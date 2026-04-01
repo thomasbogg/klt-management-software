@@ -27,3 +27,6 @@ cache/
 
 # Ignore VS Code settings
 .vscode/
+
+# Ignore .gitignore itself
+.gitignore
