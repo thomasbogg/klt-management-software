@@ -4,6 +4,9 @@ default/settings.py
 # Ignore credentials files
 accounts/
 
+# Ignore downloaded data files
+downloaded_files/
+
 # Ignore the listed data files
 default/property/data/
 
