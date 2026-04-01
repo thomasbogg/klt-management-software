@@ -1,0 +1,60 @@
+Hey, Copilot! Please read the following instructions and edit the current file where and when applicable.
+
+- remove unused imports
+- order imports alphabetically
+- if there are multiple imports from the same file, import them using brackets and a new line for each imported object
+
+- organise all code into logical blocks
+- remove unnecessary comments
+- remove unnecessary whitespace
+
+- make sure all functions have docstrings with a description of the function, its parameters, and its return value
+- make sure all classes have docstrings with a description of the class, its parameters, and its return value
+- check existing docstrings for typos and grammar and relevance to the function, make corrections if necessary, and add missing information
+- ensure all variables are camelCase
+- ensure all functions are snake_case unless the function is a public class method which should be camelCase
+- ensure all private class methods are prefixed with an underscore and in snake_case
+- ensure all classes are PascalCase
+- ensure all constants are ALL_CAPS
+- ensure all private variables and functions are prefixed with an underscore
+
+- add type hints to all functions and variables using the 3.10+ syntax and avoid importing from the typing module:
+    - prefer 'str | None' over 'Optional[str]'
+    - prefer 'list[str]' over 'List[str]'
+    - prefer 'dict[str, str]' over 'Dict[str, str]'
+    - prefer 'tuple[str, str]' over 'Tuple[str, str]'
+    - prefer 'set[str]' over 'Set[str]'
+    - prefer 'int | None' over 'Optional[int]'
+    - prefer 'float | None' over 'Optional[float]'
+    - for typing start and end args in run_X funcs use datetime.date importing from datetime
+    - for typing Booking objects import from default.booking.booking
+    - for typing Workbook objects import from workbooks.workbook; if there already is an import from a different file, remove it
+    - for typing Worksheet objects import from workbooks.worksheet; if there already is an import from a different file, remove it
+    - for typing Guest objects import from default.guest.guest; if there already is an import from a different file, remove it
+    - for typing Property objects import from default.property.property; if there already is an import from a different file, remove it
+    - for typing Database objects import from default.database.database; if there already is an import from a different file, remove it
+    - for typing GoogleDriveDirectory objects import from apis.google.drives.directory
+    - for typing GoogleDriveFile objects import from apis.google.drives.file
+    - for typing GoogleForm objects import from apis.google.drives.form
+    - for typing GooglePerson objects import from apis.google.contacts.person
+    - for typing GoogleMailMessage objects import from apis.google.mail.message
+    - for typing GoogleAccount objects import from apis.google.account
+    - for typing GoogleMailMessages objects import from apis.google.mail.messages
+    - for typing GoogleMailMessage.Body objects import from apis.google.mail.message
+    - for typing GoogleCalendars objects import from apis.google.calendars.calendars
+    - for typing GoogleCalendar objects import from apis.google.calendars.calendar
+    - for typing GoogleCalendarEvent objects import from apis.google.calendars.event
+    - for typing Browser objects import from web.brower
+    - for typing HTML objects import from web.html.parser
+    - for typing Interface objects like 'Interface' and 'subsection' import from interfaces.interface
+    - for typing Browser objects like 'Browser' and 'browser' import from web.browser
+
+- remove unused variables
+- remove unused functions
+- put functions in the correct order
+- section functions into logical blocks
+- remove unused classes
+- remove unused methods
+- remove unused properties
+
+- make line lengths and new lines consistent for functions that return a tuple of strings, max 80 characters per line; do not cut words in half but cut at the end of the word

@@ -1,0 +1,27 @@
+For currently open file do the following:
+- change all snake_case variables names to cameCase
+- leave all function names in snake_case
+- if applicable, change all stay_id or stayId variables to bookingId
+- look at the default/booking/booking.py file provided to see how the Booking object is composed:
+  - basically, it is a class that composes self.tableX.columnY data pulled from a series of related database rows 
+  - for additional context and full functionality evaluation, check all the other files in the default/booking/ folder to see the Booking object in its totality
+  - also check the default/property/property.py file to see how the Property object is composed through the Booking object
+    - look at the other files in the default/property/ folder to see how the Property object is a composing class in itself
+  - and check the guest.py file in the default/guest/ folder to see what properties and functionality the Guest object offers
+  - the Guest and Property classes can also be initialised outside calls via the Booking class. Apply this simplification where appropriate
+- if applicable: remove any references to DatabaseBooking objects from any load.py file including at the import level: these are obsolete; the Booking object is always already set in any "bookings" -> list() variable initialised with a call to one of the search functions in the default/database/functions.py file - see it in the provided files for added context
+- if applicable: where a pull/fetch call to the database is made, import search_bookings, search_valid_bookings, get_booking, etc (depending on the most appropriate option) and also get_database to pass a "database" variable to the relevant function for faster searching performance 
+- change all outdated setting and getting of the instantiated Booking object(s) to the new syntax of @property setting and getting. Examples:
+  - booking.stay.set_enquiry_status(x_y_z) is now handled booking.details.enquiryStatus = x_y_z
+  - booking.stay.set_arrival_date(datetime_object) is now booking.arrival.date = datetimeObject
+  - all table and column changes can be ascertained by reading the files in the default/booking folder
+- where the booking.table.column @property of the Booking class doesn't return the required value in a given instance, see the functions.py files to find the correct function to call by passing booking as an argument
+- where there is use of the dates.prettify() function or dates.prettyDate(), instead use the in-build prettyDate properties of the booking.arrival and booking.departure methods, the same for booking.details.prettyEnquiryDate if applicable
+- clean up any unused imports
+- clean up unnecessary whitespace
+- use newlines to separate logical sections of the code. Don't leave conditionals and their results on the same line
+- reorder the imports alphabetically
+- fix any typos
+- if the Booking object is makes an insertion or update call to the database, remove any XToDatabase() classes (at the import level, too) and replace the action with booking.insert() or booking.update() checking which to perform using booking.exists() first
+- in summary, the Booking object now acts as the single interface for creating, reading, updating and deleting instances of KLT Property Services holiday bookings/reservation in the database
+- extra: if you find code functionality that could be simplified or or streamlined, feel free to make suggestions

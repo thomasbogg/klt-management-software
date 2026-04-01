@@ -1,0 +1,52 @@
+﻿For the curent file, do the following:
+
+- if the file contains Fetch class(es): rewrite the database pull Fetch class(es) into funcs
+- where the file already has such funcs: check their syntax
+- the funcs should call on the Database class to make a selection and set conditions for pulling data from the database
+    - to evaluate the composition of the database tables and columns, read the default/database/database.py file (funcs of table calls) all the .py files provided from the default/database/tables folder (funcs of column calls)
+    - the Table funcs in the Database class are @property funcs, the Column funcs in the each of the Table classes are undecorated
+    - the pull call composition follows this syntax:
+        - Database().tableX.where().columnY().isZ(arg) 
+        - for more clarity on the functionality, especially for condition-setting, consult the provided column.py file
+- also read the funcs in all the funcs.py provided files to see the nearest highest level funcs that will be imported and called on to write the new function(s). It will require one of the following possibilities:
+    - when high enough and sets a Stays() condition to valid_bookings=True, search_valid_bookings() should be imported and used from the default/database/funcs.py file, otherwise use get_booking() for classes that pull a single booking from the database and search_bookings() for those that pull many without specifying validity
+        - the same procedure should be in place for get_X_bookings funcs that pull properties from the "properties" table of the database
+    - when it is a lower level function that relies on the search-setting of an intermediary function, the obsolete Fetch class will have inherited from FetchXBookings instead of directly from FetchDatabaseBookings
+        - in this case, look for the nearest get_X_bookings function in the function.py files provided
+- the classes should be renamed as funcs to get_something() as opposed to fetch_something(). Function names should be snake_case
+
+Here is a little more on the new syntax:
+
+    The self.TableX().Selection().Set(['column_x', 'column_y', 'column_z']) syntax is no loger valid. Instead use this:
+        select = search.tableX.select()
+        select.columnX()
+        select.columnY()
+        select = search.tableY.select()
+        select.columnX()
+        select.columnY()
+
+    The self.TableX().Conditions().Set(column_x=True, column_y=('x', 'y'), has_column_z=) syntax is also obsolete. Change it to:
+        where = search.tableX.where()
+        where.columnX().isTrue()
+        where.columnY().isIn(('x', 'y'))
+        where.columnZ().isNotNullEmptyOrFalse() ## again, for more on available condition-setting consult column.py
+
+
+Some points to rewriting the search syntax:
+- the pause_emails condition is now checked against the "paused" column in the "emails" table, using isFalse as the condition
+- the stay_id variable should be changed to bookingId
+- the remove_blocks option is handled at the highest level function of search_bookings. Simply pass in a kwarg into the function if this is needed as an option
+- all funcs should take database as the first argument and pass it into the higher level function call
+- "addresses", "managers", "owners", "accountants", "specs" searches should be to "propertyAddresses", "propertySpecs", etc. 
+
+ 
+Some important changes to the database to be wary of: 
+- all column and table names have been changed from snake_case to camelCase
+- the “stays” table called as Stays() is now the “bookings” table called as details()
+- the "arrival_date" and "departure_date" columns in "stays" are now “date” columns in separate "arrivals" and "departures" tables, so should be selected as such: search.arrivals.select().date()
+- the "shorthand_name" column in the "properties" table has been changed to "shortName" 
+- "owner_meet_greet" and "owner_clean" columns are now "meetGreet" and “clean” columns in the “arrivals” and “departure” tables respectively, use the this example to select them: search.arrivals.select().meetGreet()
+- we no longer need to pull the "default_owner_clean" and "default_owner_meet_greet" columns from the “owners” table, so eliminate instances of these
+- the columns in the "charges" table have been altered the most, use the charges.py file to rework the new select() and where() calls for this table
+- property specifics like no. of bedrooms have been isolated in a separate propertySpecs table in the database. Use the specs.py to check these changes for rewriting the appropriate select() and where() calls
+- in the emails and forms tables, the separate columns for owner_booking_form and four_weeks have been amalgamated under arrivalQuestionnaire

@@ -1,0 +1,29 @@
+For the run.py files do the following:
+- import get_database() from default/database/functions.py file
+- change all snake_case variables names to cameCase
+- leave all function names in snake_case
+- change all stay_id or stayId variables to bookingId
+- in the main function, which is always the first in the file, initialise a "database" variable with a get_database() call after the dates variables have been established
+- change any "fetched" variables to "bookings"
+- the new "bookings" variables should call on get_x_bookings() function in the selfsame run.py file; it should be the second function in the file
+- the get_x_bookings() function should be called with the "database" variable as an argument as well as any other args and kwargs given to the main function
+- the get_x_bookings() function will return a list of Booking objects from the default/booking/booking.py file
+- look at the default/booking/booking.py file to see how the Booking object is composed:
+  - check all the other files in the default/booking/ folder to see how the Booking object is used
+  - also check the default/property/property.py file to see how the Property object is composed through the Booking object
+    - look at the other files in the default/property/ folder to see how the Property object is used
+  - and check the guest.py file in the default/guest/ folder to see how the Guest object is composed through the Booking object
+- remove any references to Fetch classes including at the import level: these are obsolete; the get_x_bookings() function is the new way to fetch bookings
+- remove any references to DatabaseBooking objects including at the import level: these are obsolete; the Booking object is already set in the get_x_bookings() function
+- after the bookings variable has been initialised, loop through the bookings replacing "for loaded in fetched" with "for booking in bookings"
+- in the loop, remove any initialisations of a different Booking object, e.g. "booking = DatabaseBooking()"
+- follow the logic of the loop and alter the functions called accordingly to the functionality of the new Booking object
+- where the booking.table.column @property of the Booking class doesn't return the required value in a given instance, see the functions.py files to find the correct function to call by passing booking as an argument
+- if there is a call to update the database, such as an XToDatabase:
+  - remove the class and use the inbuilt Booking object functionality to perform the update instead: set the table and column to be update with the value via the Booking object accordingly and use booking.tableX.update() to execute the update
+- close the database connection at the end of the main function with a database.close() call
+- clean up any unused imports
+- clean up unnecessary whitespace
+- use newlines to separate logical sections of the code
+- reorder the imports alphabetically
+- fix any typos in the email content functions at the bottom end of the file, but leave the content as is
