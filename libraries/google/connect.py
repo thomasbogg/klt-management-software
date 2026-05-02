@@ -1,10 +1,10 @@
 import os.path
 from dates import dates
 from google.auth.transport.requests import Request
+from google.oauth2 import service_account
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build, Resource
-
 
 
 class GoogleAPIService:
@@ -20,7 +20,8 @@ class GoogleAPIService:
             api: str = '',
             version: str = '',
             scopes: list[str] | None = None,
-            pathToCredentials: str = '') -> None:
+            credentials: str = '',
+            LOCAL: bool = False) -> None:
         """
         Initialize a new GoogleAPIService instance.
         
@@ -29,13 +30,15 @@ class GoogleAPIService:
             api: Google API service name (e.g., 'gmail', 'drive')
             version: API version (e.g., 'v1', 'v3')
             scopes: List of OAuth scopes required for API access
-            pathToCredentials: Path to the directory containing credentials files
+            credentials: Path to the directory containing credentials files or service account info
+            LOCAL: Whether to use local credentials flow (True) or service account flow (False)
         """
         self._username = username
         self._api = api 
         self._version = version
         self._scopes = scopes or []
-        self._path_to_credentials = pathToCredentials
+        self._credentials = credentials
+        self._local = LOCAL
         self._connection = None
         self._connection_time = None
     
@@ -57,6 +60,25 @@ class GoogleAPIService:
                             credentials=self._get_token())
         return self
     
+    def get_service_account_connection(self) -> 'GoogleAPIService':
+        """
+        Establishes a connection to the specified Google API using a service account.
+        
+        Returns:
+            GoogleAPIService: Self for method chaining
+        """
+        credentials = service_account.Credentials.from_service_account_info(
+            self._credentials[0],
+            scopes=self._scopes
+        )
+        delegated_credentials = credentials.with_subject(self._credentials[1])
+        self._connection_time = dates.now()
+        self._connection: Resource = build(
+                            self._api, 
+                            self._version, 
+                            credentials=delegated_credentials)
+        return self
+    
     def connect(self) -> 'GoogleAPIService':
         """
         Alias for get_local_connection() - establishes a connection to the specified Google API.
@@ -64,7 +86,9 @@ class GoogleAPIService:
         Returns:
             GoogleAPIService: Self for method chaining
         """
-        return self.get_local_connection()
+        if self._local:
+            return self.get_local_connection()
+        return self.get_service_account_connection()
 
     # =============================================================================
     # Properties
@@ -126,9 +150,9 @@ class GoogleAPIService:
         self._scopes = scopes
     
     @property
-    def pathToCredentials(self) -> str:
+    def credentials(self) -> str:
         """Get the path to credentials directory."""
-        return self._path_to_credentials
+        return self._credentials
 
     # =============================================================================
     # Authentication Methods
@@ -202,7 +226,7 @@ class GoogleAPIService:
         Returns:
             str: Path to credentials file
         """
-        return f'{self._path_to_credentials}/credentials-{self._username.split(".")[0]}.json'
+        return f'{self._credentials}/credentials-{self._username.split(".")[0]}.json'
     
     def _get_token_file_path(self) -> str:
         """
@@ -211,7 +235,7 @@ class GoogleAPIService:
         Returns:
             str: Path to token file
         """
-        return f'{self._path_to_credentials}/token-{self._username.split(".")[0]}-{self._api}-{self._version}.json'
+        return f'{self._credentials}/token-{self._username.split(".")[0]}-{self._api}-{self._version}.json'
 
     def _write_to_token_file(self, credentials: Credentials) -> Credentials:
         """

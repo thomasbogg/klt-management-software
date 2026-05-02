@@ -34,14 +34,14 @@ class GoogleAccount(Object):
         self._set('emailAddress', value)
 
     @property
-    def pathToCredentials(self) -> str:
+    def credentials(self) -> str:
         """Get the file path to the credentials directory."""
-        return self._get('pathToCredentials')
+        return self._get('credentials')
     
-    @pathToCredentials.setter
-    def pathToCredentials(self, value: str) -> None:
+    @credentials.setter
+    def credentials(self, value: str) -> None:
         """Set the file path to the credentials directory."""
-        self._set('pathToCredentials', value)
+        self._set('credentials', value)
     
     @property
     def details(self) -> dict:

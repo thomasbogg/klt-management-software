@@ -5,12 +5,18 @@ try:
     # Check if running in deployed environment (e.g., on a server) 
     # where environment variables are set directly
     os.getenv('LOCAL', 'None').lower() == 'false'
+    LOCAL = False
+    CREDS = (
+        os.getenv('GOOGLE_API_CREDENTIALS'),
+        os.getenv('GOOGLE_API_SERVICE_ACCOUNT_USERNAME'),
+    )
 except Exception:
     # Load environment variables from .env file
     from dotenv import load_dotenv
     load_dotenv()
+    LOCAL = True
+    CREDS = os.path.abspath(os.getenv('CREDS', None))
 
-CREDS_DIR = os.path.abspath(os.getenv('CREDS_DIR', None))
 
 class ThomasAtABA(GoogleAccount):
     """
@@ -23,20 +29,20 @@ class ThomasAtABA(GoogleAccount):
     _details: list = os.environ.get('ThomasAtABA').split(';')
 
     
-    def __init__(self, pathToCredentials: str = CREDS_DIR) -> None:
+    def __init__(self, credentials: str = CREDS, local: bool = LOCAL) -> None:
         """
         Initialize the Thomas Bogg Google Account.
         
         Args:
-            pathToCredentials: Directory path where API credentials are stored.
+            credentials: Directory path where API credentials are stored.
         """
         super().__init__()
         self.name: str = self._details[0]
         self.emailAddress: str = self._details[1]
         self.phoneNumber: str = self._details[2]
         self.details: list[str] = self._details[3:]
-        self.pathToCredentials: str = pathToCredentials
-
+        self.credentials: str = credentials
+        self.local: bool = local
 
 class KevinAtABA(GoogleAccount):
     """
@@ -48,19 +54,20 @@ class KevinAtABA(GoogleAccount):
 
     _details: list = os.environ.get('KevinAtABA').split(';')
     
-    def __init__(self, pathToCredentials: str = CREDS_DIR) -> None:
+    def __init__(self, credentials: str = CREDS, local: bool = LOCAL) -> None:
         """
         Initialize the Kevin Bogg Google Account.
         
         Args:
-            pathToCredentials: Directory path where API credentials are stored.
+            credentials: Directory path where API credentials are stored.
         """
         super().__init__()
         self.name: str = self._details[0]
         self.emailAddress: str = self._details[1]
         self.phoneNumber: str = self._details[2]
         self.details: list[str] = self._details[3:]
-        self.pathToCredentials: str = pathToCredentials
+        self.credentials: str = credentials
+        self.local: bool = local
 
 
 class TeamAtABA(GoogleAccount):
@@ -73,16 +80,17 @@ class TeamAtABA(GoogleAccount):
 
     _details: list = os.environ.get('TeamAtABA').split(';')
     
-    def __init__(self, pathToCredentials: str = CREDS_DIR) -> None:
+    def __init__(self, credentials: str = CREDS, local: bool = LOCAL) -> None:
         """
         Initialize the Management Team Google Account.
         
         Args:
-            pathToCredentials: Directory path where API credentials are stored.
+            credentials: Directory path where API credentials are stored.
         """
         super().__init__()
         self.name: str = self._details[0]
         self.emailAddress: str = self._details[1]
         self.phoneNumber: str = self._details[2]
         self.details: list[str] = self._details[3:]
-        self.pathToCredentials: str = pathToCredentials
+        self.credentials: str = credentials
+        self.local: bool = local

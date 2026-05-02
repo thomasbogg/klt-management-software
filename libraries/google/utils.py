@@ -23,7 +23,7 @@ def get_google_api_connection(account: GoogleAccount | None = None, **kwargs) ->
         raise Exception('No GoogleAccount instance provided: cannot get Google API connection.')
     if not isinstance(account, GoogleAccount):
         raise Exception('Account is not a GoogleAccount instance: cannot get Google API connection.')
-    return GoogleAPIService(username=account.emailAddress, pathToCredentials=account.pathToCredentials, **kwargs).connect()
+    return GoogleAPIService(username=account.emailAddress, credentials=account.credentials, LOCAL=account.local, **kwargs).connect()
 
 
 def sort_connection(
