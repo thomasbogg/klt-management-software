@@ -4,18 +4,19 @@ import os
 try:
     # Check if running in deployed environment (e.g., on a server) 
     # where environment variables are set directly
-    os.getenv('LOCAL').lower() == 'false'
-    LOCAL = False
-    CREDS = (
-        os.getenv('GOOGLE_API_CREDENTIALS'),
-        os.getenv('GOOGLE_API_SERVICE_ACCOUNT_USERNAME'),
-    )
+    LOCAL: bool = os.getenv('LOCAL').lower() == 'false'
 except Exception:
     # Load environment variables from .env file
     from dotenv import load_dotenv
     load_dotenv()
-
     LOCAL = True
+
+if LOCAL:  
+    CREDS = (
+        os.getenv('GOOGLE_API_CREDENTIALS'),
+        os.getenv('GOOGLE_API_SERVICE_ACCOUNT_USERNAME'),
+    )
+else:
     CREDS = os.path.abspath(os.getenv('GOOGLE_CREDS_DIR', None))
 
 
