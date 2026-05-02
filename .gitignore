@@ -18,6 +18,7 @@ test.py
 
 # Ignore docker files
 .dockerignore
+docker-compose.yml
 
 # Ignore compiled Python files
 __pycache__/

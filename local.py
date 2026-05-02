@@ -65,7 +65,7 @@ from sheets.ABA.run import update_ABA_properties_sheets
 from sheets.KKLJ.run import update_KKLJ_properties_sheets
 
 
-def main() -> None:
+def run() -> None:
     """
     Main entry point for the KLT management and database system updater.
     

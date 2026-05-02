@@ -2,8 +2,8 @@ from default.settings import LOCAL
 
 if __name__ == '__main__':
     if LOCAL:
-        from local import main as local_main
-        local_main()
+        from local import run as local_run
+        local_run()
     else:
-        from server import main as server_main
-        server_main()
+        from server import run as server_run
+        server_run()
