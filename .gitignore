@@ -16,6 +16,9 @@ copilot/
 # Ignore test files
 test.py
 
+# Ignore docker files
+.dockerignore
+
 # Ignore compiled Python files
 __pycache__/
 *.pyc
