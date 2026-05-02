@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from default.dates import dates
 from typing import Self, Union
 
-from utils import log, loginput
+from libraries.utils import log, loginput
 
 
 class TMTBrowser(KLTBrowser):

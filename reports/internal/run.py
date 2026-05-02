@@ -19,8 +19,8 @@ from reports.internal.management.run import management_report_creator
 from reports.internal.properties.run import properties_report_creator
 from reports.internal.revenue.run import revenue_report_creator
 from reports.internal.stays.run import stays_vs_nights_reports_creator
-from utils import log, sublog
-from workbooks.workbook import Workbook
+from libraries.utils import log, sublog
+from libraries.workbook.workbook import Workbook
 
 
 DATE = f'{dates.prettyMonth()} {dates.year()}'

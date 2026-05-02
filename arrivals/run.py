@@ -2,8 +2,8 @@ import re
 import datetime
 from time import sleep
 
-from apis.google.calendars.calendar import GoogleCalendar
-from apis.google.calendars.utils import (
+from libraries.google.calendars.calendar import GoogleCalendar
+from libraries.google.calendars.utils import (
     get_google_calendar_events,
     get_google_calendars
 )
@@ -28,7 +28,7 @@ from default.guest.functions import guest_has_stayed_before
 from default.settings import DEFAULT_ACCOUNT, TEST
 from default.update.dates import updatedates
 from default.update.wrapper import update
-from utils import log, logdivider, logerror
+from libraries.utils import log, logdivider, logerror
 
 
 # Main update function

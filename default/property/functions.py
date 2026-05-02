@@ -18,7 +18,7 @@ from default.property.property import Property
 from default.property.sef import SEFDetails
 from default.property.specs import Specs
 from default.update.wrapper import update
-from utils import log, sublog
+from libraries.utils import log, sublog
 
 
 #######################################################

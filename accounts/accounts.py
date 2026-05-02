@@ -1,4 +1,4 @@
-from apis.google.account import GoogleAccount
+from libraries.google.account import GoogleAccount
 import os
 
 try:

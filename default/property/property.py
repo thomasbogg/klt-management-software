@@ -1,6 +1,6 @@
 from typing import Any
 
-from databases.row import Row as DatabaseRow
+from libraries.database.row import Row as DatabaseRow
 from default.property.accountant import Accountant
 from default.property.address import Address
 from default.property.manager import Manager

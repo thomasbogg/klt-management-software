@@ -16,7 +16,7 @@ from sheets.functions import (
     sort_owner_properties
 )
 from sheets.KKLJ.functions import set_KKLJ_worksheet, update_worksheet
-from utils import log, sublog
+from libraries.utils import log, sublog
 
 
 #######################################################

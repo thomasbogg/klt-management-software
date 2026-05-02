@@ -10,7 +10,7 @@ from platforms.functions import (
     update_booking_in_database, 
     update_PIMS_platform_bookings
 )
-from utils import string_to_float, toList
+from libraries.utils import string_to_float, toList
 
 
 #######################################################

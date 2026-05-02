@@ -1,16 +1,16 @@
 import datetime
 
-from apis.google.drives.directory import GoogleDriveDirectory
-from apis.google.drives.file import GoogleDriveFile
+from libraries.google.drives.directory import GoogleDriveDirectory
+from libraries.google.drives.file import GoogleDriveFile
 from default.database.functions import last_database_update
 from default.dates import dates
 from default.directory.functions import get_KLT_directory
 from default.google.drive.functions import get_todays_backup_directory_on_drive
 from default.settings import DATABASE_NAME, DATABASE_PATH
 from default.update.wrapper import update
-from directories.directory import Directory
-from directories.file import File
-from utils import log, sublog
+from libraries.directory.directory import Directory
+from libraries.directory.file import File
+from libraries.utils import log, sublog
 
 
 @update

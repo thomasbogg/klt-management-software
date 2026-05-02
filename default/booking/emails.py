@@ -1,4 +1,4 @@
-from databases.row import Row as DatabaseRow
+from libraries.database.row import Row as DatabaseRow
 
 
 class Emails(DatabaseRow):

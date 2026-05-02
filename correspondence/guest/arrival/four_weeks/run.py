@@ -1,7 +1,7 @@
 from datetime import date
 
-from apis.google.mail.message import GoogleMailMessage
-from apis.google.mail.messages import GoogleMailMessages
+from libraries.google.mail.message import GoogleMailMessage
+from libraries.google.mail.messages import GoogleMailMessages
 from correspondence.guest.arrival.functions import (
     get_guest_arrival_email_bookings,
     new_guest_arrival_email
@@ -17,7 +17,7 @@ from default.update.dates import updatedates
 from default.update.wrapper import update
 from forms.arrival.guest.functions import set_guest_arrival_form
 from platforms.airbnb.browser import BrowseAirbnb
-from web.browser import Browser
+from libraries.web.browser import Browser
 
 
 @update

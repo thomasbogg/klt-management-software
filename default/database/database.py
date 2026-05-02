@@ -1,5 +1,5 @@
-from databases.database import Database as DefaultDatabase
-from databases.table import Table
+from libraries.database.database import Database as DefaultDatabase
+from libraries.database.table import Table
 from default.booking.booking import Booking as LoadedBooking
 from default.database.tables.accountants import Accountants
 from default.database.tables.addresses import Addresses

@@ -1,6 +1,6 @@
 from datetime import date
 
-from workbooks.workbook import Workbook
+from libraries.workbook.workbook import Workbook
 from default.booking import booking
 from default.booking.booking import Booking
 from default.booking.functions import (
@@ -44,14 +44,14 @@ from sheets.functions import (
     set_latest_date_border,
     set_worksheet
 )
-from utils import (
+from libraries.utils import (
     break_up_person_names, 
     isString,
     logwarning,
     only_digits_in_string,
     string_is_affirmative
 )
-from workbooks.worksheet import Worksheet
+from libraries.workbook.worksheet import Worksheet
 
 
 #######################################################

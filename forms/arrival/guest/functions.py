@@ -1,4 +1,4 @@
-from apis.google.drives.directory import GoogleDriveDirectory
+from libraries.google.drives.directory import GoogleDriveDirectory
 from default.booking.booking import Booking
 from default.google.drive.functions import (
     get_klt_management_directory_on_drive,
@@ -15,7 +15,7 @@ from forms.arrival.functions import (
 from forms.arrival.vars import GUEST_PHONE_NUMBER
 from forms.arrival.guest.responses import GuestArrivalFormResponses
 from default.translator.functions import translator as _translator
-from utils import (
+from libraries.utils import (
     logwarning,
 )
 

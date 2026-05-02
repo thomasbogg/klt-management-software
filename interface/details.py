@@ -1,6 +1,6 @@
 from default.booking.booking import Booking
 from interface.functions import get_text, get_int
-from interfaces.interface import Interface
+from libraries.interface.interface import Interface
 
 
 def update_details(

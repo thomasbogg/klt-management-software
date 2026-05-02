@@ -1,6 +1,6 @@
-from apis.google.mail.message import GoogleMailMessage
+from libraries.google.mail.message import GoogleMailMessage
 from default.settings import TEST
-from utils import Object
+from libraries.utils import Object
 
 
 class ReadPlatformEmails(Object):

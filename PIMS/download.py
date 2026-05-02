@@ -29,7 +29,7 @@ from default.updates.functions import (
     property_has_changed,
 )
 from PIMS.browser import BrowsePIMS
-from utils import log, logerror, string_is_affirmative, sublog
+from libraries.utils import log, logerror, string_is_affirmative, sublog
 
 
 # Main entry point function

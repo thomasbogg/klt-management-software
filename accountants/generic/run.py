@@ -8,7 +8,7 @@ from accountants.functions import (
     get_workbook,
     send_new_email_to_accountant
 )
-from apis.google.drives.file import GoogleDriveFile
+from libraries.google.drives.file import GoogleDriveFile
 from default.booking.booking import Booking
 from default.database.database import Database
 from default.database.functions import (
@@ -30,7 +30,7 @@ from default.workbook.functions import (
     set_worksheet,
     update_worksheet
 )
-from workbooks.workbook import Workbook
+from libraries.workbook.workbook import Workbook
 
 
 DRIVE_FOLDER = 'GenAcc - Gerenciamento e Contabilidade'

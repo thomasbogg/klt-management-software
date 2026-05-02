@@ -31,9 +31,9 @@ from sheets.cells import (
     set_run_tot_cell,
     set_time_cell
 )
-from workbooks.stylesheet import Stylesheet
-from workbooks.worksheet import Worksheet
-from workbooks.workbook import Workbook
+from libraries.workbook.stylesheet import Stylesheet
+from libraries.workbook.worksheet import Worksheet
+from libraries.workbook.workbook import Workbook
 
 
 #######################################################

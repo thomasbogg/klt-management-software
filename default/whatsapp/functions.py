@@ -1,7 +1,7 @@
 import os
 from correspondence.self.functions import new_email_to_self, send_email_to_self
 from default.settings import BROWSER_DIR, DEFAULT_ACCOUNT, BROWSER_USER_DATA_DIR
-from web.whatsapp import BrowseWhatsApp
+from libraries.web.whatsapp import BrowseWhatsApp
 
 
 def login_to_whatsapp() -> BrowseWhatsApp:

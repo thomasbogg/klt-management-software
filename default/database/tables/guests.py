@@ -1,5 +1,5 @@
-from databases.column import Column
-from databases.table import Table
+from libraries.database.column import Column
+from libraries.database.table import Table
 from typing import Self
 
 

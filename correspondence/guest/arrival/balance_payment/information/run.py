@@ -1,7 +1,7 @@
 from datetime import date
 
-from apis.google.mail.message import GoogleMailMessage
-from apis.google.mail.messages import GoogleMailMessages
+from libraries.google.mail.message import GoogleMailMessage
+from libraries.google.mail.messages import GoogleMailMessages
 from correspondence.functions import (
     determine_balance_payment, 
     determine_balance_payment_date
@@ -15,7 +15,7 @@ from default.database.database import Database
 from default.database.functions import get_database
 from default.update.wrapper import update
 from PIMS.browser import BrowsePIMS
-from web.browser import Browser
+from libraries.web.browser import Browser
 
 
 @update

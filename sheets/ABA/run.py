@@ -26,8 +26,8 @@ from sheets.functions import (
     sort_owner_properties,
     update_worksheet
 )
-from utils import log, sublog, toList
-from workbooks.workbook import Workbook
+from libraries.utils import log, sublog, toList
+from libraries.workbook.workbook import Workbook
 
 
 #######################################################

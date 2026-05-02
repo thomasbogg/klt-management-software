@@ -1,5 +1,5 @@
 from default.database.functions import get_database, search_properties, set_property_location
-from interfaces.interface import Interface
+from libraries.interface.interface import Interface
 from interface.functions import get_location_criteria, get_int
 from default.database.database import Database
 from default.dates import dates

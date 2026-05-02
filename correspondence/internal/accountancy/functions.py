@@ -1,5 +1,5 @@
-from apis.google.account import GoogleAccount
-from apis.google.mail.message import GoogleMailMessage
+from libraries.google.account import GoogleAccount
+from libraries.google.mail.message import GoogleMailMessage
 from correspondence.functions import get_email_bookings
 from correspondence.internal.functions import (
     get_subject,

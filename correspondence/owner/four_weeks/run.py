@@ -1,6 +1,6 @@
 from datetime import date
 
-from apis.google.mail.message import GoogleMailMessage
+from libraries.google.mail.message import GoogleMailMessage
 from correspondence.owner.functions import get_owner_email_bookings, new_owner_email
 from default.booking.booking import Booking
 from default.database.database import Database

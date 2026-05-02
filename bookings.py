@@ -21,7 +21,7 @@ from interface.functions import (
 from interface.guests import update_guests
 from interface.manual import manually_fill_arrival_questionnaire
 from interface.source import update_at_source
-from interfaces.interface import Interface
+from libraries.interface.interface import Interface
 
 
 @pull_database

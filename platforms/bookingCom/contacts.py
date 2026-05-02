@@ -30,7 +30,7 @@ from default.workbook.functions import (
     set_worksheet
 )
 from typing import Callable
-from workbooks.worksheet import Worksheet
+from libraries.workbook.worksheet import Worksheet
 
 
 # Main update function

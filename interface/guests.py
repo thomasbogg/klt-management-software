@@ -14,8 +14,8 @@ from interface.functions import (
     open_PIMS,
     should_update_PIMS,
 )
-from interfaces.interface import Interface
-from translator.deepl import Deepl
+from libraries.interface.interface import Interface
+from libraries.translator.deepl import Deepl
 
 def update_guests(subsection: Interface, databaseBooking: Booking, updatedBooking: Booking) -> None:
     """

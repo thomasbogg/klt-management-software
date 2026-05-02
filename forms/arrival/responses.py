@@ -1,7 +1,7 @@
 import datetime
 import re
 
-from apis.google.forms.form import GoogleForm
+from libraries.google.forms.form import GoogleForm
 from default.dates import dates
 
 from forms.arrival.vars import (

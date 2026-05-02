@@ -4,11 +4,11 @@ import datetime
 from default.dates import dates
 from default.property.prices import Prices
 from default.settings import LOCAL_STORAGE_DIR
-from utils import set_euro_currency
-from web.html import HTML
-from workbooks.utils import set_tables_in_worksheet
-from workbooks.workbook import Workbook
-from workbooks.workbook import Worksheet
+from libraries.utils import set_euro_currency
+from libraries.web.html import HTML
+from libraries.workbook.utils import set_tables_in_worksheet
+from libraries.workbook.workbook import Workbook
+from libraries.workbook.workbook import Worksheet
 
 
 CACHE_DIRECTORY = f'{LOCAL_STORAGE_DIR}/prices/'

@@ -1,5 +1,5 @@
-from apis.google.mail.message import GoogleMailMessage
-from apis.google.mail.messages import GoogleMailMessages
+from libraries.google.mail.message import GoogleMailMessage
+from libraries.google.mail.messages import GoogleMailMessages
 from correspondence.guest.arrival.functions import new_guest_arrival_email
 from correspondence.guest.functions import send_guest_email
 from default.booking.booking import Booking

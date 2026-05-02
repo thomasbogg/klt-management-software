@@ -14,7 +14,7 @@ from default.update.wrapper import update
 from platforms.bookingCom.browser import BrowseBookingComExtranet
 from platforms.bookingCom.reader import ReadBookingComEmails
 from platforms.functions import convert_date, update_booking_in_database
-from utils import break_up_person_names, string_to_float, string_to_int
+from libraries.utils import break_up_person_names, string_to_float, string_to_int
 
 
 #######################################################
@@ -380,7 +380,7 @@ def get_price(name: str, databaseMonth: str, year: int) -> float:
 
 
 def test_reservations_page(filename: str = 'test-bookingcom.html') -> None:
-    from web.html import HTML
+    from libraries.web.html import HTML
     html = open(filename).read()
     parsed = BrowseBookingComExtranet.list_reservations(html, test=True)
     for reservation in parsed: 

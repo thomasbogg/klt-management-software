@@ -20,7 +20,7 @@ from default.updates.functions import (
     welcome_pack_modifications_changes,
 )
 from interface.functions import get_text, get_bool, open_PIMS, should_update_PIMS
-from interfaces.interface import Interface
+from libraries.interface.interface import Interface
 
 
 def update_extras(subsection: Interface, databaseBooking: Booking, updatedBooking: Booking) -> None:

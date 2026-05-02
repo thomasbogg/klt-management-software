@@ -9,7 +9,7 @@ from correspondence.self.functions import new_security_code_email_to_self
 from default.browser.browser import KLTBrowser
 from default.settings import DEFAULT_ACCOUNT
 from platforms.functions import convert_date
-from web.html import HTML
+from libraries.web.html import HTML
 
 
 class BrowseAirbnb(KLTBrowser):

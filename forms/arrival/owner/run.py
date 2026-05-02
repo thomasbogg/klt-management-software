@@ -21,7 +21,7 @@ from forms.arrival.owner.functions import (
     update_from_owner_comments_section
 )
 from forms.functions import get_forms_bookings
-from utils import log, logdivider
+from libraries.utils import log, logdivider
 from default.update.wrapper import update
 from default.updates.functions import update_to_database
 

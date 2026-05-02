@@ -16,7 +16,7 @@ from platforms.functions import (
 )
 from platforms.vrbo.browser import BrowseVrbo
 from platforms.vrbo.reader import ReadVrboEmails
-from utils import log, logerror
+from libraries.utils import log, logerror
 
 
 #######################################################

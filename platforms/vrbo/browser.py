@@ -7,8 +7,8 @@ from datetime import date
 from platforms.functions import convert_date, convert_dates, threeX
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
-from utils import log, logerror, loginput
-from web.html import HTML
+from libraries.utils import log, logerror, loginput
+from libraries.web.html import HTML
 import regex as re
 
 

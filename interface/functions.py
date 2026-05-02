@@ -8,7 +8,7 @@ from default.database.functions import (
     set_valid_management_booking
 )
 from default.property.functions import determine_location
-from interfaces.interface import Interface
+from libraries.interface.interface import Interface
 
 
 # Database query functions

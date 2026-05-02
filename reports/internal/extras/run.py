@@ -8,9 +8,9 @@ from reports.internal.functions import (
     split_by_month,
     split_by_year,
 )
-from workbooks.utils import set_tables_in_worksheet
-from workbooks.workbook import Workbook
-from workbooks.worksheet import Worksheet
+from libraries.workbook.utils import set_tables_in_worksheet
+from libraries.workbook.workbook import Workbook
+from libraries.workbook.worksheet import Worksheet
 
 
 def extras_report_creator(workbook: Workbook, bookings: list[Booking]):

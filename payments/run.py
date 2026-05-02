@@ -1,5 +1,5 @@
 from datetime import date
-from apis.google.drives.file import GoogleDriveFile
+from libraries.google.drives.file import GoogleDriveFile
 from default.accountancy.functions import get_accountancy_sheet_bookings
 from default.database.database import Database
 from default.database.functions import (
@@ -41,8 +41,8 @@ from default.workbook.functions import (
     set_worksheet, 
     update_worksheet
 )
-from utils import logdivider, sublog
-from workbooks.workbook import Workbook
+from libraries.utils import logdivider, sublog
+from libraries.workbook.workbook import Workbook
 
 
 # Directory constants

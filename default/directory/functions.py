@@ -1,7 +1,7 @@
 import os
 
 from default.settings import DIR, TEST
-from directories.directory import Directory
+from libraries.directory.directory import Directory
 
 
 def get_KLT_directory(localPath: str = '') -> Directory:

@@ -43,9 +43,9 @@ from default.workbook.functions import (
     set_worksheet,
     update_worksheet
 )
-from utils import sublog
-from workbooks.workbook import Workbook
-from workbooks.worksheet import Worksheet
+from libraries.utils import sublog
+from libraries.workbook.workbook import Workbook
+from libraries.workbook.worksheet import Worksheet
 
 
 DRIVE_DIR = 'Green Receipts Issuance for Owners'

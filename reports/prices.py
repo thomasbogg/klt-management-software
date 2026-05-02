@@ -5,7 +5,7 @@ from default.booking.functions import logbooking
 from default.dates import dates
 from default.update.wrapper import update
 from default.database.functions import search_valid_bookings, get_property_price
-from utils import log, superlog
+from libraries.utils import log, superlog
 
 
 @update

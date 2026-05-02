@@ -1,7 +1,7 @@
 import os
 
 from default.settings import BROWSER_DIR, BROWSER_USER_DATA_DIR
-from web.browser import Browser
+from libraries.web.browser import Browser
 
 
 class KLTBrowser(Browser):

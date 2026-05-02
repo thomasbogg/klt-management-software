@@ -1,11 +1,11 @@
 import datetime
 
 from default.booking.functions import logbooking
-from workbooks.tables import Table
-from workbooks.worksheet import Worksheet
+from libraries.workbook.tables import Table
+from libraries.workbook.worksheet import Worksheet
 from default.dates import dates
 from default.booking.booking import Booking
-from workbooks.stylesheet import Stylesheet
+from libraries.workbook.stylesheet import Stylesheet
 
 
 def generic_calculator_function(*args, **kwargs):

@@ -1,7 +1,7 @@
 from datetime import date
 
-from apis.google.mail.message import GoogleMailMessage
-from apis.google.mail.messages import GoogleMailMessages
+from libraries.google.mail.message import GoogleMailMessage
+from libraries.google.mail.messages import GoogleMailMessages
 from correspondence.guest.arrival.functions import (
     code_of_conduct_explainer,
     get_guest_arrival_email_bookings,

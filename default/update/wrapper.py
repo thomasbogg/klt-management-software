@@ -1,6 +1,6 @@
 import traceback
 
-from apis.google.drives.file import GoogleDriveFile
+from libraries.google.drives.file import GoogleDriveFile
 from cache.clear import clear_cache_and_conflicts
 from correspondence.self.functions import (
     new_email_to_self,
@@ -12,7 +12,7 @@ from default.google.drive.functions import (
     upload_local_file_to_drive
 )
 from default.settings import DATABASE_NAME, DATABASE_PATH
-from interfaces.interface import Interface
+from libraries.interface.interface import Interface
 
 
 LOAD_START = dates.now()

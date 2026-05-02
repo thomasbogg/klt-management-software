@@ -3,10 +3,10 @@ import regex as re
 from ssl import SSLEOFError
 import time
 
-from apis.google.drives.directory import GoogleDriveDirectory
-from apis.google.drives.file import GoogleDriveFile
-from apis.google.drives.permissions import GoogleDrivePermissions
-from apis.google.drives.utils import (
+from libraries.google.drives.directory import GoogleDriveDirectory
+from libraries.google.drives.file import GoogleDriveFile
+from libraries.google.drives.permissions import GoogleDrivePermissions
+from libraries.google.drives.utils import (
     get_google_drives,
     get_google_drives_connection,
     get_refreshed_google_drives_connection
@@ -14,7 +14,7 @@ from apis.google.drives.utils import (
 from dates import dates
 from default.directory.functions import get_local_storage_directory
 from default.settings import DEFAULT_ACCOUNT, TEST
-from utils import log, logerror, logwarning
+from libraries.utils import log, logerror, logwarning
 
 
 # Global variables

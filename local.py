@@ -44,7 +44,7 @@ from forms.arrival.owner.run import (
 from forms.registration.run import update_from_guest_registrations
 from forms.registration.complete import complete_empty_guest_details
 
-from interfaces.interface import Interface
+from libraries.interface.interface import Interface
 
 from payments.run import update_payments_to_owner_workbooks
 

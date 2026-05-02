@@ -1,9 +1,9 @@
 import datetime
 
 from default.dates import dates
-from utils import gen_hex
+from libraries.utils import gen_hex
 
-from apis.google.forms.form import GoogleForm
+from libraries.google.forms.form import GoogleForm
 
 
 class GuestRegistrationFormResponses(GoogleForm.Responses):

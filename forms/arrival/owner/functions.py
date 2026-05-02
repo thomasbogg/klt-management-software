@@ -1,5 +1,5 @@
-from apis.google.drives.directory import GoogleDriveDirectory
-from apis.google.forms.form import GoogleForm
+from libraries.google.drives.directory import GoogleDriveDirectory
+from libraries.google.forms.form import GoogleForm
 from default.booking.booking import Booking
 from default.database.database import Database
 from default.google.drive.functions import (
@@ -8,7 +8,7 @@ from default.google.drive.functions import (
 from default.google.forms.functions import get_form_responses as _get_form_responses
 from default.guest.guest import Guest
 from forms.arrival.owner.responses import OwnerArrivalFormResponses
-from utils import logwarning
+from libraries.utils import logwarning
 from forms.arrival.functions import (
     new_arrival_form,
     set_arrival_section_of_form,

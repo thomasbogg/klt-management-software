@@ -1,6 +1,6 @@
 from default.booking.booking import Booking
 from interface.functions import get_float
-from interfaces.interface import Interface
+from libraries.interface.interface import Interface
 
 
 def update_charges(subsection: Interface, databaseBooking: Booking) -> None:

@@ -1,11 +1,11 @@
-from apis.google.contacts.person import GooglePerson
-from apis.google.contacts.utils import (
+from libraries.google.contacts.person import GooglePerson
+from libraries.google.contacts.utils import (
     get_google_contacts,
     get_google_contacts_connection,
     new_google_contact
 )
 from default.settings import DEFAULT_ACCOUNT
-from utils import logerror
+from libraries.utils import logerror
 
 
 # Global variables

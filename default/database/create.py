@@ -1,6 +1,6 @@
-from databases.column import Column
-from databases.database import Database
-from databases.table import Table
+from libraries.database.column import Column
+from libraries.database.database import Database
+from libraries.database.table import Table
 from dates import dates
 from default.settings import DEFAULT_LANGUAGE
 

@@ -1,7 +1,7 @@
 import re
 from typing import Any
 
-from databases.row import Row as DatabaseRow
+from libraries.database.row import Row as DatabaseRow
 
 
 class Address(DatabaseRow):

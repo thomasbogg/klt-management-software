@@ -1,7 +1,7 @@
-from apis.google.account import GoogleAccount
-from apis.google.contacts.person import GooglePerson
-from apis.google.mail.message import GoogleMailMessage
-from apis.google.mail.messages import GoogleMailMessages
+from libraries.google.account import GoogleAccount
+from libraries.google.contacts.person import GooglePerson
+from libraries.google.mail.message import GoogleMailMessage
+from libraries.google.mail.messages import GoogleMailMessages
 from correspondence.functions import get_email_bookings
 from default.booking.booking import Booking
 from default.database.database import Database
@@ -14,8 +14,8 @@ from default.settings import (
     DEFAULT_LANGUAGE, 
 )
 from default.whatsapp.functions import send_whatsapp_message
-from translator.deepl import Deepl
-from web.whatsapp import BrowseWhatsApp
+from libraries.translator.deepl import Deepl
+from libraries.web.whatsapp import BrowseWhatsApp
 
 
 def new_guest_email(

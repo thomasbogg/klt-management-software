@@ -1,6 +1,6 @@
 from datetime import date
 
-from apis.google.mail.message import GoogleMailMessage
+from libraries.google.mail.message import GoogleMailMessage
 from correspondence.guest.arrival.registration.run import (
     get_guest_registration_attachment,
     new_guest_arrival_email,
@@ -34,8 +34,8 @@ from default.whatsapp.functions import login_to_whatsapp
 from forms.functions import get_forms_bookings
 from forms.registration.parser import PIMSGuestRegistrationParser
 from PIMS.browser import BrowsePIMS
-from utils import log, sublog, logdivider
-from web.whatsapp import BrowseWhatsApp
+from libraries.utils import log, sublog, logdivider
+from libraries.web.whatsapp import BrowseWhatsApp
 
 
 #######################################################

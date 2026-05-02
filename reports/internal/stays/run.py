@@ -10,9 +10,9 @@ from reports.internal.functions import (
     get_percentage,
     set_items
 )
-from workbooks.utils import set_tables_in_worksheet
-from workbooks.workbook import Workbook
-from workbooks.worksheet import Worksheet
+from libraries.workbook.utils import set_tables_in_worksheet
+from libraries.workbook.workbook import Workbook
+from libraries.workbook.worksheet import Worksheet
 
 
 def stays_vs_nights_reports_creator(workbook: Workbook, bookings: list[Booking], onlyGuest: bool = False):

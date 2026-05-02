@@ -11,8 +11,8 @@ from default.settings import (
     PIMS_USERNAME,
     PLATFORMS
 )
-from utils import string_to_float
-from web.html import HTML
+from libraries.utils import string_to_float
+from libraries.web.html import HTML
 
 
 class BrowsePIMS(KLTBrowser):

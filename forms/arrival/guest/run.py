@@ -27,8 +27,8 @@ from forms.arrival.guest.functions import (
 )
 from forms.arrival.guest.responses import GuestArrivalFormResponses
 from forms.functions import get_forms_bookings
-from utils import log, logdivider, sublog
-from web.whatsapp import BrowseWhatsApp
+from libraries.utils import log, logdivider, sublog
+from libraries.web.whatsapp import BrowseWhatsApp
 
 
 

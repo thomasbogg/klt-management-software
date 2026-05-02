@@ -19,7 +19,7 @@ from default.updates.functions import (
 )
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from time import sleep
-from utils import sublog
+from libraries.utils import sublog
 
 
 # Decorator for retry logic

@@ -1,4 +1,4 @@
-from web.html import HTML
+from libraries.web.html import HTML
 
 
 class PIMSGuestRegistrationParser(HTML):

@@ -1,6 +1,6 @@
 from datetime import date
 
-from apis.google.mail.message import GoogleMailMessage
+from libraries.google.mail.message import GoogleMailMessage
 from correspondence.internal.functions import (
     get_booking_table_data,
     get_subject,

@@ -1,4 +1,4 @@
-from apis.google.mail.message import GoogleMailMessage
+from libraries.google.mail.message import GoogleMailMessage
 from platforms.reader import ReadPlatformEmails
 import regex as re
 

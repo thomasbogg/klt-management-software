@@ -1,7 +1,7 @@
 from datetime import date
 from PIMS.browser import BrowsePIMS
 from default.update.wrapper import update
-from utils import sublog
+from libraries.utils import sublog
 
 
 @update

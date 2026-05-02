@@ -9,9 +9,9 @@ from default.booking.functions import (
 )
 from default.dates import dates
 from default.settings import LOCAL_STORAGE_DIR
-from workbooks.dates import WorksheetDates
-from workbooks.workbook import Workbook
-from workbooks.worksheet import Worksheet
+from libraries.workbook.dates import WorksheetDates
+from libraries.workbook.workbook import Workbook
+from libraries.workbook.worksheet import Worksheet
 
 
 #######################################################

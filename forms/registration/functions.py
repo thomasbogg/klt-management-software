@@ -1,4 +1,4 @@
-from apis.google.forms.form import GoogleForm
+from libraries.google.forms.form import GoogleForm
 from default.booking.booking import Booking
 from default.dates import dates
 from default.google.drive.functions import set_global_permissions
@@ -14,13 +14,13 @@ from default.settings import (
 )
 from default.translator.functions import translator as _translator
 from forms.registration.responses import GuestRegistrationFormResponses
-from utils import (
+from libraries.utils import (
     convert_to_base_64,
     gen_hex,
     logerror,
     sublog
 )
-from web.xml import XMLTreeBuilder
+from libraries.web.xml import XMLTreeBuilder
 from zeep import Client
 
 _COUNTRIES: list[str] | None = None

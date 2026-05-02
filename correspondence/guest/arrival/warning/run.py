@@ -1,7 +1,7 @@
 from datetime import date
 
-from apis.google.mail.message import GoogleMailMessage
-from apis.google.mail.messages import GoogleMailMessages
+from libraries.google.mail.message import GoogleMailMessage
+from libraries.google.mail.messages import GoogleMailMessages
 from correspondence.guest.arrival.functions import (
     get_guest_arrival_email_bookings,
     new_guest_arrival_email
@@ -11,7 +11,7 @@ from default.booking.booking import Booking
 from default.database.database import Database
 from default.database.functions import get_database
 from default.update.wrapper import update
-from utils import logerror
+from libraries.utils import logerror
 
 
 @update

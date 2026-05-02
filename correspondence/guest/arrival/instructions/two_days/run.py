@@ -1,5 +1,5 @@
 from accounts.accounts import TeamAtABA
-from apis.google.mail.message import GoogleMailMessage
+from libraries.google.mail.message import GoogleMailMessage
 from correspondence.guest.arrival.functions import (
     get_arrival_table_data,
     new_guest_arrival_email

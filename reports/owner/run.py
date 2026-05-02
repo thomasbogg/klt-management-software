@@ -1,7 +1,7 @@
 from datetime import date
 
 from accountants.functions import get_accountants_sheet_bookings
-from apis.google.mail.message import GoogleMailMessage
+from libraries.google.mail.message import GoogleMailMessage
 from correspondence.owner.functions import new_owner_email
 from default.booking.booking import Booking
 from default.booking.functions import (
@@ -55,9 +55,9 @@ from default.workbook.functions import (
     set_worksheet, 
     update_worksheet
 )
-from utils import log, sublog
-from workbooks.dates import WorksheetDates
-from workbooks.worksheet import Worksheet
+from libraries.utils import log, sublog
+from libraries.workbook.dates import WorksheetDates
+from libraries.workbook.worksheet import Worksheet
 
 
 # Constants

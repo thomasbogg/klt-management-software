@@ -1,6 +1,6 @@
 import datetime
 
-from apis.google.forms.form import GoogleForm
+from libraries.google.forms.form import GoogleForm
 from default.booking.booking import Booking
 from default.booking.functions import determine_price_of_extra
 from default.database.database import Database

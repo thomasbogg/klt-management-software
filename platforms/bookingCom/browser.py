@@ -9,8 +9,8 @@ from default.settings import (
 )
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
-from utils import logerror, loginput
-from web.html import HTML
+from libraries.utils import logerror, loginput
+from libraries.web.html import HTML
 
 
 class BrowseBookingComExtranet(KLTBrowser):

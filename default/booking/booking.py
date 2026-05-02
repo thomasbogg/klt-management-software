@@ -12,7 +12,7 @@ from default.guest.guest import Guest
 from default.property.property import Property
 from default.settings import PLATFORMS
 from typing import Any
-from utils import logerror
+from libraries.utils import logerror
 
 
 class Booking:

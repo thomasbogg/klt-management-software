@@ -20,7 +20,7 @@ from interface.functions import (
     open_PIMS,
     should_update_PIMS,
 )
-from interfaces.interface import Interface
+from libraries.interface.interface import Interface
 
 
 def update_arrival_departure(

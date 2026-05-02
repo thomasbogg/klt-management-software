@@ -3,7 +3,7 @@ from default.booking.functions import determine_management_fee, determine_meet_g
 from default.property.property import Property
 from default.workbook.cells import set_cell
 from default.booking.functions import determine_owner_payment as default_determine_owner_payment
-from workbooks.worksheet import Worksheet
+from libraries.workbook.worksheet import Worksheet
 
 
 def set_id_cell(worksheet: Worksheet, booking: Booking=None, **kwargs):

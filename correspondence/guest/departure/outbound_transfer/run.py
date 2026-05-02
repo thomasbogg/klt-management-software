@@ -1,4 +1,4 @@
-from apis.google.mail.message import GoogleMailMessage
+from libraries.google.mail.message import GoogleMailMessage
 from correspondence.guest.departure.functions import (
     get_guest_departure_email_bookings,
     new_guest_departure_email

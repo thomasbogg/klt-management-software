@@ -1,4 +1,4 @@
-from translator.deepl import Deepl
+from libraries.translator.deepl import Deepl
 from default.settings import DEEPL_AUTH_KEY
 
 DEEPL = None

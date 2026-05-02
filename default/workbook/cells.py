@@ -13,9 +13,9 @@ from default.booking.functions import (
     determine_platform_fee_with_IVA,
     determine_total_to_be_receipted
 )
-from workbooks.dates import WorksheetDates
-from workbooks.stylesheet import Stylesheet
-from workbooks.worksheet import Worksheet
+from libraries.workbook.dates import WorksheetDates
+from libraries.workbook.stylesheet import Stylesheet
+from libraries.workbook.worksheet import Worksheet
 
 
 #######################################################

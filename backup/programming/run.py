@@ -1,9 +1,9 @@
-from apis.google.drives.directory import GoogleDriveDirectory
+from libraries.google.drives.directory import GoogleDriveDirectory
 from backup.functions import backup_folders_and_files
 from default.directory.functions import get_KLT_directory
 from default.google.drive.functions import get_todays_backup_directory_on_drive
 from default.update.wrapper import update
-from directories.directory import Directory
+from libraries.directory.directory import Directory
 
 
 @update

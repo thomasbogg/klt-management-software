@@ -1,7 +1,7 @@
 from datetime import date
 
-from apis.google.mail.message import GoogleMailMessage
-from apis.google.mail.messages import GoogleMailMessages
+from libraries.google.mail.message import GoogleMailMessage
+from libraries.google.mail.messages import GoogleMailMessages
 from correspondence.functions import determine_balance_payment
 from correspondence.guest.arrival.balance_payment.functions import get_balance_payment_bookings
 from correspondence.guest.arrival.functions import new_guest_arrival_email
@@ -12,7 +12,7 @@ from default.database.functions import get_database
 from default.update.dates import updatedates
 from default.update.wrapper import update
 from PIMS.browser import BrowsePIMS
-from web.browser import Browser
+from libraries.web.browser import Browser
 
 
 @update

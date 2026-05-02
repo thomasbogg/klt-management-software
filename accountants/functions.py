@@ -1,7 +1,7 @@
 from datetime import date
 
-from apis.google.drives.file import GoogleDriveFile
-from apis.google.mail.message import GoogleMailMessage
+from libraries.google.drives.file import GoogleDriveFile
+from libraries.google.mail.message import GoogleMailMessage
 from default.accountancy.functions import (
     ACC_STORAGE_DIR,
     get_accountancy_sheet_bookings
@@ -30,8 +30,8 @@ from default.workbook.functions import (
     get_workbook as default_get_workbook,
     set_worksheet
 )
-from workbooks.workbook import Workbook
-from workbooks.worksheet import Worksheet
+from libraries.workbook.workbook import Workbook
+from libraries.workbook.worksheet import Worksheet
 
 
 DRIVE_FOLDER = 'Accountancy Sheets'

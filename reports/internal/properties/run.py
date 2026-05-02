@@ -14,10 +14,10 @@ from reports.internal.functions import (
     set_items,
     currency_value_formatter,
 )
-from workbooks.utils import set_tables_in_worksheet
-from workbooks.workbook import Workbook
-from workbooks.worksheet import Worksheet
-from workbooks.tables import Table
+from libraries.workbook.utils import set_tables_in_worksheet
+from libraries.workbook.workbook import Workbook
+from libraries.workbook.worksheet import Worksheet
+from libraries.workbook.tables import Table
 
 
 def properties_report_creator(workbook: Workbook, bookings: list[Booking]) -> None:

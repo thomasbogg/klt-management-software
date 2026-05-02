@@ -1,14 +1,14 @@
 import datetime
 import regex as re
 
-from apis.google.mail.message import GoogleMailMessage
-from apis.google.mail.messages import GoogleMailMessages
+from libraries.google.mail.message import GoogleMailMessage
+from libraries.google.mail.messages import GoogleMailMessages
 from default.google.mail.functions import get_default_user
 from default.update.dates import updatedates
 from default.update.wrapper import update
 from platforms.airbnb.browser import BrowseAirbnb
 from platforms.functions import threeX
-from utils import sublog
+from libraries.utils import sublog
 
 
 @update

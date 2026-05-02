@@ -14,7 +14,7 @@ from default.update.dates import updatedates
 from default.update.wrapper import update
 from touristtax.browser import TMTBrowser
 from touristtax.functions import get_tourist_tax_properties, get_tourist_tax_bookings, calculate_tourist_tax
-from utils import log, sublog
+from libraries.utils import log, sublog
 
 
 @update

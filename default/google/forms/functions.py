@@ -1,15 +1,15 @@
 from typing import Any
 
-from apis.google.drives.file import GoogleDriveFile
-from apis.google.forms.form import GoogleForm
-from apis.google.forms.utils import (
+from libraries.google.drives.file import GoogleDriveFile
+from libraries.google.forms.form import GoogleForm
+from libraries.google.forms.utils import (
     get_google_forms,
     get_google_forms_connection,
     create_new_form,
 )
 from default.google.drive.functions import get_klt_management_directory_on_drive
 from default.settings import DEFAULT_ACCOUNT, TEST
-from utils import (
+from libraries.utils import (
     logerror,
     sublog,
 )

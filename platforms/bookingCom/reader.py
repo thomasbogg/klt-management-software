@@ -1,7 +1,7 @@
 from datetime import date
 import regex as re
 
-from apis.google.mail.message import GoogleMailMessage
+from libraries.google.mail.message import GoogleMailMessage
 from platforms.functions import convert_date
 from platforms.reader import ReadPlatformEmails
 

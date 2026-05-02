@@ -8,7 +8,7 @@ from interface.functions import (
     get_text,
     get_time,
 )
-from interfaces.interface import Interface
+from libraries.interface.interface import Interface
 
 
 def manually_fill_arrival_questionnaire(database: Database, subsection: Interface, booking: Booking) -> None:

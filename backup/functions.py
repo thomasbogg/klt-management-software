@@ -1,6 +1,6 @@
-from apis.google.drives.directory import GoogleDriveDirectory
-from directories.directory import Directory
-from directories.file import File
+from libraries.google.drives.directory import GoogleDriveDirectory
+from libraries.directory.directory import Directory
+from libraries.directory.file import File
 
 
 def backup_folders_and_files(

@@ -1,7 +1,7 @@
 import os
 from datetime import date
 
-from apis.google.drives.directory import GoogleDriveDirectory
+from libraries.google.drives.directory import GoogleDriveDirectory
 from default.dates import dates
 from default.google.drive.functions import get_klt_management_directory_on_drive
 from default.update.dates import updatedates

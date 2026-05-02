@@ -19,7 +19,7 @@ from default.booking.booking import Booking
 from forms.arrival.guest.run import send_whatsapp_prompts as send_arrival_form_whatsapp_prompt
 from forms.registration.run import send_whatsapp_prompts as send_guest_registration_whatsapp_prompt
 from forms.registration.run import send_new_guest_registration_to_owner_email
-from interfaces.interface import Interface
+from libraries.interface.interface import Interface
 
 
 def send_emails(subsection: Interface, booking: Booking) -> None:

@@ -1,11 +1,11 @@
 from datetime import date
 from ssl import SSLEOFError
 
-from apis.google.account import GoogleAccount
-from apis.google.connect import GoogleAPIService
-from apis.google.mail.message import GoogleMailMessage
-from apis.google.mail.messages import GoogleMailMessages
-from apis.google.mail.utils import (
+from libraries.google.account import GoogleAccount
+from libraries.google.connect import GoogleAPIService
+from libraries.google.mail.message import GoogleMailMessage
+from libraries.google.mail.messages import GoogleMailMessages
+from libraries.google.mail.utils import (
     get_google_mail_connection,
     get_google_mail_user,
     get_refreshed_google_mail_connection
@@ -13,7 +13,7 @@ from apis.google.mail.utils import (
 from default.booking.booking import Booking
 from default.dates import dates
 from default.settings import DEFAULT_ACCOUNT, TEST
-from utils import logwarning
+from libraries.utils import logwarning
 
 
 # Global variables

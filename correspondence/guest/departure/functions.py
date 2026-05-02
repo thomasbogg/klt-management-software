@@ -1,8 +1,8 @@
 from datetime import date
 
-from apis.google.account import GoogleAccount
-from apis.google.mail.message import GoogleMailMessage
-from apis.google.mail.messages import GoogleMailMessages
+from libraries.google.account import GoogleAccount
+from libraries.google.mail.message import GoogleMailMessage
+from libraries.google.mail.messages import GoogleMailMessages
 from correspondence.guest.functions import (
     get_guest_email_bookings,
     new_guest_email
