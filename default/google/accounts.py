@@ -11,13 +11,14 @@ except Exception:
     load_dotenv()
     LOCAL = True
 
+
 if LOCAL:  
+    CREDS = os.path.abspath(os.getenv('GOOGLE_CREDS_DIR', None))
+else:
     CREDS = (
         os.getenv('GOOGLE_API_CREDENTIALS'),
         os.getenv('GOOGLE_API_SERVICE_ACCOUNT_USERNAME'),
     )
-else:
-    CREDS = os.path.abspath(os.getenv('GOOGLE_CREDS_DIR', None))
 
 
 class ThomasAtABA(GoogleAccount):
