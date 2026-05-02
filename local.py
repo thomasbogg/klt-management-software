@@ -296,7 +296,3 @@ def last_minute_update(sections: Interface) -> None:
 
     send_owner_four_weeks_emails(start=updatedates.calculate(days=1), end=end)
     back_up_database()
-
-
-if __name__ == '__main__':
-    main()

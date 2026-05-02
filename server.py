@@ -55,6 +55,8 @@ from reports.internal.run import update_end_of_month_internal_report
 from sheets.ABA.run import update_ABA_properties_sheets
 from sheets.KKLJ.run import update_KKLJ_properties_sheets
 
+from touristtax.run import pay_monthly_tourist_tax
+
 IS_MAIN_RUN: bool = updatedates.hour() in (15, 16)
 
 @pull_database
@@ -125,7 +127,6 @@ def update_accountancy_system() -> None:
         if updatedates.month() in (3, 6, 9, 12):
             calculate_owners_totals_over_period()
 
-
     if IS_MAIN_RUN and updatedates.day() in (1, 2):
         update_generic_accounts_reports_workbooks(
             'PNM - Consultadoria, Lda',
@@ -135,6 +136,12 @@ def update_accountancy_system() -> None:
     if IS_MAIN_RUN and updatedates.day() in (1, 16):
         complete_empty_guest_details()
         update_bookings_reports_workbooks()
+
+    if IS_MAIN_RUN and updatedates.day() in (1, 15):
+        update_bookingCom_guest_contacts()
+
+    if IS_MAIN_RUN and updatedates.day() == 1:
+        pay_monthly_tourist_tax()
 
 
 def update_arrivals_system() -> None:
