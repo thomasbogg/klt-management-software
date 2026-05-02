@@ -1,0 +1,15 @@
+google-api-python-client
+google_auth_oauthlib
+python-dateutil
+regex
+bs4
+openpyxl
+phonenumbers
+matplotlib
+selenium
+undetected-chromedriver
+seleniumbase
+deepl
+pycountries
+zeep
+python-dotenv
