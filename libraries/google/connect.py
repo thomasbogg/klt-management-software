@@ -6,6 +6,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build, Resource
 
 
+
 class GoogleAPIService:
     """
     Service class to authenticate and connect to various Google APIs.
@@ -42,7 +43,7 @@ class GoogleAPIService:
     # Connection Methods
     # =============================================================================
         
-    def get(self) -> 'GoogleAPIService':
+    def get_local_connection(self) -> 'GoogleAPIService':
         """
         Establishes a connection to the specified Google API.
         
@@ -58,12 +59,12 @@ class GoogleAPIService:
     
     def connect(self) -> 'GoogleAPIService':
         """
-        Alias for get() - establishes a connection to the specified Google API.
+        Alias for get_local_connection() - establishes a connection to the specified Google API.
         
         Returns:
             GoogleAPIService: Self for method chaining
         """
-        return self.get()
+        return self.get_local_connection()
 
     # =============================================================================
     # Properties
