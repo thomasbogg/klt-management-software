@@ -5,7 +5,7 @@ This module contains configuration settings, API credentials, and constants
 used throughout the application.
 """
 import os
-from accounts.accounts import ThomasAtABA
+from default.google.accounts import ThomasAtABA
 
 try:
     # Check if running in deployed environment (e.g., on a server) 

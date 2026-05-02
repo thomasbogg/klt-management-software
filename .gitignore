@@ -13,6 +13,9 @@ copilot/
 # Ignore test files
 test.py
 
+# Ignore secrets files
+.secrets/
+
 # Ignore docker files
 .dockerignore
 docker-compose.yml

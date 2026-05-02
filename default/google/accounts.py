@@ -15,7 +15,7 @@ except Exception:
     from dotenv import load_dotenv
     load_dotenv()
     LOCAL = True
-    CREDS = os.path.abspath(os.getenv('CREDS', None))
+    CREDS = os.path.abspath(os.getenv('GOOGLE_CREDS_DIR', None))
 
 
 class ThomasAtABA(GoogleAccount):

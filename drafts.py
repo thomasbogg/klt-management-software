@@ -1,4 +1,4 @@
-from accounts.accounts import KevinAtABA, TeamAtABA, ThomasAtABA
+from default.google.accounts import KevinAtABA, TeamAtABA, ThomasAtABA
 from libraries.google.mail.message import GoogleMailMessage
 from libraries.google.mail.messages import GoogleMailMessages
 from correspondence.drafts.functions import (
