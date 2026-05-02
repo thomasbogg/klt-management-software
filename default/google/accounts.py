@@ -4,7 +4,7 @@ import os
 try:
     # Check if running in deployed environment (e.g., on a server) 
     # where environment variables are set directly
-    os.getenv('LOCAL', 'None').lower() == 'false'
+    os.getenv('LOCAL').lower() == 'false'
     LOCAL = False
     CREDS = (
         os.getenv('GOOGLE_API_CREDENTIALS'),
@@ -14,6 +14,7 @@ except Exception:
     # Load environment variables from .env file
     from dotenv import load_dotenv
     load_dotenv()
+
     LOCAL = True
     CREDS = os.path.abspath(os.getenv('GOOGLE_CREDS_DIR', None))
 
@@ -26,7 +27,7 @@ class ThomasAtABA(GoogleAccount):
     and credentials for API access.
     """
 
-    _details: list = os.environ.get('ThomasAtABA').split(';')
+    _details: list = os.getenv('ThomasAtABA').split(';')
 
     
     def __init__(self, credentials: str = CREDS, local: bool = LOCAL) -> None:
@@ -52,7 +53,7 @@ class KevinAtABA(GoogleAccount):
     and credentials for API access.
     """
 
-    _details: list = os.environ.get('KevinAtABA').split(';')
+    _details: list = os.getenv('KevinAtABA').split(';')
     
     def __init__(self, credentials: str = CREDS, local: bool = LOCAL) -> None:
         """
@@ -78,7 +79,7 @@ class TeamAtABA(GoogleAccount):
     information and credentials for API access.
     """
 
-    _details: list = os.environ.get('TeamAtABA').split(';')
+    _details: list = os.getenv('TeamAtABA').split(';')
     
     def __init__(self, credentials: str = CREDS, local: bool = LOCAL) -> None:
         """

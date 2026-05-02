@@ -10,7 +10,7 @@ from default.google.accounts import ThomasAtABA
 try:
     # Check if running in deployed environment (e.g., on a server) 
     # where environment variables are set directly
-    os.getenv('LOCAL', 'None').lower() == 'false'
+    os.getenv('LOCAL').lower() == 'false'
     LOCAL: bool = False
 except Exception:
     # Load environment variables from .env file
