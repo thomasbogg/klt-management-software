@@ -9,7 +9,7 @@ except Exception:
     # Load environment variables from .env file
     from dotenv import load_dotenv
     load_dotenv()
-    LOCAL = True
+    LOCAL = os.getenv('LOCAL').lower() == 'true'
 
 
 if LOCAL:  

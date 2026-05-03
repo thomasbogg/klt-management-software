@@ -15,7 +15,7 @@ except Exception:
     # Load environment variables from .env file
     from dotenv import load_dotenv
     load_dotenv()
-    LOCAL: bool = os.getenv('LOCAL', 'True').lower() == 'true'
+    LOCAL: bool = os.getenv('LOCAL').lower() == 'true'
 
 #######################################################
 # APPLICATION SETTINGS
