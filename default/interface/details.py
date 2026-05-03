@@ -1,5 +1,5 @@
 from default.booking.booking import Booking
-from interface.functions import get_text, get_int
+from default.interface.functions import get_text, get_int
 from libraries.interface.interface import Interface
 
 

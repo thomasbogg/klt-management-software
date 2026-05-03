@@ -19,7 +19,7 @@ from default.updates.functions import (
     welcome_pack_changes,
     welcome_pack_modifications_changes,
 )
-from interface.functions import get_text, get_bool, open_PIMS, should_update_PIMS
+from default.interface.functions import get_text, get_bool, open_PIMS, should_update_PIMS
 from libraries.interface.interface import Interface
 
 

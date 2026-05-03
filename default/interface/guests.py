@@ -7,7 +7,7 @@ from default.updates.functions import (
 )
 from forms.arrival.functions import reset_arrival_form
 from forms.arrival.guest.functions import set_guest_arrival_form
-from interface.functions import (
+from default.interface.functions import (
     get_bool,
     get_int,
     get_text,

@@ -2,7 +2,7 @@ from default.booking.booking import Booking
 from default.database.database import Database
 from default.guest.guest import Guest
 from default.updates.functions import update_to_database
-from interface.functions import (
+from default.interface.functions import (
     get_bool,
     get_int,
     get_text,

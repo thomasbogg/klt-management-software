@@ -9,7 +9,7 @@ from datetime import date
 from default.google.mail.functions import get_user, send_email
 from default.guest.guest import Guest
 from default.property.property import Property
-from interface.functions import get_location_criteria
+from default.interface.functions import get_location_criteria
 from libraries.interface.interface import Interface
 from libraries.utils import logerror
 

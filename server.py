@@ -145,8 +145,8 @@ def update_accountancy_system() -> None:
     if IS_MAIN_RUN and updatedates.day() in (1, 15):
         update_bookingCom_guest_contacts()
 
-    if IS_MAIN_RUN and updatedates.day() == 1:
-        pay_monthly_tourist_tax()
+    #if IS_MAIN_RUN and updatedates.day() == 1:
+    #    pay_monthly_tourist_tax()
 
 
 def update_arrivals_system() -> None:

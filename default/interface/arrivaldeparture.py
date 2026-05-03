@@ -12,7 +12,7 @@ from default.updates.functions import (
     departure_time_has_changed,
     meet_greet_has_changed,
 )
-from interface.functions import (
+from default.interface.functions import (
     get_bool,
     get_date,
     get_text,
