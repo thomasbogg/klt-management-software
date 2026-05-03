@@ -12,6 +12,7 @@ copilot/
 
 # Ignore test files
 test.py
+dockertest.py
 
 # Ignore secrets files
 .secrets/

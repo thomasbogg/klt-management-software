@@ -564,12 +564,12 @@ def send_email_for_new_sheet(worksheet: Worksheet, lastRowTaken: int) -> None:
 # DATA RETRIEVAL FUNCTIONS
 #######################################################
 
-def get_property_sheet_properties() -> list[Property]:
+def get_property_sheet_properties() -> Database:
     """
     Get properties with owner information for property sheets.
     
     Returns:
-        List of properties with owner details loaded
+        Database: A database object containing the properties and their owners
     """
     search = search_properties()
     select = search.propertyOwners.select()

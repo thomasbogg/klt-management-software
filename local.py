@@ -48,7 +48,7 @@ from libraries.interface.interface import Interface
 
 from payments.run import update_payments_to_owner_workbooks
 
-from PIMS.download import download_latest_from_PIMS
+from PIMS.download import download_PIMS_bookings
 from PIMS.upload import update_PIMS_platform_bookings
 
 from platforms.airbnb.download import update_from_airbnb
@@ -165,7 +165,7 @@ def daily_update_from_pims() -> None:
     """
     Download the latest data from PIMS.
     """
-    download_latest_from_PIMS()
+    download_PIMS_bookings()
 
 
 def update_properties_sheets() -> None:
@@ -280,7 +280,7 @@ def last_minute_update(sections: Interface) -> None:
         update_bookingCom_guest_contacts(start=start, end=end)
         update_from_airbnb()
         update_from_vrbo()
-        download_latest_from_PIMS(start=start, end=end, updatedSince=1)
+        download_PIMS_bookings(start=start, end=end, updatedSince=1)
     elif option == 2: 
         update_KKLJ_properties_sheets()
 

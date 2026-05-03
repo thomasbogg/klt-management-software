@@ -34,7 +34,7 @@ from libraries.utils import log, logerror, string_is_affirmative, sublog
 
 # Main entry point function
 @update
-def download_latest_from_PIMS(start: date = None, end: date = None, PIMSId: str | int | list = None, 
+def download_PIMS_bookings(start: date = None, end: date = None, PIMSId: str | int | list = None, 
                              updatedSince: int = 2, visible: bool = False) -> str:
     """
     Download the latest booking data from PIMS to the local database.

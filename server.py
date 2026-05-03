@@ -43,7 +43,7 @@ from forms.registration.complete import complete_empty_guest_details
 
 from payments.run import update_payments_to_owner_workbooks
 
-from PIMS.download import download_latest_from_PIMS
+from PIMS.download import download_PIMS_bookings
 from PIMS.upload import update_PIMS_platform_bookings
 
 from platforms.bookingCom.contacts import update_bookingCom_guest_contacts
@@ -59,13 +59,18 @@ from touristtax.run import pay_monthly_tourist_tax
 
 IS_MAIN_RUN: bool = updatedates.hour() in (15, 16)
 
-@pull_database
+#@pull_database
 def run() -> None:
     """
     Main entry point for the KLT management and database system updater.
     
     Determines whether to run a full or last-minute update based on the current 
     time and user input.
+    """
+
+    from dockertest import run_dockertest
+    run_dockertest()
+
     """
     back_up_database()
     update_from_forms()
@@ -77,7 +82,7 @@ def run() -> None:
     update_guest_departures_system()
     update_platform_guests()
     back_up_database()
-
+    """
 
 def update_from_forms() -> None:
     """
@@ -96,7 +101,7 @@ def daily_update_from_pims() -> None:
     """
     Download the latest data from PIMS.
     """
-    download_latest_from_PIMS()
+    download_PIMS_bookings()
 
 
 def update_properties_sheets() -> None:

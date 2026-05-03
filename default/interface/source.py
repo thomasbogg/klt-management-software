@@ -1,7 +1,7 @@
 from datetime import date
 from default.booking.booking import Booking
 from default.dates import dates
-from PIMS.download import download_latest_from_PIMS
+from PIMS.download import download_PIMS_bookings
 from platforms.airbnb.download import update_from_airbnb
 from platforms.bookingCom.download import update_from_bookingCom
 from platforms.vrbo.download import update_from_vrbo
@@ -26,7 +26,7 @@ def update_at_source(booking: Booking) -> None:
     source = booking.details.enquirySource
 
     if source == 'Direct':
-        return download_latest_from_PIMS(visible=True, PIMSId=booking.details.PIMSId)
+        return download_PIMS_bookings(visible=True, PIMSId=booking.details.PIMSId)
         
     if source == 'Airbnb':
         return update_from_airbnb(id=booking.details.platformId)
