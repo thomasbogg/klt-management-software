@@ -6,7 +6,7 @@ from email.mime.text import MIMEText
 from typing import Any
 
 from libraries.google.connect import GoogleAPIService
-from libraries.dates import dates dates
+from libraries.dates import dates
 from libraries.translator.deepl import Deepl
 from libraries.utils import Object, logerror, logtest, sublog, toList
 

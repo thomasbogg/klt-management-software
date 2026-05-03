@@ -1,4 +1,4 @@
-from libraries.dates import dates dates
+from libraries.dates import dates
 from default.booking.booking import Booking
 from default.booking.functions import (
     determine_klt_commission,

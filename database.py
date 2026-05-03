@@ -1,6 +1,4 @@
-from typing import Any
-
-from libraries.dates import dates dates
+from libraries.dates import dates
 from libraries.database.table import Table
 from default.booking.arrival import Arrival
 from default.booking.booking import Booking
@@ -17,7 +15,7 @@ from default.database.functions import (
     search_properties, 
     search_valid_bookings, 
 )
-from default.property.functions import update_properties_information_in_database
+from default.property.database import update_properties_information_in_database
 from default.update.wrapper import pull_database
 from libraries.interface.interface import Interface
 from libraries.utils import sublog

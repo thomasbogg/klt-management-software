@@ -11,7 +11,7 @@ from libraries.google.drives.utils import (
     get_google_drives_connection,
     get_refreshed_google_drives_connection
 )
-from libraries.dates import dates dates
+from libraries.dates import dates
 from default.directory.functions import get_local_storage_directory
 from default.settings import DEFAULT_ACCOUNT, TEST
 from libraries.utils import log, logerror, logwarning

@@ -1,5 +1,5 @@
 from datetime import date
-from libraries.dates import dates dates
+from libraries.dates import dates
 
 
 class WorksheetDates(dates):
