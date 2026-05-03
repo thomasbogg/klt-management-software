@@ -1,6 +1,6 @@
 import datetime
 
-from dates import dates as _dates
+from libraries.dates import dates as _dates
 from libraries.utils import logerror, logwarning
 
 
