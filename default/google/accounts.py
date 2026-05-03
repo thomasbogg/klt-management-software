@@ -4,12 +4,14 @@ import os
 try:
     # Check if running in deployed environment (e.g., on a server) 
     # where environment variables are set directly
-    LOCAL: bool = os.getenv('LOCAL').lower() == 'false'
+    LOCAL: bool = os.getenv('LOCAL').lower() == 'true'
+    print(f"Running in deployed environment. LOCAL={LOCAL}")
 except Exception:
     # Load environment variables from .env file
     from dotenv import load_dotenv
     load_dotenv()
     LOCAL = os.getenv('LOCAL').lower() == 'true'
+    print(f"Running in local environment. LOCAL={LOCAL}")
 
 
 if LOCAL:  
@@ -46,6 +48,7 @@ class ThomasAtABA(GoogleAccount):
         self.details: list[str] = self._details[3:]
         self.credentials: str = credentials
         self.local: bool = local
+
 
 class KevinAtABA(GoogleAccount):
     """

@@ -6,7 +6,7 @@ from correspondence.self.functions import (
     new_email_to_self,
     send_email_to_self
 )
-from dates import dates
+from libraries.dates import dates dates
 from default.google.drive.functions import (
     get_klt_management_directory_on_drive,
     upload_local_file_to_drive

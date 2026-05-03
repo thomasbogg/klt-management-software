@@ -1,7 +1,7 @@
 from libraries.google.account import GoogleAccount
 from libraries.google.mail.message import GoogleMailMessage
 from libraries.google.mail.messages import GoogleMailMessages
-from dates import dates
+from libraries.dates import dates
 from default.booking.booking import Booking
 from default.google.mail.functions import get_default_user, get_inbox, new_email
 from default.settings import DEFAULT_ACCOUNT
