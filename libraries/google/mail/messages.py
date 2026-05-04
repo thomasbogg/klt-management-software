@@ -29,6 +29,7 @@ class GoogleMailMessages(Object):
         self._connection = connection
         self._service = connection.connection
         self._account = account
+        self._userId = 'me' #if account.local else account.credentials[0].get('client_id')
 
     # =============================================================================
     # Properties
@@ -53,7 +54,7 @@ class GoogleMailMessages(Object):
         elif type == 'labels':
             search = self._service.users().labels()
 
-        response = search.list(userId="me", q=query).execute()
+        response = search.list(userId=self._userId, q=query).execute()
         results = response.get(type, [])
         
         if not results or type == 'labels':
@@ -240,7 +241,7 @@ class GoogleMailMessages(Object):
             GoogleMailMessage: Message object
         """
         if id and not load:
-            load = self._service.users().messages().get(userId="me", id=id).execute()
+            load = self._service.users().messages().get(userId=self._userId, id=id).execute()
         return GoogleMailMessage(
             connection=self._connection, load=load, id=id, isDraft=isDraft, TEST=self.TEST)
     

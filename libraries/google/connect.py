@@ -73,7 +73,7 @@ class GoogleAPIService:
             self._parse_service_account_info(),
             scopes=self._scopes
         )
-        delegated_credentials = credentials.with_subject(self._credentials[1])
+        delegated_credentials = credentials.with_subject(self.username)
         self._connection_time = dates.now()
         self._connection: Resource = build(
                             self._api, 

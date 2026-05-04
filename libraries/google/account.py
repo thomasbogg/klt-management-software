@@ -71,6 +71,16 @@ class GoogleAccount(Object):
         """Set the phone number for this account."""
         self._set('phoneNumber', value)
 
+    @property
+    def local(self) -> bool:
+        """Check if this account is configured for local credentials."""
+        return self._get('local')
+    
+    @local.setter
+    def local(self, value: bool) -> None:
+        """Set whether this account is configured for local credentials."""
+        self._set('local', value)
+
     # =============================================================================
     # Public Methods
     # =============================================================================

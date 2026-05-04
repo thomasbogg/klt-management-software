@@ -23,7 +23,8 @@ def get_google_mail_connection(account: GoogleAccount | None = None) -> GoogleAP
     apiKwargs = {
         'api': 'gmail', 
         'version': 'v1', 
-        'scopes': ['https://www.googleapis.com/auth/gmail.modify']
+        'scopes': ['https://www.googleapis.com/auth/gmail.modify',
+                   'https://mail.google.com/']
     }
     return get_google_api_connection(account, **apiKwargs)
 
