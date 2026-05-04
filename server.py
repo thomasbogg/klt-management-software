@@ -68,10 +68,6 @@ def run() -> None:
     time and user input.
     """
 
-    from dockertest import run_dockertest
-    run_dockertest()
-
-    """
     back_up_database()
     update_from_forms()
     daily_update_from_pims()
@@ -82,7 +78,7 @@ def run() -> None:
     update_guest_departures_system()
     update_platform_guests()
     back_up_database()
-    """
+
 
 def update_from_forms() -> None:
     """

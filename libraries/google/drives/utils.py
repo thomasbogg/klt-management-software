@@ -49,7 +49,8 @@ def get_google_drives(
         name: str | None = None, 
         account: GoogleAccount | None = None, 
         connection: GoogleAPIService | None = None, 
-        TEST: bool = False) -> GoogleDriveDirectory | list[GoogleDriveDirectory]:
+        TEST: bool = False,
+        LOCAL: bool = True) -> GoogleDriveDirectory | list[GoogleDriveDirectory]:
     """
     Retrieves Google Drive(s) by name or lists all available drives.
     
@@ -70,7 +71,7 @@ def get_google_drives(
     drives = connection.connection.drives().list(
                                             pageSize=5, 
                                             fields='nextPageToken, drives(id, name)', 
-                                            useDomainAdminAccess=True).execute().get('drives', [])
+                                            useDomainAdminAccess=LOCAL).execute().get('drives', [])
 
     if not drives:
         raise Exception(f'No Google drives found using search word {name}.')

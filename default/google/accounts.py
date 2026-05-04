@@ -5,20 +5,31 @@ try:
     # Check if running in deployed environment (e.g., on a server) 
     # where environment variables are set directly
     LOCAL: bool = os.getenv('LOCAL').lower() == 'true'
-    print(f"Running in deployed environment. LOCAL={LOCAL}")
 except Exception:
     # Load environment variables from .env file
     from dotenv import load_dotenv
     load_dotenv()
     LOCAL = os.getenv('LOCAL').lower() == 'true'
-    print(f"Running in local environment. LOCAL={LOCAL}")
 
 
 if LOCAL:  
     CREDS = os.path.abspath(os.getenv('GOOGLE_CREDS_DIR', None))
 else:
     CREDS = (
-        os.getenv('GOOGLE_API_CREDENTIALS'),
+        {
+            "type": os.getenv("type"),
+            "project_id": os.getenv("project_id"),
+            "private_key_id": os.getenv("private_key_id"),
+            "private_key": '\n'.join(os.getenv("private_key").split('\\n')),
+            "client_email": os.getenv("client_email"),
+            "client_id": os.getenv("client_id"),
+            "auth_uri": os.getenv("auth_uri"),
+            "token_uri": os.getenv("token_uri"),
+            "auth_provider_x509_cert_url": os.getenv("auth_provider_x509_cert_url"),
+            "client_x509_cert_url": os.getenv("client_x509_cert_url"),
+            "universe_domain": os.getenv("universe_domain"),
+        },
+        #os.getenv('GOOGLE_API_CREDENTIALS_DIR'),
         os.getenv('GOOGLE_API_SERVICE_ACCOUNT_USERNAME'),
     )
 

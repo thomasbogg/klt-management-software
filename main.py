@@ -5,5 +5,7 @@ if __name__ == '__main__':
         from local import run as local_run
         local_run()
     else:
-        from server import run as server_run
-        server_run()
+        #from server import run as server_run
+        #server_run()
+        from dockertest import run_dockertest
+        run_dockertest()

@@ -13,7 +13,7 @@ from libraries.google.drives.utils import (
 )
 from libraries.dates import dates
 from default.directory.functions import get_local_storage_directory
-from default.settings import DEFAULT_ACCOUNT, TEST
+from default.settings import DEFAULT_ACCOUNT, LOCAL, TEST
 from libraries.utils import log, logerror, logwarning
 
 
@@ -97,7 +97,8 @@ def get_klt_management_drive() -> GoogleDriveDirectory:
     _DRIVE_DIRECTORY = get_google_drives(
         name='KLT Management Drive', 
         connection=_DRIVES_CONNECTION, 
-        TEST=TEST
+        TEST=TEST,
+        LOCAL=LOCAL
     )
     return _DRIVE_DIRECTORY
 

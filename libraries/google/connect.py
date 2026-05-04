@@ -5,6 +5,7 @@ from google.oauth2 import service_account
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build, Resource
+import json
 
 
 class GoogleAPIService:
@@ -67,8 +68,9 @@ class GoogleAPIService:
         Returns:
             GoogleAPIService: Self for method chaining
         """
+        #print('\n'.join(self._parse_service_account_info()['private_key'].split('\\n')))
         credentials = service_account.Credentials.from_service_account_info(
-            self._credentials[0],
+            self._parse_service_account_info(),
             scopes=self._scopes
         )
         delegated_credentials = credentials.with_subject(self._credentials[1])
@@ -250,3 +252,30 @@ class GoogleAPIService:
         with open(self._get_token_file_path(), 'w') as token:
             token.write(credentials.to_json())
         return credentials
+    
+    def _parse_service_account_info(self) -> dict:
+        """
+        Parses service account information from the credentials string.
+        
+        Returns:
+            dict: Service account information as a dictionary
+        """
+        if isinstance(self._credentials[0], str):
+            if '.json' in self._credentials[0]:
+                with open(self._credentials[0], 'r') as f:
+                    return json.load(f)
+            string = self._credentials[0].replace('{', '').replace('}', '')
+            d = dict()
+            for k_v in string.split(','):
+                k = None
+                v = None
+                for item in k_v.split('"'):
+                    item = item.strip()
+                    if len(item) > 0:
+                        if not k:
+                            k = item
+                        else:
+                            v = item
+                d[k] = v
+            return d
+        return self._credentials[0]
