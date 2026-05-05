@@ -329,9 +329,9 @@ class BrowsePIMS(KLTBrowser):
                 Self for method chaining
             """
             year, month, day = dates.breakUpDate(date)
+            self.element(By.ID, f"{name}_date_Year_ID").clear().input(str(year), time=.1)
             self.element(By.XPATH, f'//select[@id="{name}_date_Month_ID"]').selectByValue(str(month - 1))
             self.element(By.XPATH, f'//select[@id="{name}_date_Day_ID"]').selectByVisibleText(str(day))
-            self.element(By.ID, f"{name}_date_Year_ID").clear().input(str(year), time=.1)
             return self
         
         def _get_date(self, name: str) -> datetime.date:
