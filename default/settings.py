@@ -33,6 +33,9 @@ DEFAULT_ACCOUNT = ThomasAtABA()
 # Default language
 DEFAULT_LANGUAGE = 'EN-GB'
 
+# Cloud update warning
+CLOUD_UPDATE_EMAIL_FOLDER = 'Updates from Cloud'
+CLOUD_UPDATE_EMAIL_SUBJECT = 'RUNNING UPDATE FROM CLOUD'
 
 #######################################################
 # FILESYSTEM SETTINGS

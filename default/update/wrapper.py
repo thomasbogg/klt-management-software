@@ -11,9 +11,16 @@ from default.google.drive.functions import (
     get_klt_management_directory_on_drive,
     upload_local_file_to_drive
 )
-from default.settings import DATABASE_NAME, DATABASE_PATH
+from default.settings import (
+    CLOUD_UPDATE_EMAIL_FOLDER, 
+    CLOUD_UPDATE_EMAIL_SUBJECT, 
+    DATABASE_NAME, 
+    DATABASE_PATH, 
+    DEFAULT_ACCOUNT,
+    LOCAL,
+)
 from libraries.interface.interface import Interface
-
+from libraries.utils import logerror
 
 LOAD_START = dates.now()
 
@@ -42,9 +49,7 @@ def update(func):
             run = func(*args, **kwargs)
             sections.log(run)    
         except Exception as e:
-            user, message = new_email_to_self(subject=f'ERRORS IN {func.__name__}')
-            message.body.paragraph(traceback.format_exc(chain=False))
-            send_email_to_self(user, message)
+            _contact_self(subject=f'ERROR IN {func.__name__}', body=str(e))
             _log_exception(sections)
      
         end = dates.now()
@@ -67,9 +72,17 @@ def pull_database(func):
         The wrapped function.
     """
     def wrapper(*args, **kwargs):
+
         pullDatabase = kwargs.get('pullDatabase', True)
         if not pullDatabase:
             return func(*args, **kwargs)
+        
+        if not LOCAL:
+            _contact_self(subject=CLOUD_UPDATE_EMAIL_SUBJECT, body=f'Starting cloud update at {dates.now()}')
+        else:
+            if _current_update_message_exists():
+                logerror('Cannot pull database as Cloud Update Ongoing')
+                return
         
         interface = Interface(divider=90)
         interface.divide()
@@ -89,6 +102,9 @@ def pull_database(func):
         upload_local_file_to_drive(driveFile)
         clear_cache_and_conflicts()
         interface.divide()
+
+        if not LOCAL:
+            _delete_current_update_messages()
 
     return wrapper
 
@@ -128,3 +144,36 @@ def _log_exception(sections: Interface) -> None:
     sections.divide()
     traceback.print_exc(chain=False)
     sections.divide()
+
+
+def _contact_self(subject: str, body: str) -> None:
+    """
+    Send an email to self with the given subject and body.
+    
+    Args:
+        subject: The subject of the email.
+        body: The body of the email.
+        
+    Returns:
+        None
+    """
+    user, message = new_email_to_self(subject=subject)
+    message.body.paragraph(body)
+    send_email_to_self(user, message)
+
+
+def _current_update_message_exists():
+    from default.google.mail.functions import get_user
+    messages = get_user(DEFAULT_ACCOUNT)
+    messages.folder(CLOUD_UPDATE_EMAIL_FOLDER)
+    messages.subject(CLOUD_UPDATE_EMAIL_SUBJECT)
+    return len(messages.list) > 0
+
+
+def _delete_current_update_messages():
+    from default.google.mail.functions import get_user
+    messages = get_user(DEFAULT_ACCOUNT)
+    messages.folder(CLOUD_UPDATE_EMAIL_FOLDER)
+    messages.subject(CLOUD_UPDATE_EMAIL_SUBJECT)
+    for message in messages.list:
+        message.delete()
