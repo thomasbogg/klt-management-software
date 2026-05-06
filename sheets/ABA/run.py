@@ -141,9 +141,6 @@ def update_property_sheet(
 
     bookings = get_ABA_bookings(database, start, end, sheetName)
 
-    if not bookings and not newFile:
-        return None
-    
     sublog(f'doing sheet: {sheetName}...')
     sheet = set_worksheet(name=sheetName, start=start, end=end)
     
