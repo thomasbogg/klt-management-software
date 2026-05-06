@@ -28,6 +28,7 @@ from default.booking.functions import (
 from default.database.database import Database
 from default.database.functions import get_database
 from default.dates import dates
+from default.settings import LOCAL
 from default.update.dates import updatedates as updateDates
 from default.update.wrapper import update
 from default.whatsapp.functions import login_to_whatsapp
@@ -138,7 +139,15 @@ def update_from_guest_registrations(
     browser.quit()
     
     if whatsappPrompts:
-        send_whatsapp_prompts(whatsappPrompts)
+        if not LOCAL:
+            from default.updates.functions import update_to_database
+            for booking in whatsappPrompts:
+                update_to_database(
+                    booking,
+                    messages='WhatsApp:Guest Registration Form.'
+                )
+        else:
+            send_whatsapp_prompts_for_guest_registration_forms(bookings=whatsappPrompts)
     
     database.close()
     return 'Successfully parsed all guest registrations!'
@@ -307,7 +316,7 @@ def thank_you(body: GoogleMailMessage.Body) -> None:
 # WHATSAPP FUNCTIONS
 #######################################################
 
-def send_whatsapp_prompts(bookings: list[Booking] = None, bookingId: int = None) -> str:
+def send_whatsapp_prompts_for_guest_registration_forms(bookings: list[Booking] = None, bookingId: int = None) -> str:
     """
     Send WhatsApp prompts to guests requesting registration form completion.
     
