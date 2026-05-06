@@ -13,6 +13,7 @@ from default.database.database import Database
 from default.database.functions import get_database
 from default.google.forms.functions import get_form_responder_uri
 from default.google.mail.functions import valid_email_address
+from default.settings import LOCAL
 from default.update.dates import updatedates
 from default.update.wrapper import update
 from forms.arrival.guest.functions import set_guest_arrival_form
@@ -81,7 +82,15 @@ def send_guest_four_weeks_emails(
                 airbnbBookings.append(booking)            
 
     if airbnbBookings: 
-        _send_airbnb_messages(airbnbBookings)
+        if not LOCAL:
+            from default.updates.functions import update_to_database
+            for booking in airbnbBookings:
+                update_to_database(
+                    booking,
+                    messages='Airbnb:Arrival Form.'
+                )
+        else:
+            send_airbnb_arrival_form_messages(airbnbBookings)
 
     database.close()
     return 'All emails sent!'
@@ -200,7 +209,7 @@ def _send_new_guest_four_weeks_email(
     return message
 
 
-def _send_airbnb_messages(bookings: list[Booking]) -> None:
+def send_airbnb_arrival_form_messages(bookings: list[Booking]) -> None:
     """
     Send messages to Airbnb guests through the Airbnb messaging system.
     
