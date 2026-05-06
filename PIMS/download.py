@@ -17,7 +17,7 @@ from default.database.functions import (
     get_property,
     search_valid_bookings
 )
-from default.settings import PLATFORMS, VALID_BOOKING_STATUSES
+from default.settings import PLATFORMS, VALID_BOOKING_STATUSES, LOCAL
 from default.update.dates import updatedates
 from default.update.wrapper import update
 from default.updates.functions import (
@@ -62,6 +62,9 @@ def download_PIMS_bookings(start: date = None, end: date = None, PIMSId: str | i
     else:
         if not start and not end:
             start, end = updatedates.PIMS_update_dates()
+        
+        if not LOCAL: 
+            updatedSince = 0
 
         reservations = get_reservations(browser.reservations.goTo(), start, end, updatedSince)
         log(f'Retrieved {len(reservations)} bookings to parse and update in database.')
