@@ -37,7 +37,18 @@ env/
 *.db
 
 # Ignore media files
-cache/
+cache/accountancy-sheets
+cache/bookings-reports
+cache/chromium-user-airbnb
+cache/chromium-user-booking.com
+cache/chromium-user-pims
+cache/guest-management
+cache/html
+cache/monthly-reports
+cache/payments-to-owners
+cache/prices
+cache/properties-sheets
+cache/reports
 
 # Ignore VS Code settings
 .vscode/
