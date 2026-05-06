@@ -89,8 +89,16 @@ def update_from_guest_arrival_forms(
         booking.update()
 
     if whatsappPrompts:
-        send_whatsapp_prompts(whatsappPrompts)
- 
+        if not LOCAL:
+            from default.updates.functions import update_to_database
+            for booking in whatsappPrompts:
+                update_to_database(
+                    booking,
+                    messages='WhatsApp:Arrival Form.'
+                )
+        else:
+            send_whatsapp_prompts_for_guest_arrival_forms(bookings=whatsappPrompts)
+            
     database.close()
     return 'All arrival forms have been processed!'
 
