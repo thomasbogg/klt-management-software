@@ -26,15 +26,14 @@ def review_airbnb_guests(start: datetime.date = None, end: datetime.date = None)
     if not start or not end:
         start, end = updatedates.review_airbnb_guests_dates()
 
-    messages = _get_airbnb_reviews_box(start, end)
+    messages = get_airbnb_reviews_box(start, end)
     if not messages:
         return 'No reviews to be done today!'
     
     linksNames = []
     for message in messages:
-        if message.date < start or message.date > end:
-            if 'last chance' not in message.subject.lower():
-                continue
+        if message.date > end:
+            continue
         name_s = _get_name_s(message)
         if not name_s:
             sublog(f'No guest name found in message: {message.subject}')
@@ -105,7 +104,7 @@ def _get_link(message: GoogleMailMessage) -> str:
     return search.group(1)
 
 
-def _get_airbnb_reviews_box(
+def get_airbnb_reviews_box(
     start: datetime.date, 
     end: datetime.date
 ) -> list[GoogleMailMessage]:

@@ -1,5 +1,3 @@
-from correspondence.guest.arrival.instructions.two_weeks.run import send_two_weeks_instructions_emails
-from correspondence.internal.management.transfers.run import send_airport_transfers_request_emails
 from default.booking.booking import Booking
 from default.database.database import Database
 from default.database.functions import get_booking, get_database

@@ -57,7 +57,10 @@ from sheets.KKLJ.run import update_KKLJ_properties_sheets
 
 from touristtax.run import pay_monthly_tourist_tax
 
+IS_EARLY_RUN: bool = updatedates.hour() == 6
 IS_MAIN_RUN: bool = updatedates.hour() == 15
+IS_EVENING_RUN: bool = updatedates.hour() == 19
+IS_LATE_RUN: bool = updatedates.hour() == 0
 
 @pull_database
 def run() -> None:
@@ -105,8 +108,9 @@ def update_properties_sheets() -> None:
     """
     Update property sheets for ABA and KKLJ properties.
     """
-    update_ABA_properties_sheets()
-    update_KKLJ_properties_sheets()
+    if IS_EARLY_RUN or IS_MAIN_RUN:
+        update_ABA_properties_sheets()
+        update_KKLJ_properties_sheets()
 
 
 def update_accountancy_system() -> None:
@@ -135,11 +139,11 @@ def update_accountancy_system() -> None:
             'GRACIETE GRACE - Contabilidade e Consultoria, Lda',
             direct=False)
 
-    if IS_MAIN_RUN and updatedates.day() in (1, 16):
+    if IS_EARLY_RUN and updatedates.day() in (1, 10, 20):
         complete_empty_guest_details()
         update_bookings_reports_workbooks()
 
-    #if IS_MAIN_RUN and updatedates.day() == 1:
+    #if IS_EARLY_RUN and updatedates.day() == 5:
     #    pay_monthly_tourist_tax()
 
 
@@ -149,7 +153,7 @@ def update_arrivals_system() -> None:
     Send realco email on the first day of the month.
     """
     update_arrivals_calendar()
-    if IS_MAIN_RUN or updatedates.hour() == 6:
+    if IS_MAIN_RUN or IS_EARLY_RUN:
         send_management_updates_emails()
     if IS_MAIN_RUN:
         send_management_arrivals_emails()
@@ -163,7 +167,7 @@ def update_guest_arrivals_system() -> None:
     """
     Send various emails to guests and owners related to upcoming arrivals.
     """
-    if IS_MAIN_RUN:
+    if IS_EARLY_RUN or IS_MAIN_RUN:
         send_two_days_instructions_emails()
         send_guest_registration_emails()
         send_two_weeks_instructions_emails()
@@ -178,9 +182,9 @@ def update_guest_departures_system() -> None:
     """
     Send emails to guests related to their departures.
     """
-    if IS_MAIN_RUN:
+    if IS_EARLY_RUN or IS_MAIN_RUN:
         send_goodbye_emails()
-    if updatedates.hour() == 19:
+    if IS_EVENING_RUN or IS_LATE_RUN:
         send_final_day_reminder_emails()
 
 
@@ -189,9 +193,56 @@ def update_platform_guests() -> None:
     Update platform bookings from PIMS.
     Review Airbnb guests based on the latest data.
     """
-    if updatedates.hour() == 0:
+    if IS_LATE_RUN:
         update_PIMS_platform_bookings()
     if updatedates.day() == 1:
         notify_platform_bookings_without_PIMS_ID(
                                             start=updatedates.date(), 
                                             end=updatedates.calculate(365))
+        
+
+def send_email_to_self_for_local_run() -> None:
+    """
+    Send a test email to self when running the update locally.
+    """
+    if not IS_EVENING_RUN:
+        return
+    
+    from default.database.functions import search_updates
+    updates_search = search_updates(
+        start=updatedates.date(days=-2), end=updatedates.calculate(days=1))
+   
+    where = updates_search.updates.where()
+    where.messages().isNotNullEmptyOrFalse()
+    where.emailSent().isNullEmptyOrFalse()
+    updates = updates_search.fetchall()
+    updates_search.close()    
+    
+    from platforms.airbnb.review import get_airbnb_reviews_box
+    messages = get_airbnb_reviews_box()
+    toReview = []
+    for message in messages:
+        if message.date > updatedates.date(days=-3):
+            continue
+        toReview.append(message.subject)
+
+    if not updates and not toReview:
+        return
+    
+    from correspondence.self.functions import (
+        new_email_to_self,
+        send_email_to_self
+    )
+
+    subject = "Local Update Test - Updates and Airbnb Reviews"
+    user, message = new_email_to_self(subject=subject)
+    body = message.body
+    if updates:
+        body.paragraph("The following updates need local attention to complete:")
+        for update in updates:
+            body.paragraph(f'- {update.bookingId}: {update.messages}')
+    if toReview:
+        body.paragraph("The following Airbnb guests need to be reviewed:")
+        for review in toReview:
+            body.paragraph(f'- {review.subject}')
+    send_email_to_self(user, message)
