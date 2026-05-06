@@ -212,9 +212,10 @@ def parse_order_form(database: Database, browser: BrowsePIMS.OrderForms,
     if browser.enquirySource != 'Direct':
 
         if 'A24' in browser.propertyName:
-            booking.details.isOwner = True
-            browser.ownerBooking = True
-            browser.update()
+            if not browser.ownerBooking:
+                booking.details.isOwner = True
+                browser.ownerBooking = True
+                browser.update()
 
         if exists:
             #set_booking_dates(booking, browser)
