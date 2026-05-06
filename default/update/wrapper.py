@@ -32,7 +32,7 @@ def update(func):
         The wrapped function.
     """
     def wrapper(*args, **kwargs):
-        interface = Interface()
+        interface = Interface(divider=90)
         interface.divide()
         sections = interface.subsections()
         sections.log(f'NOW RUNNING: {func.__name__}')

@@ -4,7 +4,7 @@ from default.settings import BROWSER_DIR, DEFAULT_ACCOUNT, BROWSER_USER_DATA_DIR
 from libraries.web.whatsapp import BrowseWhatsApp
 
 
-def login_to_whatsapp() -> BrowseWhatsApp:
+def login_to_whatsapp(visible=True) -> BrowseWhatsApp:
     """
     Login to WhatsApp Web using the BrowseWhatsApp class.
     
@@ -15,7 +15,6 @@ def login_to_whatsapp() -> BrowseWhatsApp:
     Returns:
         A configured and logged-in BrowseWhatsApp instance.
     """
-    visible = True
     userDataDir = os.path.join(BROWSER_USER_DATA_DIR, 'chromium-browser-whatsapp')
     phoneNumber = DEFAULT_ACCOUNT.noPrefix().phoneNumber
     browser = BrowseWhatsApp(visible, BROWSER_DIR, userDataDir, phoneNumber)
@@ -38,7 +37,9 @@ def send_whatsapp_message(
         recipientContact: str | None = None, 
         recipientName: str | None = None,
         content: str | list[str] | None = None,
-        targetLang: str = None) -> BrowseWhatsApp:
+        targetLang: str = 'EN-GB',
+        visible: bool = True
+        ) -> BrowseWhatsApp:
     """
     Send a WhatsApp message to a recipient.
     
@@ -50,12 +51,14 @@ def send_whatsapp_message(
         recipientName: The display name of the recipient. Used for logging purposes.
         content: The message content to send. Can be a string or list of strings.
             If None, an empty list will be used.
+        targetLang: The target language for translation. Defaults to 'EN-GB'.
+        visible: Whether the WhatsApp browser should be visible. Defaults to True.
     
     Returns:
         The BrowseWhatsApp instance used to send the message.
     """
     if not whatsapp:
-        whatsapp = login_to_whatsapp()
+        whatsapp = login_to_whatsapp(visible=visible)
     if not author:
         author = DEFAULT_ACCOUNT.name
     if not recipientContact:
@@ -74,11 +77,12 @@ def send_whatsapp_message(
     return whatsapp.sendMessage(recipientContact, content, recipientName)
 
 
-def send_whatsapp_test_message(content):
+def send_whatsapp_test_message(content, visible=True):
     """
     Send a test WhatsApp message to the default account.
     
     Args:
         content: The message content to send. Can be a string or list of strings.
+        visible: Whether the WhatsApp browser should be visible.
     """
-    return send_whatsapp_message(content=content, recipientName='(You)')
+    return send_whatsapp_message(content=content, recipientName='(You)', visible=visible)

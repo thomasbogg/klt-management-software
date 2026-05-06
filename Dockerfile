@@ -46,7 +46,10 @@ COPY [".", "./"]
 RUN google-chrome --version && chromedriver --version \
     && useradd -m -s /bin/bash chromeuser \
     && mkdir -p /home/chromeuser \
-    && chown -R chromeuser:chromeuser /app /home/chromeuser
+    && chown -R chromeuser:chromeuser /app /home/chromeuser \
+    && chown -R chromeuser:chromeuser /usr/local/lib/python3.12/site-packages/seleniumbase \
+    && chown -R chromeuser:chromeuser /usr/local/lib/python3.12/site-packages/undetected_chromedriver \
+    && find /usr/local/lib/python3.12/site-packages/seleniumbase -type f -name 'uc_driver*' -exec chmod +x {} \; || true
 
 EXPOSE 8000
 
