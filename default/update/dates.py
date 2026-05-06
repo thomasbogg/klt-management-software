@@ -16,54 +16,6 @@ class updatedates(dates):
         """Initialize updatedates instance."""
         super().__init__()
 
-    @classmethod
-    def isForYesterday(cls) -> bool:
-        """
-        Determine if updates should use yesterday's date based on current hour.
-        
-        Returns:
-            True if current hour is before 11AM, indicating we should use yesterday's date.
-        """
-        return cls.hour() < 11
-
-    @classmethod
-    def calculate(cls, days: int = 0, months: int = 0) -> datetime.date:
-        """
-        Calculate a date relative to today, adjusting for early morning updates.
-        
-        Args:
-            days: Number of days to add/subtract from reference date.
-            months: Number of months to add/subtract from reference date.
-            
-        Returns:
-            A calculated date object.
-        """
-        if cls.isForYesterday(): 
-            days -= 1 
-        return super().calculate(date=super().date(), days=days, months=months)
-
-    @classmethod
-    def date(cls) -> datetime.date:
-        """
-        Get today's date or yesterday's date depending on current time.
-        
-        Returns:
-            The appropriate reference date for updates.
-        """
-        if cls.isForYesterday(): 
-            return super().date()
-        return cls.calculate()
-    
-    @classmethod
-    def day(cls) -> int:
-        """
-        Get the day of the month for the appropriate reference date.
-        
-        Returns:
-            The day number (1-31) of the reference date.
-        """
-        return cls.date().day
-
     # Helper methods for common date calculations
     
     def monthly_update_dates(self, month: int = 0) -> tuple[datetime.date, datetime.date]:
@@ -99,6 +51,16 @@ class updatedates(dates):
         return False
 
     # Date ranges for various update operations
+
+    @classmethod
+    def is_server_update_hour(cls) -> bool:
+        """
+        Check if the current hour is within the server update window (2-3 PM).
+        
+        Returns:
+            True if current hour is 14 or 15, False otherwise.
+        """
+        return cls.hour() in (6, 15, 19, 0)
     
     @classmethod
     def ABA_sheets_update_arrival_dates(cls) -> list[datetime.date]:

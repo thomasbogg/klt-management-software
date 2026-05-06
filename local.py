@@ -55,7 +55,7 @@ from platforms.airbnb.download import update_from_airbnb
 from platforms.airbnb.review import review_airbnb_guests
 from platforms.bookingCom.contacts import update_bookingCom_guest_contacts
 from platforms.bookingCom.download import update_from_bookingCom
-from platforms.functions import notify_platform_bookings_without_PIMS_ID
+from PIMS.upload import notify_platform_bookings_without_PIMS_ID
 from platforms.vrbo.download import update_from_vrbo
 
 from reports.owner.run import update_bookings_reports_workbooks

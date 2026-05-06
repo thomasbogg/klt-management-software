@@ -195,7 +195,7 @@ class Update(DatabaseRow):
         Check if this update already exists in the database.
         
         Returns:
-            True if an update with the same booking ID and date exists, False otherwise.
+            True if an update with the same booking ID, date, and messages exists, False otherwise.
         """
         try:
             if self.id:
@@ -203,7 +203,7 @@ class Update(DatabaseRow):
         except Exception:
             pass
 
-        self.database.runSQL(f"SELECT id FROM updates WHERE bookingId = {self.bookingId} AND date = '{self.date}'")
+        self.database.runSQL(f"SELECT id FROM updates WHERE bookingId = {self.bookingId} AND date = '{self.date}' AND messages = '{self.messages}'")
         if self.database._cursor.fetchone():
             return True
         return False

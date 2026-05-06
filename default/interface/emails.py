@@ -16,8 +16,8 @@ from correspondence.internal.management.cleans.run import send_management_cleans
 from correspondence.internal.management.transfers.run import send_airport_transfers_request_emails
 from correspondence.owner.four_weeks.run import send_owner_four_weeks_emails
 from default.booking.booking import Booking
-from forms.arrival.guest.run import send_whatsapp_prompts as send_arrival_form_whatsapp_prompt
-from forms.registration.run import send_whatsapp_prompts as send_guest_registration_whatsapp_prompt
+from forms.arrival.guest.run import send_whatsapp_prompts_for_guest_arrival_forms
+from forms.registration.run import send_whatsapp_prompts_for_guest_registration_forms
 from forms.registration.run import send_new_guest_registration_to_owner_email
 from libraries.interface.interface import Interface
 
@@ -102,9 +102,9 @@ def send_emails(subsection: Interface, booking: Booking) -> None:
     elif email == 15:
         send_security_deposit_returns_email(bookingId=bookingId)
     elif email == 16:
-        send_arrival_form_whatsapp_prompt(bookingId=bookingId)
+        send_whatsapp_prompts_for_guest_arrival_forms(bookingId=bookingId)
     elif email == 17:
-        send_guest_registration_whatsapp_prompt(bookingId=bookingId)
+        send_whatsapp_prompts_for_guest_registration_forms(bookingId=bookingId)
     elif email == 18:
         send_new_guest_registration_to_owner_email(booking=booking)
 

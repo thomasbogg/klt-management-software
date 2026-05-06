@@ -47,7 +47,7 @@ from PIMS.download import download_PIMS_bookings
 from PIMS.upload import update_PIMS_platform_bookings
 
 from platforms.bookingCom.contacts import update_bookingCom_guest_contacts
-from platforms.functions import notify_platform_bookings_without_PIMS_ID
+from PIMS.upload import notify_platform_bookings_without_PIMS_ID
 
 from reports.owner.run import update_bookings_reports_workbooks
 from reports.internal.run import update_end_of_month_internal_report
@@ -57,9 +57,9 @@ from sheets.KKLJ.run import update_KKLJ_properties_sheets
 
 from touristtax.run import pay_monthly_tourist_tax
 
-IS_MAIN_RUN: bool = updatedates.hour() in (15, 16)
+IS_MAIN_RUN: bool = updatedates.hour() == 15
 
-#@pull_database
+@pull_database
 def run() -> None:
     """
     Main entry point for the KLT management and database system updater.
@@ -84,11 +84,12 @@ def update_from_forms() -> None:
     """
     Update data from various forms and delete old forms on a schedule.
     """
+    update_bookingCom_guest_contacts()
     update_from_guest_arrival_forms()
     update_from_owner_arrival_forms()
     update_from_guest_registrations()
     
-    if updatedates.day() % 14 == 0:
+    if updatedates.day() % 14 == 0 and IS_MAIN_RUN:
         delete_old_guest_arrival_forms()
         delete_old_owner_arrival_forms()
 
@@ -138,9 +139,6 @@ def update_accountancy_system() -> None:
         complete_empty_guest_details()
         update_bookings_reports_workbooks()
 
-    if IS_MAIN_RUN and updatedates.day() in (1, 15):
-        update_bookingCom_guest_contacts()
-
     #if IS_MAIN_RUN and updatedates.day() == 1:
     #    pay_monthly_tourist_tax()
 
@@ -151,12 +149,13 @@ def update_arrivals_system() -> None:
     Send realco email on the first day of the month.
     """
     update_arrivals_calendar()
-    if IS_MAIN_RUN:
+    if IS_MAIN_RUN or updatedates.hour() == 6:
         send_management_updates_emails()
+    if IS_MAIN_RUN:
         send_management_arrivals_emails()
         send_management_cleans_emails()
     send_airport_transfers_request_emails()
-    if updatedates.date() in (25, 26):
+    if updatedates.date() == 25:
         send_realco_email()
 
 
@@ -164,22 +163,25 @@ def update_guest_arrivals_system() -> None:
     """
     Send various emails to guests and owners related to upcoming arrivals.
     """
-    send_two_days_instructions_emails()
-    send_guest_registration_emails()
-    send_two_weeks_instructions_emails()
-    send_security_deposit_request_emails()
-    send_guest_four_weeks_emails()
-    send_owner_four_weeks_emails()
-    send_arrival_details_prompting_emails()
-    send_balance_payment_emails()
+    if IS_MAIN_RUN:
+        send_two_days_instructions_emails()
+        send_guest_registration_emails()
+        send_two_weeks_instructions_emails()
+        send_security_deposit_request_emails()
+        send_guest_four_weeks_emails()
+        send_owner_four_weeks_emails()
+        send_arrival_details_prompting_emails()
+        send_balance_payment_emails()
 
 
 def update_guest_departures_system() -> None:
     """
     Send emails to guests related to their departures.
     """
-    send_goodbye_emails()
-    send_final_day_reminder_emails()
+    if IS_MAIN_RUN:
+        send_goodbye_emails()
+    if updatedates.hour() == 19:
+        send_final_day_reminder_emails()
 
 
 def update_platform_guests() -> None:
@@ -187,7 +189,7 @@ def update_platform_guests() -> None:
     Update platform bookings from PIMS.
     Review Airbnb guests based on the latest data.
     """
-    if IS_MAIN_RUN:
+    if updatedates.hour() == 0:
         update_PIMS_platform_bookings()
     if updatedates.day() == 1:
         notify_platform_bookings_without_PIMS_ID(

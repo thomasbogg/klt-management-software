@@ -2,13 +2,15 @@ from datetime import date
 import regex as re
 
 from correspondence.self.functions import new_bookings_email_to_self
+from default.dates import dates
 from default.booking.booking import Booking
 from default.booking.functions import logbooking
 from default.database.database import Database
 from default.database.functions import (
     get_booking,
     get_database,
-    search_valid_bookings
+    search_valid_bookings,
+    set_minimum_logging_criteria
 )
 from default.update.dates import updatedates
 from default.update.wrapper import update
@@ -292,3 +294,29 @@ def is_platform_owner_booking(booking: Booking) -> None:
         bool indicating if the booking is an owner booking
     """
     return booking.details.enquirySource == 'Booking.com' and booking.property.shortName == 'A24'
+
+
+def notify_platform_bookings_without_PIMS_ID(start: date = dates.firstOfYear(), end: date = dates.lastOfYear()) -> None:
+    """
+    Check the database for bookings without a PIMS ID and notify if found.
+    
+    Returns:
+        None
+    """
+    database = search_valid_bookings(start=start, end=end)
+    search = database
+
+    set_minimum_logging_criteria(search)
+
+    where = search.details.where()
+    where.PIMSId().isNullEmptyOrFalse()
+    where.platformId().isNotNullEmptyOrFalse()
+    
+    bookings = search.fetchall()
+    
+    if bookings:
+        subject = f'Platform Bookings without PIMS ID - {dates.prettyDate()}'
+        new_bookings_email_to_self(subject=subject, bookings=bookings)
+    
+    database.close()
+    return None

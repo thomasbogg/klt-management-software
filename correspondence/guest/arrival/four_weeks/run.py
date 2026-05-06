@@ -17,7 +17,6 @@ from default.settings import LOCAL
 from default.update.dates import updatedates
 from default.update.wrapper import update
 from forms.arrival.guest.functions import set_guest_arrival_form
-from platforms.airbnb.browser import BrowseAirbnb
 from libraries.web.browser import Browser
 
 
@@ -219,6 +218,7 @@ def send_airbnb_arrival_form_messages(bookings: list[Booking]) -> None:
     Returns:
         None
     """
+    from platforms.airbnb.browser import BrowseAirbnb
     airbnb: Browser = BrowseAirbnb().goTo().login().messages()
     
     for booking in bookings: 

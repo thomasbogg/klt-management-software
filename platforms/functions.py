@@ -544,29 +544,3 @@ def check_updates_to_booking(databaseBooking: Booking, updatedBooking: Booking) 
             return None
     
     return None
-
-
-def notify_platform_bookings_without_PIMS_ID(start: date = dates.firstOfYear(), end: date = dates.lastOfYear()) -> None:
-    """
-    Check the database for bookings without a PIMS ID and notify if found.
-    
-    Returns:
-        None
-    """
-    database = search_valid_bookings(start=start, end=end)
-    search = database
-
-    set_minimum_logging_criteria(search)
-
-    where = search.details.where()
-    where.PIMSId().isNullEmptyOrFalse()
-    where.platformId().isNotNullEmptyOrFalse()
-    
-    bookings = search.fetchall()
-    
-    if bookings:
-        subject = f'Platform Bookings without PIMS ID - {dates.prettyDate()}'
-        new_bookings_email_to_self(subject=subject, bookings=bookings)
-    
-    database.close()
-    return None

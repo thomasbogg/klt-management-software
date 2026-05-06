@@ -13,7 +13,6 @@ from default.database.database import Database
 from default.database.functions import (
     get_booking,
     get_database,
-    get_guest,
     get_property,
     search_valid_bookings
 )
