@@ -337,6 +337,7 @@ class Browser:
             The current instance of the Browser class.
         """
         self._element = self._driver.find_elements(mode, value)
+        self._elements = self._element
         return self
 
     def tryElement(self, mode: By, value: str) -> Self | None:

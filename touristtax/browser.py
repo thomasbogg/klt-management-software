@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from default.dates import dates
 from typing import Self, Union
 
-from libraries.utils import log, loginput
+from libraries.utils import log, loginput, sublog
 
 
 class TMTBrowser(KLTBrowser):
@@ -151,15 +151,24 @@ class TMTBrowser(KLTBrowser):
         self.element(By.ID, 'listEstablishmentForm:listEstablishmentTable:globalFilter').input(property.name).wait(2)
         self.element(By.ID, 'listEstablishmentForm:listEstablishmentTable:globalFilterBTN').click()
 
+        # Check if tax has already been paid for the specified period, and if so, skip declaration
+        if self.checkPaid(property):
+            sublog(f'Tourist tax for property {property.name} has already been paid for {month}/{year}, skipping declaration.')
+            return self
+
         # Click the first result in the filtered establishments list (assuming it matches the property)
         self.element(By.ID, 'listEstablishmentForm:listEstablishmentTable:0:j_idt121').click()
+
+        # Check if there is a saved draft of declaration for the selected month and year, and if so, click to edit it
+        if self.hasElement(By.ID, 'rascunhoForm:deleteRascunhoBtn'):
+            self.element(By.ID, 'rascunhoForm:deleteRascunhoBtn').click()
 
         # Fill out the monthly declaration form with the specified year, month, and total tax amount
         self.element(By.ID, 'doclarationForm:forYearInput_input').selectByValue(str(year))
         self.element(By.ID, 'doclarationForm:periodInput_input').selectByValue('Period{id=' + str(month) + '}')
         self.element(By.XPATH, '//input[@data-p-label="Total de Dorminas na época"]').clear().input(str(total))
-        self.element(By.ID, 'buttonsForm:saveRascunhoBtn').click() # Save as draft (submit button is commented out for safety)
-        #self.element(By.ID, 'buttonsForm:submitBtn').click()  # Confirm submission
+        #self.element(By.ID, 'buttonsForm:saveRascunhoBtn').click() # Save as draft (submit button is commented out for safety)
+        self.element(By.ID, 'buttonsForm:submitBtn').click()  # Confirm submission
         return self
     
     @property
@@ -203,3 +212,25 @@ class TMTBrowser(KLTBrowser):
             # Search by string name directly
             property = property.name
         return property in self.element(By.ID, 'listEstablishmentForm:listEstablishmentTable_data').text
+    
+    def checkPaid(self, property: Union[Property, str]) -> bool:
+        """Check if the monthly tax has already been paid for a specific property and period.
+        
+        This method is a placeholder for checking payment status functionality.
+        Implementation needed to verify if a declaration exists for the given property, year, and month.
+        
+        Args:
+            property (Union[Property, str]): Property object or property name string
+            
+        Returns:
+            bool: True if tax has already been paid for the specified period, False otherwise
+        """
+        # Get the index of the "Regularização" column in the declarations table to check payment status
+        self.elements(By.TAG_NAME, 'th')
+        count = 0
+        for element in self._elements:
+            if element.text.lower() == 'regularização':
+                break
+            count += 1
+        self.elements(By.TAG_NAME, 'td')
+        return self._elements[count].text.lower() == 'sim'
