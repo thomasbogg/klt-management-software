@@ -7,6 +7,7 @@ from libraries.google.drives.directory import GoogleDriveDirectory
 from libraries.google.drives.file import GoogleDriveFile
 from libraries.google.drives.permissions import GoogleDrivePermissions
 from libraries.google.drives.utils import (
+    GoogleAPIService,
     get_google_drives,
     get_google_drives_connection,
     get_refreshed_google_drives_connection
@@ -56,6 +57,17 @@ def exception_handlers(func):
             time.sleep(5)
             reconnect()
             return func(*args, **kwargs)
+        except BrokenPipeError:
+            logwarning(
+                'Broken pipe occurred during Google Drive transfer, '
+                'reconnecting and retrying...')
+
+            for arg in list(args) + list(kwargs.values()):
+                if isinstance(arg, (GoogleDriveFile, GoogleDriveDirectory)):
+                    reconnect()
+                    arg.connection = _DRIVES_CONNECTION
+
+            return func(*args, **kwargs)
     return wrapper
 
 
@@ -70,7 +82,7 @@ def connect() -> None:
     _DRIVES_CONNECTION = get_google_drives_connection(DEFAULT_ACCOUNT)
 
 
-def reconnect() -> None:
+def reconnect() -> GoogleAPIService:
     """
     Refresh the Google Drive connection.
     
@@ -79,6 +91,7 @@ def reconnect() -> None:
     """
     global _DRIVES_CONNECTION
     _DRIVES_CONNECTION = get_refreshed_google_drives_connection(DEFAULT_ACCOUNT)
+    return _DRIVES_CONNECTION
 
 
 def get_klt_management_drive() -> GoogleDriveDirectory:

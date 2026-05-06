@@ -9,6 +9,7 @@ from correspondence.self.functions import (
 from libraries.dates import dates
 from default.google.drive.functions import (
     get_klt_management_directory_on_drive,
+    reconnect,
     upload_local_file_to_drive
 )
 from default.settings import (
@@ -99,6 +100,7 @@ def pull_database(func):
         
         sections.smallDivide()  
         sections.log('Clearing cache and storing database on CLOUD...')
+        driveFile.connection =  reconnect()
         upload_local_file_to_drive(driveFile)
         clear_cache_and_conflicts()
         interface.divide()
