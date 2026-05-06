@@ -82,26 +82,14 @@ def run() -> None:
             'default.settings to run upupdatedates.')
         return
 
-    if updatedates.isUpdateHour(): 
-        sections.log(
-            'Will do FULL update. Press ENTER to continue or 1 for smaller update')
-    else: 
-        sections.log(
-            'Will do SMALLER update. Press ENTER to continue or 1 for full update.')
+    sections.log(
+        'Will do partial update. Press ENTER to continue or 1 for full update')
     
     option = sections.integer()
     if option:
-        if updatedates.isUpdateHour(): 
-            last_minute_update(sections)
-        else:
             full_update()
-            update_backups()
     else:
-        if updatedates.isUpdateHour():
-            full_update()
-            update_backups()
-        else: 
-            last_minute_update(sections)
+            partial_update()
 
 
 @pull_database
@@ -120,8 +108,23 @@ def full_update() -> None:
     update_arrivals_system()
     update_guest_arrivals_system()
     update_guest_departures_system()
-    update_and_review_platform_guests()
     back_up_database()
+
+
+@pull_database
+def partial_update() -> None:
+    """
+    Perform a partial update for locally performed changes.
+    
+    Args:
+        sections: Interface object for user interaction
+    """
+    back_up_database()
+    update_from_platforms()
+    from correspondence.guest.local import send_messages_from_updates_table
+    send_messages_from_updates_table()
+    review_airbnb_guests()
+
     
 
 def update_backups() -> None:

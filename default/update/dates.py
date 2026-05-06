@@ -219,6 +219,16 @@ class updatedates(dates):
         return cls.calculate(days=1), cls.calculate(days=17)
 
     @classmethod
+    def send_messages_from_updates_table_dates(cls) -> tuple[datetime.date, datetime.date]:
+        """
+        Get date range for local messages from updates table.
+        
+        Returns:
+            A tuple containing start and end dates for local messages from updates table.
+        """
+        return cls.calculate(days=-2), cls.calculate(days=1)
+
+    @classmethod
     def check_in_information_emails_dates(cls) -> tuple[datetime.date, datetime.date]:
         """
         Get date range for sending check-in information emails.

@@ -54,7 +54,7 @@ def update_from_guest_arrival_forms(
         start, end = updateDates.arrival_forms_dates()
     
     database: Database = get_database()
-    bookings: list[Booking] = get_arrival_form_bookings(database, start, end, bookingId)
+    bookings: list[Booking] = get_guest_arrival_form_bookings(database, start, end, bookingId)
     
     if not bookings: 
         database.close()
@@ -98,12 +98,12 @@ def update_from_guest_arrival_forms(
                 )
         else:
             send_whatsapp_prompts_for_guest_arrival_forms(bookings=whatsappPrompts)
-            
+
     database.close()
     return 'All arrival forms have been processed!'
 
 
-def get_arrival_form_bookings(
+def get_guest_arrival_form_bookings(
         database: Database,
         start: date | None = None,
         end: date | None = None,
@@ -214,7 +214,7 @@ def send_whatsapp_prompts_for_guest_arrival_forms(bookings: list[Booking] = None
     if not bookings:
         if not bookingId:
             return 
-        bookings = get_arrival_form_bookings(database=None, bookingId=bookingId)
+        bookings = get_guest_arrival_form_bookings(database=None, bookingId=bookingId)
     
     for booking in bookings:
         logbooking(booking, inline='Sending WhatsApp prompt to:')

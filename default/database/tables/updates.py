@@ -91,5 +91,6 @@ class Updates(Table):
         self.bookingId()
         self.details()
         self.extras()
+        self.messages()
         self.emailSent()
         return self
