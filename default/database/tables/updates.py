@@ -60,6 +60,15 @@ class Updates(Table):
             Updates: The current instance for method chaining.
         """
         return self._column(name='extras', dataType='text')
+    
+    def messages(self) -> Column | Self:
+        """
+        Define the messages column of the table.
+        
+        Returns:
+            Updates: The current instance for method chaining.
+        """
+        return self._column(name='messages', dataType='text')
 
     def emailSent(self) -> Column | Self:
         """

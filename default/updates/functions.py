@@ -136,7 +136,7 @@ def has_transfers(existingBooking: Booking) -> bool:
     return False
 
 
-def update_to_database(booking: Booking, details: str | None = None, extras: str | None = None) -> bool:
+def update_to_database(booking: Booking, details: str | None = None, extras: str | None = None, messages: str | None = None) -> bool:
     """
     Create an update record in the database for a booking.
     
@@ -144,6 +144,7 @@ def update_to_database(booking: Booking, details: str | None = None, extras: str
         booking: The booking to create an update for.
         details: Details about the update (for booking detail changes).
         extras: Details about the update (for extras changes).
+        messages: Details about the update (for messages changes).
         
     Returns:
         True if the update was successful.
@@ -155,6 +156,7 @@ def update_to_database(booking: Booking, details: str | None = None, extras: str
     update.bookingId = booking.id
     update.details = details
     update.extras = extras
+    update.messages = messages
     
     if not update.exists():
         update.insert()

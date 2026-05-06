@@ -113,6 +113,26 @@ class Update(DatabaseRow):
             value: The extras changes to set.
         """
         self._set('extras', value)
+
+    @property
+    def messages(self) -> str | None:
+        """
+        Get the booking messages changes.
+        
+        Returns:
+            The messages changes or None if not set.
+        """
+        return self._get('messages')
+    
+    @messages.setter
+    def messages(self, value: str | None) -> None:
+        """
+        Set the booking messages changes.
+        
+        Args:
+            value: The messages changes to set.
+        """
+        self._set('messages', value)
     
     # Notification properties
     @property

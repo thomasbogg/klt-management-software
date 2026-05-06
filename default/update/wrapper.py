@@ -71,7 +71,7 @@ def pull_database(func):
         if not pullDatabase:
             return func(*args, **kwargs)
         
-        interface = Interface()
+        interface = Interface(divider=90)
         interface.divide()
         sections = interface.subsections()
         sections.log('Clearing cache and pulling database from CLOUD...')
