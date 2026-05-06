@@ -96,6 +96,11 @@ def pay_monthly_tourist_tax(start: datetime.date = None, end: datetime.date = No
     
     for property in properties:
         log(f'Processing tourist tax payment for property {property.name}')
+       
+        browser.goToMonthlyDeclarations()
+        if not browser.propertyExists(property):
+            sublog(f'Property {property.name} does not exist in TMT, skipping tax payment')
+            continue
         
         # Get bookings for the property within the specified date range
         bookings = get_tourist_tax_bookings(database, start, end, property.name)
@@ -104,7 +109,6 @@ def pay_monthly_tourist_tax(start: datetime.date = None, end: datetime.date = No
         tax_amount = calculate_tourist_tax(bookings)
 
         sublog(f'Calculated tourist tax for property {property.name}: {tax_amount:.2f}')
-        browser.goToMonthlyDeclarations()
         browser.declareMonthlyTax(property=property, year=start.year, month=start.month, total=tax_amount)
         browser.home()  # Return to home after declaration
 
