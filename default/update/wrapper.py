@@ -79,7 +79,7 @@ def pull_database(func):
             return func(*args, **kwargs)
         
         if not LOCAL:
-            _contact_self(subject=CLOUD_UPDATE_EMAIL_SUBJECT, body=f'Starting cloud update at {dates.now()}')
+            _contact_self(subject=CLOUD_UPDATE_EMAIL_SUBJECT, body=f'Started cloud update at {dates.now()}')
         else:
             if _current_update_message_exists():
                 logerror('Cannot pull database as Cloud Update Ongoing')

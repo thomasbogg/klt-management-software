@@ -30,7 +30,7 @@ class dates:
         Returns:
             Current datetime
         """
-        return datetime.datetime.now()
+        return datetime.datetime.now(tz=datetime.timezone.utc)
 
     @classmethod
     def date(cls, year: int | str | datetime.date | None = None, 
