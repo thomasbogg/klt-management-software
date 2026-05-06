@@ -16,7 +16,8 @@ def determine_location(value: str | None) -> dict[str, bool | None]:
             'isBarracuda': None, 
             'isMonaco': None, 
             'isCorcovada': None, 
-            'isCerro': None
+            'isCerro': None,
+            'isBalaia': None
         }
     
     result = {}
@@ -26,5 +27,6 @@ def determine_location(value: str | None) -> dict[str, bool | None]:
     result['isMonaco'] = 'monaco' in value
     result['isCorcovada'] = 'corcovada' in value
     result['isCerro'] = 'cerro' in value
+    result['isBalaia'] = 'balaia' in value
     
     return result

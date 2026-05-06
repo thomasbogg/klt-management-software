@@ -294,9 +294,10 @@ def get_location_criteria(sections: Interface) -> dict[str, str | None]:
         'Quinta da Barracuda',
         'Clube do Monaco',
         'Parque da Corcovada',
+        'Balaia Atlântico'
     )
     location = sections.option(options)
 
     if location == 1:
-        return determine_location('barracuda, monaco, corcovada')
+        return determine_location('barracuda, monaco, corcovada, balaia')
     return determine_location(options[location - 1])
