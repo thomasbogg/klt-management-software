@@ -12,6 +12,7 @@ from default.database.functions import get_database
 from default.dates import dates
 from default.google.drive.functions import get_klt_management_directory_on_drive
 from default.google.forms.functions import get_form_responder_uri, get_form
+from default.settings import LOCAL
 from default.update.dates import updatedates as updateDates
 from default.update.wrapper import update
 from default.updates.functions import update_to_database
@@ -188,13 +189,13 @@ def check_new_prompt(booking: Booking, whatsappPrompts: list[Booking]) -> None:
     return None
 
 
-def send_whatsapp_prompts(bookings: list[Booking] = None, bookingId: int = None) -> str:
+def send_whatsapp_prompts_for_guest_arrival_forms(bookings: list[Booking] = None, bookingId: int = None) -> str:
     """
     Sends WhatsApp prompts to guests to complete arrival forms.
     
     Args:
         bookings: List of bookings for which to send WhatsApp prompts.
-        
+        bookingId: The specific booking ID to filter by.
     Returns:
         A message indicating the result of the operation.
     """
