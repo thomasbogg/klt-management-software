@@ -189,7 +189,6 @@ def new_security_code_email_to_self(
     return code
 
 
-
 def send_email_reminder_to_self_for_local_update_run(IS_EVENING_RUN: bool = False) -> None:
     """
     Send a test email to self when running the update locally.
@@ -214,7 +213,7 @@ def send_email_reminder_to_self_for_local_update_run(IS_EVENING_RUN: bool = Fals
     for message in messages:
         if message.date > updatedates.date(days=-3):
             continue
-        toReview.append(message.subject)
+        toReview.append(message)
 
     if not updates and not toReview:
         return
@@ -232,10 +231,14 @@ def send_email_reminder_to_self_for_local_update_run(IS_EVENING_RUN: bool = Fals
         body.paragraph("The following updates need local attention to complete:")
         for update in updates:
             body.paragraph(f'- {update.bookingId}: {update.messages}')
-   
+
+
     if toReview:
         body.paragraph("The following Airbnb guests need to be reviewed:")
         for review in toReview:
             body.paragraph(f'- {review.subject}')
    
     send_email_to_self(user, message)
+    for update in updates:
+        update.emailSent = True
+        update.save()
