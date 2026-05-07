@@ -1,7 +1,7 @@
 from datetime import date
 from PIMS.browser import BrowsePIMS
 from default.update.wrapper import update
-from libraries.utils import sublog
+from libraries.utils import loginput, sublog
 
 
 @update
@@ -62,3 +62,38 @@ def get_reservations(browser: BrowsePIMS.ReservationsList, start: date, end: dat
     browser.noOwner = False
     browser.update()
     return browser.list
+
+
+@update
+def close_departed_bookings_in_PIMS(visible: bool = False) -> str:
+    """
+    Close departed bookings in PIMS.
+    
+    Finds and closes bookings that have already departed within the specified
+    date range. This helps keep the PIMS system clean by closing out old
+    bookings that are no longer active.
+    
+    Parameters:
+        visible: Whether to show the browser window during execution
+    
+    Returns:
+        Success message confirming closure
+    """
+    browser = BrowsePIMS(True).goTo().login()
+
+    todoList = browser.todoList.goTo()
+    todoList.propertyName = 'All properties'
+    todoList.dueInNextXDays = 5
+    todoList.excludeOlderThan = 30
+    todoList.refresh()
+    allTasks = todoList.list
+   
+    orderForms = browser.orderForms
+    for task in allTasks:
+        taskName = task['taskName']
+        orderId = task['orderId']
+        if 'check account details for sec dep return' in taskName.lower():
+            orderForms.goTo(orderId).complete_task(taskName)
+   
+    browser.quit()
+    return 'All departed bookings closed successfully'

@@ -11,7 +11,7 @@ from default.settings import (
     PIMS_USERNAME,
     PLATFORMS
 )
-from libraries.utils import string_to_float
+from libraries.utils import log, string_to_float
 from libraries.web.html import HTML
 
 
@@ -37,6 +37,7 @@ class BrowsePIMS(KLTBrowser):
         super().__init__('PIMS', visible)
         self._reservationsList = self.ReservationsList(self.url, self._driver)
         self._orderForms = self.OrderForms(self.url, self._driver)
+        self._todoList = self.TodoList(self.url, self._driver)
 
     def goTo(self, url: str | None = None) -> 'BrowsePIMS':
         """
@@ -71,6 +72,11 @@ class BrowsePIMS(KLTBrowser):
     def reservations(self) -> 'BrowsePIMS.ReservationsList':
         """Get the reservations list interface."""
         return self._reservationsList
+
+    @property
+    def todoList(self) -> 'BrowsePIMS.TodoList':
+        """Get the todo list interface."""
+        return self._todoList
 
     @property
     def orderForms(self) -> 'BrowsePIMS.OrderForms':
@@ -408,6 +414,136 @@ class BrowsePIMS(KLTBrowser):
             """Close the browser session."""
             return self._driver.quit()
         
+    
+    class TodoList(KLTBrowser):
+        """
+        Interface for PIMS todo list.
+        
+        Provides methods for viewing, filtering and interacting with 
+        todo listings.
+        """
+        def __init__(self, url: str, driver):
+            """
+            Initialize todo list interface.
+            
+            Parameters:
+                url: Base URL for PIMS system
+                driver: Browser driver instance
+            """
+            self._url = url
+            self._driver = driver
+            self._wait = WebDriverWait(self._driver, 10)
+
+        def goTo(self) -> 'BrowsePIMS.TodoList':
+            """
+            Navigate to the todo list page.
+            
+            Returns:
+                Self for method chaining
+            """
+            return super().goTo(f'{self._url}/todolist.php')
+        
+        def refresh(self) -> 'BrowsePIMS.TodoList':
+            """
+            Refresh the todo list with current filter settings.
+            
+            Returns:
+                Self for method chaining
+            """
+            self.element(By.XPATH, '//input[@value="Refresh"]').click(wait=3)
+            return self
+        
+        @property
+        def list(self) -> dict:
+            """
+            Get parsed reservation data from the current page.
+            
+            Returns:
+                Dictionary of parsed reservation data
+            """
+            parser = HTML(self.html, 'table', 'class', 'orderlisting')
+            self._parse_task_rows(parser, parser.tableRows()[1:])
+            return parser.parsed
+        
+        def _parse_task_rows(self, parser: HTML, rows: list) -> 'BrowsePIMS.TodoList':
+            """
+            Recursively parse rows of todo task data.
+            
+            Parameters:
+                parser: HTML object to use
+                rows: List of rows to parse
+                
+            Returns:
+                Self for method chaining
+            """
+            if not rows:
+                return self
+            row = rows.pop()
+            data = parser.rowData(row, includeHeader=False)
+            try:
+                task = data[3]
+                taskName = task.text.strip()
+                orderId = task.find('a')['href'].split('order_id=')[1]
+                parser.parsed = {'orderId': int(orderId), 'taskName': taskName} 
+            except IndexError:
+                pass
+            return self._parse_task_rows(parser, rows)
+        
+        @property
+        def propertyName(self) -> str:
+            """Get the currently selected property name."""
+            return self.element(By.NAME, 'property_selected').option
+        
+        @propertyName.setter
+        def propertyName(self, name: str | None = None) -> 'BrowsePIMS.TodoList':
+            """
+            Set the property filter by name.
+            
+            Parameters:
+                name: Property name to filter by
+                
+            Returns:
+                Self for method chaining
+            """
+            self.element(By.NAME, 'property_selected').selectByVisibleText(str(name))
+            return self
+        
+        @property
+        def dueInNextXDays(self) -> str:
+            """Get the current due in filter."""
+            return self.element(By.NAME, 'nextdays').option
+        
+        @dueInNextXDays.setter
+        def dueInNextXDays(self, days: str | None = None) -> None:
+            """
+            Set the due in next X days filter.
+            
+            Parameters:
+                days: Number of days to filter by
+                
+            Returns:
+                Self for method chaining
+            """
+            self.element(By.NAME, 'nextdays').clear().input(str(days))
+        
+        @property
+        def excludeOlderThan(self) -> str:
+            """Get the current exclude older than filter."""
+            return self.element(By.NAME, 'todo_list_overlays').option
+        
+        @excludeOlderThan.setter
+        def excludeOlderThan(self, days: str | None = None) -> None:
+            """
+            Set the exclude older than X days filter.
+            
+            Parameters:
+                days: Number of days to filter by
+                
+            Returns:
+                Self for method chaining
+            """
+            self.element(By.NAME, 'todo_list_overdays').clear().input(str(days))
+
 
     class OrderForms(KLTBrowser):
         """
@@ -1034,6 +1170,11 @@ class BrowsePIMS(KLTBrowser):
         def completedTasks(self) -> str:
             """Get the list of completed tasks."""
             return self.element(By.XPATH, '//fieldset[contains(., "Task history")]').text
+        
+        @property
+        def incompleteTasks(self) -> str:
+            """Get the list of incomplete tasks."""
+            return self.element(By.XPATH, '//fieldset[contains(., "Task history")]').text
 
         @property
         def basicRental(self) -> float:
@@ -1106,6 +1247,21 @@ class BrowsePIMS(KLTBrowser):
             if isinstance(value, str):
                 return string_to_float(value)
             return value
+        
+        def complete_task(self, taskName: str = None):
+            if not taskName:
+                return self
+            for key in self.currentTasks.keys():
+                if taskName.lower() in key:
+                    self.currentTasks[key].find_element(By.TAG_NAME, 'input').click()
+            self.element(By.XPATH, '//input[@value="Update Status"]').click()
+            return self
+            
+        @property
+        def currentTasks(self):
+            self.elements(By.XPATH, '//fieldset[@class="todo"]//table[@class="paymentlisting"]//tr')
+            return {task.text.lower(): task for task in self._elements}  
+
         
         def unlockGuestRegistrationForm(self, PIMSId) -> 'BrowsePIMS.OrderForms':
             """
