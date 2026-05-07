@@ -201,21 +201,25 @@ def send_email_reminder_to_self_for_local_update_run(IS_EVENING_RUN: bool = Fals
     updates_search = search_updates(
         start=updatedates.calculate(days=-2), end=updatedates.calculate(days=1))
    
+    select = updates_search.updates.select()
+    select.bookingId()
+    select.messages()
+    
     where = updates_search.updates.where()
     where.messages().isNotNullEmptyOrFalse()
     where.emailSent().isNullEmptyOrFalse()
     updates = updates_search.fetchall()
-    updates_search.close()    
     
     from platforms.airbnb.review import get_airbnb_reviews_box
     messages = get_airbnb_reviews_box()
     toReview = []
     for message in messages:
-        if message.date > updatedates.date(days=-3):
+        if message.date > updatedates.calculate(days=-3):
             continue
         toReview.append(message)
 
     if not updates and not toReview:
+        updates_search.close()    
         return
     
     from correspondence.self.functions import (
@@ -241,4 +245,6 @@ def send_email_reminder_to_self_for_local_update_run(IS_EVENING_RUN: bool = Fals
     send_email_to_self(user, message)
     for update in updates:
         update.emailSent = True
-        update.save()
+        update.update()
+
+    updates_search.close()    

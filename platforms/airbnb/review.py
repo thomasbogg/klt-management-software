@@ -26,7 +26,7 @@ def review_airbnb_guests(start: datetime.date = None, end: datetime.date = None)
     if not start or not end:
         start, end = updatedates.review_airbnb_guests_dates()
 
-    messages = get_airbnb_reviews_box(start, end)
+    messages = get_airbnb_reviews_box()
     if not messages:
         return 'No reviews to be done today!'
     
@@ -104,10 +104,7 @@ def _get_link(message: GoogleMailMessage) -> str:
     return search.group(1)
 
 
-def get_airbnb_reviews_box(
-    start: datetime.date, 
-    end: datetime.date
-) -> list[GoogleMailMessage]:
+def get_airbnb_reviews_box() -> list[GoogleMailMessage]:
     """
     Get messages from 'Airbnb Reviews' folder in default user's email
 
@@ -121,8 +118,6 @@ def get_airbnb_reviews_box(
     search: GoogleMailMessages = get_default_user()
     search.folder('Airbnb Reviews')
     search.sender('automated@airbnb.com')
-    #search.start(start)
-    #search.end(end)
     return search.list
 
 
