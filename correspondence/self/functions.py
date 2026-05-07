@@ -199,7 +199,7 @@ def send_email_reminder_to_self_for_local_update_run(IS_EVENING_RUN: bool = Fals
     from default.update.dates import updatedates
     from default.database.functions import search_updates
     updates_search = search_updates(
-        start=updatedates.date(days=-2), end=updatedates.calculate(days=1))
+        start=updatedates.calculate(days=-2), end=updatedates.calculate(days=1))
    
     where = updates_search.updates.where()
     where.messages().isNotNullEmptyOrFalse()
