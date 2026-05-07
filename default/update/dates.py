@@ -461,9 +461,9 @@ class updatedates(dates):
         Get date range for payments to owners emails.
         
         Returns:
-            A tuple containing start (7 days ago) and end (yesterday) dates.
+            A tuple containing start (7 days ago) and end (2 days ago) dates.
         """
-        return cls.calculate(days=-7), cls.calculate(days=-1)
+        return cls.calculate(days=-7), cls.calculate(days=-2)
 
     @classmethod
     def tourist_tax_payment_dates(cls) -> tuple[datetime.date, datetime.date]:
@@ -534,9 +534,9 @@ class updatedates(dates):
         Get date range for security deposit return emails.
         
         Returns:
-            A tuple containing start (8 days ago) and end (2 days ago) dates.
+            A tuple containing start (8 days ago) and end (3 days ago) dates.
         """
-        return cls.calculate(days=-8), cls.calculate(days=-2)
+        return cls.calculate(days=-8), cls.calculate(days=-3)
 
     @classmethod
     def review_airbnb_guests_dates(cls) -> tuple[datetime.date, datetime.date]:
@@ -544,7 +544,7 @@ class updatedates(dates):
         Get date range for reviewing Airbnb guests.
         
         Returns:
-            A tuple containing start (today) and end (31 days from now) dates.
+            A tuple containing start (10 days ago) and end (2 days ago) dates.
         """
         return cls.calculate(days=-10), cls.calculate(days=-2)
     
@@ -554,6 +554,6 @@ class updatedates(dates):
         Get date range for completing empty guest details.
         
         Returns:
-            A tuple containing start (30 days ago) and end (today) dates.
+            A tuple containing start (30 days ago) and end (1 day ago) dates.
         """
-        return cls.calculate(-30), cls.calculate(-1)
+        return cls.calculate(days=-30), cls.calculate(days=-1)

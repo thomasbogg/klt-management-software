@@ -123,14 +123,15 @@ def update_accountancy_system() -> None:
     Update various accountancy workbooks and send related emails.
     Certain updates are only performed on specific days of the month.
     """
-    update_payments_to_owner_workbooks()
-    
-    if IS_MAIN_RUN:
-        send_payments_to_owners_email()
-        send_security_deposit_returns_email()
-        update_ptag_workbooks()
+    if not IS_EARLY_RUN:
+        return
 
-    if IS_EARLY_RUN and updatedates.isLastOfMonth():
+    update_payments_to_owner_workbooks()
+    send_payments_to_owners_email()
+    send_security_deposit_returns_email()
+    update_ptag_workbooks()
+
+    if updatedates.isLastOfMonth():
         update_commissions_breakdown_workbooks()
         update_edgered_workbooks()
         update_harmonious_jungle_workbooks()
@@ -138,17 +139,17 @@ def update_accountancy_system() -> None:
         if updatedates.month() in (3, 6, 9, 12):
             calculate_owners_totals_over_period()
 
-    if IS_EARLY_RUN and updatedates.day() == 1:
+    if updatedates.day() == 1:
         update_generic_accounts_reports_workbooks(
             'PNM - Consultadoria, Lda',
             'GRACIETE GRACE - Contabilidade e Consultoria, Lda',
             direct=False)
 
-    if IS_EARLY_RUN and updatedates.day() in (1, 11, 21):
+    if updatedates.day() in (1, 11, 21):
         complete_empty_guest_details()
         update_bookings_reports_workbooks()
 
-    #if IS_EARLY_RUN and updatedates.day() == 5:
+    #if updatedates.day() == 5:
     #    pay_monthly_tourist_tax()
 
 
