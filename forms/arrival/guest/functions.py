@@ -136,7 +136,7 @@ def update_from_guest_details_section(
         booking.guest.email = email
 
     databasePhone = booking.guest.phone
-    if '+' in responses.phone or responses.phone.startswith('00') or not databasePhone:
+    if responses.phone.startswith('+') or responses.phone.startswith('00') or not databasePhone:
         if len(responses.phone) > 5:
             booking.guest.phone = responses.phone
 
