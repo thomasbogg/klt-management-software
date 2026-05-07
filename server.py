@@ -26,6 +26,7 @@ from correspondence.internal.management.transfers.run import send_airport_transf
 from correspondence.internal.management.updates.run import send_management_updates_emails
 from correspondence.owner.details_prompting.run import send_arrival_details_prompting_emails
 from correspondence.owner.four_weeks.run import send_owner_four_weeks_emails
+from correspondence.self.functions import send_email_reminder_to_self_for_local_update_run
 
 from default.update.dates import updatedates
 from default.update.wrapper import pull_database
@@ -44,6 +45,7 @@ from forms.registration.complete import complete_empty_guest_details
 from payments.run import update_payments_to_owner_workbooks
 
 from PIMS.download import download_PIMS_bookings
+from PIMS.clean import close_departed_bookings_in_PIMS
 from PIMS.upload import update_PIMS_platform_bookings
 
 from platforms.bookingCom.contacts import update_bookingCom_guest_contacts
@@ -80,6 +82,7 @@ def run() -> None:
     update_guest_arrivals_system()
     update_guest_departures_system()
     update_platform_guests()
+    send_email_reminder_to_self_for_local_update_run(IS_EVENING_RUN)
     back_up_database()
 
 
@@ -102,6 +105,8 @@ def daily_update_from_pims() -> None:
     Download the latest data from PIMS.
     """
     download_PIMS_bookings()
+    if IS_EARLY_RUN:
+        close_departed_bookings_in_PIMS()
 
 
 def update_properties_sheets() -> None:
@@ -125,7 +130,7 @@ def update_accountancy_system() -> None:
         send_security_deposit_returns_email()
         update_ptag_workbooks()
 
-    if IS_MAIN_RUN and updatedates.isLastOfMonth():
+    if IS_EARLY_RUN and updatedates.isLastOfMonth():
         update_commissions_breakdown_workbooks()
         update_edgered_workbooks()
         update_harmonious_jungle_workbooks()
@@ -133,13 +138,13 @@ def update_accountancy_system() -> None:
         if updatedates.month() in (3, 6, 9, 12):
             calculate_owners_totals_over_period()
 
-    if IS_MAIN_RUN and updatedates.day() in (1, 2):
+    if IS_EARLY_RUN and updatedates.day() == 1:
         update_generic_accounts_reports_workbooks(
             'PNM - Consultadoria, Lda',
             'GRACIETE GRACE - Contabilidade e Consultoria, Lda',
             direct=False)
 
-    if IS_EARLY_RUN and updatedates.day() in (1, 10, 20):
+    if IS_EARLY_RUN and updatedates.day() in (1, 11, 21):
         complete_empty_guest_details()
         update_bookings_reports_workbooks()
 
@@ -153,7 +158,7 @@ def update_arrivals_system() -> None:
     Send realco email on the first day of the month.
     """
     update_arrivals_calendar()
-    if IS_MAIN_RUN or IS_EARLY_RUN:
+    if IS_EARLY_RUN or IS_MAIN_RUN:
         send_management_updates_emails()
     if IS_MAIN_RUN:
         send_management_arrivals_emails()
@@ -199,50 +204,3 @@ def update_platform_guests() -> None:
         notify_platform_bookings_without_PIMS_ID(
                                             start=updatedates.date(), 
                                             end=updatedates.calculate(365))
-        
-
-def send_email_to_self_for_local_run() -> None:
-    """
-    Send a test email to self when running the update locally.
-    """
-    if not IS_EVENING_RUN:
-        return
-    
-    from default.database.functions import search_updates
-    updates_search = search_updates(
-        start=updatedates.date(days=-2), end=updatedates.calculate(days=1))
-   
-    where = updates_search.updates.where()
-    where.messages().isNotNullEmptyOrFalse()
-    where.emailSent().isNullEmptyOrFalse()
-    updates = updates_search.fetchall()
-    updates_search.close()    
-    
-    from platforms.airbnb.review import get_airbnb_reviews_box
-    messages = get_airbnb_reviews_box()
-    toReview = []
-    for message in messages:
-        if message.date > updatedates.date(days=-3):
-            continue
-        toReview.append(message.subject)
-
-    if not updates and not toReview:
-        return
-    
-    from correspondence.self.functions import (
-        new_email_to_self,
-        send_email_to_self
-    )
-
-    subject = "Local Update Test - Updates and Airbnb Reviews"
-    user, message = new_email_to_self(subject=subject)
-    body = message.body
-    if updates:
-        body.paragraph("The following updates need local attention to complete:")
-        for update in updates:
-            body.paragraph(f'- {update.bookingId}: {update.messages}')
-    if toReview:
-        body.paragraph("The following Airbnb guests need to be reviewed:")
-        for review in toReview:
-            body.paragraph(f'- {review.subject}')
-    send_email_to_self(user, message)

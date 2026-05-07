@@ -187,3 +187,55 @@ def new_security_code_email_to_self(
     for message in toDelete:
         message.delete()
     return code
+
+
+
+def send_email_reminder_to_self_for_local_update_run(IS_EVENING_RUN: bool = False) -> None:
+    """
+    Send a test email to self when running the update locally.
+    """    
+    if not IS_EVENING_RUN:
+        return
+    
+    from default.update.dates import updatedates
+    from default.database.functions import search_updates
+    updates_search = search_updates(
+        start=updatedates.date(days=-2), end=updatedates.calculate(days=1))
+   
+    where = updates_search.updates.where()
+    where.messages().isNotNullEmptyOrFalse()
+    where.emailSent().isNullEmptyOrFalse()
+    updates = updates_search.fetchall()
+    updates_search.close()    
+    
+    from platforms.airbnb.review import get_airbnb_reviews_box
+    messages = get_airbnb_reviews_box()
+    toReview = []
+    for message in messages:
+        if message.date > updatedates.date(days=-3):
+            continue
+        toReview.append(message.subject)
+
+    if not updates and not toReview:
+        return
+    
+    from correspondence.self.functions import (
+        new_email_to_self,
+        send_email_to_self
+    )
+
+    subject = "Local Update Test - Updates and Airbnb Reviews"
+    user, message = new_email_to_self(subject=subject)
+    body = message.body
+   
+    if updates:
+        body.paragraph("The following updates need local attention to complete:")
+        for update in updates:
+            body.paragraph(f'- {update.bookingId}: {update.messages}')
+   
+    if toReview:
+        body.paragraph("The following Airbnb guests need to be reviewed:")
+        for review in toReview:
+            body.paragraph(f'- {review.subject}')
+   
+    send_email_to_self(user, message)

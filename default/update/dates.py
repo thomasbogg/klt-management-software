@@ -60,7 +60,7 @@ class updatedates(dates):
         Returns:
             True if current hour is 14 or 15, False otherwise.
         """
-        return cls.hour() in (6, 15, 19, 0)
+        return cls.hour() in (5, 14, 18, 23)
     
     @classmethod
     def ABA_sheets_update_arrival_dates(cls) -> list[datetime.date]:
