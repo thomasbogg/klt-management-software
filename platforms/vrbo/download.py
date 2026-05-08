@@ -43,8 +43,9 @@ def update_from_vrbo(start: date | None = None, end: date | None = None, singleB
     database = get_database()
     
     if not start and not end:
+        in27Days = dates.calculate(days=27)
         in28Days = dates.calculate(days=28)
-        bookings = get_vrbo_bookings(database, date=in28Days)
+        bookings = get_vrbo_bookings(database, start=in27Days, end=in28Days)
         messages = get_inbox(sender='sender@messages.homeaway.com', subject='Booking')
         
         if not messages and not bookings:
@@ -84,7 +85,7 @@ def update_from_vrbo(start: date | None = None, end: date | None = None, singleB
 # DATA RETRIEVAL FUNCTIONS
 #######################################################
 
-def get_vrbo_bookings(database: Database, date: date | None = None) -> list[Booking]:
+def get_vrbo_bookings(database: Database, start: date | None = None, end: date | None = None) -> list[Booking]:
     """
     Get upcoming VRBO bookings from the database.
     
@@ -95,14 +96,11 @@ def get_vrbo_bookings(database: Database, date: date | None = None) -> list[Book
     Returns:
         List of Booking objects for VRBO bookings
     """
-    search = search_valid_bookings(database)
+    search = search_valid_bookings(database, start=start, end=end)
     
     where = search.details.where()
     where.enquirySource().isEqualTo('Vrbo')
-    
-    if date:
-        search.arrivals.where().date().isEqualTo(date)
-    
+
     select = search.guests.select()
     select.lastName()
     

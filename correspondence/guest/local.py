@@ -1,13 +1,14 @@
+
 from correspondence.guest.arrival.four_weeks.run import send_airbnb_arrival_form_messages, get_four_weeks_bookings
+from default.database.functions import get_database
 from default.google.mail.functions import get_user, get_inbox
 from default.settings import DEFAULT_ACCOUNT
-from forms.registration.run import send_whatsapp_prompts_for_guest_registration_forms, get_guest_registration_form_bookings
-from forms.arrival.guest.run import send_whatsapp_prompts_for_guest_arrival_forms, get_guest_arrival_form_bookings
-from default.database.functions import get_database
-from datetime import datetime
 from default.update.wrapper import update
+from forms.arrival.guest.run import send_whatsapp_prompts_for_guest_arrival_forms, get_guest_arrival_form_bookings
+from forms.registration.run import send_whatsapp_prompts_for_guest_registration_forms, get_guest_registration_form_bookings
 from libraries.web.html import HTML
 from platforms.airbnb.review import review_airbnb_guests
+from platforms.vrbo.download import update_from_vrbo
 
 
 @update
@@ -42,6 +43,7 @@ def send_guest_messages_from_local_update() -> str:
     database = get_database()
    
     reviewAirbnbGuests = False
+    updateVrboArrivals = False
     sendAirbnb4Weeks = []
     sendWhatsAppGuestReg = []
     sendWhatsApp4Weeks = []
@@ -49,10 +51,13 @@ def send_guest_messages_from_local_update() -> str:
      
         for para in HTML(message.body.body).findAll('p'):
             p: str = para.text.strip()
-            if not p.startswith('- '):
+            if not p.startswith('-- '):
                 continue
             if 'a review for' in p.lower():
                 reviewAirbnbGuests = True
+                continue
+            if 'vrbo arrival' in p.lower():
+                updateVrboArrivals = True
                 continue
             bookingId = int(p.split(':')[0].strip('-- '))
             if 'Airbnb:Arrival Form' in p:
@@ -71,12 +76,16 @@ def send_guest_messages_from_local_update() -> str:
     if sendWhatsApp4Weeks:
         send_whatsapp_prompts_for_guest_arrival_forms(bookings=sendWhatsApp4Weeks)
 
+    if updateVrboArrivals:
+        update_from_vrbo()
+
     if reviewAirbnbGuests:
         review_airbnb_guests()
 
     for message in messages:
         message.delete()
 
+    database.close()
     return f'Sent {len(sendAirbnb4Weeks)} Airbnb arrival form messages, {len(sendWhatsAppGuestReg)} ' \
            f'WhatsApp guest registration form messages, and {len(sendWhatsApp4Weeks)} WhatsApp ' \
            'arrival form messages.'

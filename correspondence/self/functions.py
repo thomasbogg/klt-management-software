@@ -1,12 +1,15 @@
+import regex as re
+from time import sleep
+
+from default.booking.booking import Booking
+from default.database.database import Database
+from default.database.functions import get_database, search_valid_bookings, search_updates
+from default.google.mail.functions import get_default_user, get_inbox, new_email
+from default.settings import DEFAULT_ACCOUNT
 from libraries.google.account import GoogleAccount
 from libraries.google.mail.message import GoogleMailMessage
 from libraries.google.mail.messages import GoogleMailMessages
 from libraries.dates import dates
-from default.booking.booking import Booking
-from default.google.mail.functions import get_default_user, get_inbox, new_email
-from default.settings import DEFAULT_ACCOUNT
-import regex as re
-from time import sleep
 
 
 #######################################################
@@ -189,6 +192,88 @@ def new_security_code_email_to_self(
     return code
 
 
+def send_email_reminder_to_self_for_local_update_run(IS_EVENING_RUN: bool = False) -> None:
+    """
+    Send a test email to self when running the update locally.
+    """    
+    if not IS_EVENING_RUN:
+        return
+    
+    updates_search = search_updates(
+        start=dates.calculate(days=-2), end=dates.calculate(days=1))
+   
+    select = updates_search.updates.select()
+    select.bookingId()
+    select.messages()
+    
+    where = updates_search.updates.where()
+    where.messages().isNotNullEmptyOrFalse()
+    where.emailSent().isNullEmptyOrFalse()
+    updates = updates_search.fetchall()
+
+    database = get_database()
+    vrboArrivals = get_vrbo_arrivals_in_28_days(database)
+    database.close()
+    
+    messages = get_airbnb_reviews_box()
+    toReview = []
+    for message in messages:
+        if message.date > dates.calculate(days=-3):
+            continue
+        toReview.append(message)
+
+    if not updates and not toReview:
+        updates_search.close()    
+        return
+
+    subject = "LOCAL UPDATE RUN REQUIRED"
+    user, message = new_email_to_self(subject=subject)
+    body = message.body
+
+    for update in updates:
+        body.paragraph(f'-- {update.bookingId}: {update.messages}')
+
+    for arrival in vrboArrivals:
+        body.paragraph(f'-- {arrival.id}: VRBO Arrival')
+   
+    for review in toReview:
+        body.paragraph(f'-- {review.subject}')
+
+    send_email_to_self(user, message)
+    for update in updates:
+        update.emailSent = True
+        update.update()
+
+    updates_search.close()    
+
+
+def get_vrbo_arrivals_in_28_days(database: Database) -> list[Booking]:
+    """
+    Get upcoming VRBO bookings from the database.
+    
+    Parameters:
+        database: Database connection
+        
+    Returns:
+        List of Booking objects for     VRBO bookings
+    """
+    search = search_valid_bookings(database)
+    
+    where = search.details.where()
+    where.enquirySource().isEqualTo('Vrbo')
+    
+    where = search.arrivals.where()
+    where.date().isEqualTo(dates.calculate(days=28))
+    
+    select = search.guests.select()
+    select.lastName()
+    
+    select = search.properties.select()
+    select.vrboId()
+    
+    return search.fetchall()
+
+
 def get_airbnb_reviews_box() -> list[GoogleMailMessage]:
     """
     Get messages from 'Airbnb Reviews' folder in default user's email
@@ -204,58 +289,3 @@ def get_airbnb_reviews_box() -> list[GoogleMailMessage]:
     search.folder('Airbnb Reviews')
     search.sender('automated@airbnb.com')
     return search.list
-
-
-def send_email_reminder_to_self_for_local_update_run(IS_EVENING_RUN: bool = False) -> None:
-    """
-    Send a test email to self when running the update locally.
-    """    
-    if not IS_EVENING_RUN:
-        return
-    
-    from default.update.dates import updatedates
-    from default.database.functions import search_updates
-    updates_search = search_updates(
-        start=updatedates.calculate(days=-2), end=updatedates.calculate(days=1))
-   
-    select = updates_search.updates.select()
-    select.bookingId()
-    select.messages()
-    
-    where = updates_search.updates.where()
-    where.messages().isNotNullEmptyOrFalse()
-    where.emailSent().isNullEmptyOrFalse()
-    updates = updates_search.fetchall()
-    
-    messages = get_airbnb_reviews_box()
-    toReview = []
-    for message in messages:
-        if message.date > updatedates.calculate(days=-3):
-            continue
-        toReview.append(message)
-
-    if not updates and not toReview:
-        updates_search.close()    
-        return
-    
-    from correspondence.self.functions import (
-        new_email_to_self,
-        send_email_to_self
-    )
-
-    subject = "LOCAL UPDATE RUN REQUIRED"
-    user, message = new_email_to_self(subject=subject)
-    body = message.body
-
-    for update in updates:
-        body.paragraph(f'-- {update.bookingId}: {update.messages}')
-
-    for review in toReview:
-        body.paragraph(f'-- {review.subject}')
-   
-    send_email_to_self(user, message)
-    for update in updates:
-        update.emailSent = True
-        update.update()
-
-    updates_search.close()    
