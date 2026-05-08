@@ -1,5 +1,5 @@
 from datetime import date
-from ssl import SSLEOFError
+from ssl import SSLEOFError, SSLError
 
 from libraries.google.account import GoogleAccount
 from libraries.google.connect import GoogleAPIService
@@ -34,7 +34,10 @@ def ssl_exception_handler(func):
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-        except SSLEOFError as e:
+        except (SSLEOFError, SSLError) as e:
+            logwarning(
+                f'SSL error in Google Mail call {func.__name__}, reconnecting and retrying once: {e}'
+            )
             for arg in list(args) + list(kwargs.values()):
                 if isinstance(arg, (GoogleMailMessages, GoogleMailMessage)):
                     if (
@@ -113,6 +116,7 @@ def get_default_user() -> GoogleMailMessages:
 
 
 # Email retrieval functions
+@ssl_exception_handler
 def get_inbox(
     user: GoogleMailMessages | None = None, 
     sender: str | None = None, 
@@ -134,6 +138,7 @@ def get_inbox(
     return user.inbox().sender(sender).subject(subject).list
 
 
+@ssl_exception_handler
 def get_sent(
     user: GoogleMailMessages | None = None, 
     subject: str | None = None, 
@@ -208,6 +213,7 @@ def new_email(
     return user, message
 
 
+@ssl_exception_handler
 def send_email(
     user: GoogleMailMessages | None = None, 
     message: GoogleMailMessage | None = None, 
