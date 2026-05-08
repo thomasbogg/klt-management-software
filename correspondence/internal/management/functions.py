@@ -82,9 +82,7 @@ def determine_manager_name(booking: Booking) -> str:
     Returns:
         Manager name for email correspondence
     """
-    if booking.property.weClean:
-        return 'Mum'
-    return booking.property.manager.name
+    return booking.property.manager.cleaning
 
 
 def determine_manager_email(booking: Booking) -> str:
@@ -97,9 +95,7 @@ def determine_manager_email(booking: Booking) -> str:
     Returns:
         Manager email address for correspondence
     """
-    if booking.property.weClean:
-        return booking.property.manager.cleaningEmail
-    return booking.property.manager.email
+    return booking.property.manager.cleaningEmail
 
 
 #######################################################
