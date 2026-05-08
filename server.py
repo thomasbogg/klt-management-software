@@ -81,7 +81,7 @@ def run() -> None:
     update_arrivals_system()
     update_guest_arrivals_system()
     update_guest_departures_system()
-    update_platform_guests()
+    final_PIMS_check()
     send_email_reminder_to_self_for_local_update_run(IS_EVENING_RUN)
     back_up_database()
 
@@ -105,8 +105,6 @@ def daily_update_from_pims() -> None:
     Download the latest data from PIMS.
     """
     download_PIMS_bookings()
-    if IS_EARLY_RUN:
-        close_departed_bookings_in_PIMS()
 
 
 def update_properties_sheets() -> None:
@@ -194,14 +192,17 @@ def update_guest_departures_system() -> None:
         send_final_day_reminder_emails()
 
 
-def update_platform_guests() -> None:
+def final_PIMS_check() -> None:
     """
     Update platform bookings from PIMS.
     Review Airbnb guests based on the latest data.
     """
+    if IS_EARLY_RUN:
+        close_departed_bookings_in_PIMS()
     if IS_LATE_RUN:
         update_PIMS_platform_bookings()
-    if updatedates.day() == 1:
-        notify_platform_bookings_without_PIMS_ID(
-                                            start=updatedates.date(), 
-                                            end=updatedates.calculate(365))
+    if IS_EVENING_RUN:
+        if updatedates.day() == 1:
+            notify_platform_bookings_without_PIMS_ID(
+                                                start=updatedates.date(), 
+                                                end=updatedates.calculate(365))
