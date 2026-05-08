@@ -17,6 +17,7 @@ from default.database.functions import (
 )
 from default.update.dates import updatedates
 from default.update.wrapper import update
+from default.updates.updates import Update
 
 
 #######################################################
@@ -52,6 +53,9 @@ def send_management_updates_emails(
     done = list()
     
     for update in updates:
+        if update.details is None and update.extras is None:
+            continue
+    
         booking = get_management_update_booking(database, update.bookingId)
         managerEmail = determine_manager_email(booking)
         managerName = determine_manager_name(booking)
@@ -254,7 +258,7 @@ def get_airport_transfers(booking: Booking) -> str | None:
 def get_management_updates(
         start: date = None, 
         end: date = None, 
-        emailSent: bool = False) -> list:
+        emailSent: bool = False) -> list[Update]:
     """
     Get management updates between dates with optional email sent filter.
     
