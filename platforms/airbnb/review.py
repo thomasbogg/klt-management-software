@@ -1,9 +1,8 @@
 import datetime
 import regex as re
 
+from correspondence.self.functions import get_airbnb_reviews_box
 from libraries.google.mail.message import GoogleMailMessage
-from libraries.google.mail.messages import GoogleMailMessages
-from default.google.mail.functions import get_default_user
 from default.update.dates import updatedates
 from default.update.wrapper import update
 from platforms.airbnb.browser import BrowseAirbnb
@@ -102,23 +101,6 @@ def _get_link(message: GoogleMailMessage) -> str:
         search = re.search(r'Last chance to review\[(.*?)\]', string)
         return None
     return search.group(1)
-
-
-def get_airbnb_reviews_box() -> list[GoogleMailMessage]:
-    """
-    Get messages from 'Airbnb Reviews' folder in default user's email
-
-    Args:
-        start (datetime.date): Start date for the search
-        end (datetime.date): End date for the search
-
-    Returns:
-        list (GoogleMailMessage): Messages matching the given dates
-    """
-    search: GoogleMailMessages = get_default_user()
-    search.folder('Airbnb Reviews')
-    search.sender('automated@airbnb.com')
-    return search.list
 
 
 @threeX

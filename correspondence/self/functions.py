@@ -189,6 +189,23 @@ def new_security_code_email_to_self(
     return code
 
 
+def get_airbnb_reviews_box() -> list[GoogleMailMessage]:
+    """
+    Get messages from 'Airbnb Reviews' folder in default user's email
+
+    Args:
+        start (datetime.date): Start date for the search
+        end (datetime.date): End date for the search
+
+    Returns:
+        list (GoogleMailMessage): Messages matching the given dates
+    """
+    search: GoogleMailMessages = get_default_user()
+    search.folder('Airbnb Reviews')
+    search.sender('automated@airbnb.com')
+    return search.list
+
+
 def send_email_reminder_to_self_for_local_update_run(IS_EVENING_RUN: bool = False) -> None:
     """
     Send a test email to self when running the update locally.
@@ -210,7 +227,6 @@ def send_email_reminder_to_self_for_local_update_run(IS_EVENING_RUN: bool = Fals
     where.emailSent().isNullEmptyOrFalse()
     updates = updates_search.fetchall()
     
-    from platforms.airbnb.review import get_airbnb_reviews_box
     messages = get_airbnb_reviews_box()
     toReview = []
     for message in messages:
