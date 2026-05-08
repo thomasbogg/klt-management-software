@@ -227,20 +227,15 @@ def send_email_reminder_to_self_for_local_update_run(IS_EVENING_RUN: bool = Fals
         send_email_to_self
     )
 
-    subject = "Local Update Test - Updates and Airbnb Reviews"
+    subject = "LOCAL UPDATE RUN REQUIRED"
     user, message = new_email_to_self(subject=subject)
     body = message.body
-   
-    if updates:
-        body.paragraph("The following updates need local attention to complete:")
-        for update in updates:
-            body.paragraph(f'- {update.bookingId}: {update.messages}')
 
+    for update in updates:
+        body.paragraph(f'-- {update.bookingId}: {update.messages}')
 
-    if toReview:
-        body.paragraph("The following Airbnb guests need to be reviewed:")
-        for review in toReview:
-            body.paragraph(f'- {review.subject}')
+    for review in toReview:
+        body.paragraph(f'-- {review.subject}')
    
     send_email_to_self(user, message)
     for update in updates:

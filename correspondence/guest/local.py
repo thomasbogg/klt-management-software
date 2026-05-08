@@ -1,13 +1,17 @@
 from correspondence.guest.arrival.four_weeks.run import send_airbnb_arrival_form_messages, get_four_weeks_bookings
+from default.google.mail.functions import get_user, get_inbox
+from default.settings import DEFAULT_ACCOUNT
 from forms.registration.run import send_whatsapp_prompts_for_guest_registration_forms, get_guest_registration_form_bookings
 from forms.arrival.guest.run import send_whatsapp_prompts_for_guest_arrival_forms, get_guest_arrival_form_bookings
-from default.database.functions import get_database, search_updates
-from default.update.wrapper import update
-from default.update.dates import updatedates
+from default.database.functions import get_database
 from datetime import datetime
+from default.update.wrapper import update
+from libraries.web.html import HTML
+from platforms.airbnb.review import review_airbnb_guests
+
 
 @update
-def send_messages_from_updates_table(start: datetime = None, end: datetime = None) -> str:
+def send_guest_messages_from_local_update() -> str:
     """
     Send messages to guests based on the updates table in the database.
     
@@ -27,47 +31,52 @@ def send_messages_from_updates_table(start: datetime = None, end: datetime = Non
     Returns:
         A string summarizing the number of messages sent for each type.
     """
-    if not start or not end:
-        start, end = updatedates.send_messages_from_updates_table_dates()
+    user = get_user(DEFAULT_ACCOUNT)
+    sender = DEFAULT_ACCOUNT.emailAddress
+    subject = 'LOCAL UPDATE RUN REQUIRED'
+    messages = get_inbox(user=user, sender=sender, subject=subject)
 
-    updates_search = search_updates(start=start, end=end)
-    where = updates_search.updates.where()
-    where.messages().isNotNullEmptyOrFalse()
-    where.emailSent().isNullEmptyOrFalse()
-    updates = updates_search.fetchall()
-    updates_search.close()
-
-    if not updates:
-        return 'Got no new messages to send locally!'
+    if not messages:
+        return 'No messages found in inbox for additional local updating.'
     
     database = get_database()
-    airbnbBookings = list()
-    whatsAppGuestReg = list()
-    whatsAppArrivalForm = list()
    
-    for update in updates:
-        if update.messages == 'Airbnb:Arrival Form.':
-            booking = get_four_weeks_bookings(database, bookingId=update.bookingId)
-            if booking:
-                airbnbBookings.append(booking)            
-        elif update.messages == 'WhatsApp:Guest Registration Form.':
-            booking = get_guest_registration_form_bookings(database, bookingId=update.bookingId)
-            if booking:
-                whatsAppGuestReg.append(booking)            
-        elif update.messages == 'WhatsApp:Arrival Form.':
-            booking = get_guest_arrival_form_bookings(database, bookingId=update.bookingId)
-            if booking:
-                whatsAppArrivalForm.append(booking)            
-    
-    if airbnbBookings:
-        send_airbnb_arrival_form_messages(bookings=airbnbBookings)
-    
-    if whatsAppGuestReg:
-        send_whatsapp_prompts_for_guest_registration_forms(bookings=whatsAppGuestReg)
+    reviewAirbnbGuests = False
+    sendAirbnb4Weeks = []
+    sendWhatsAppGuestReg = []
+    sendWhatsApp4Weeks = []
+    for message in messages:
+     
+        for para in HTML(message.body.body).findAll('p'):
+            p: str = para.text.strip()
+            if not p.startswith('- '):
+                continue
+            if 'a review for' in p.lower():
+                reviewAirbnbGuests = True
+                continue
+            bookingId = int(p.split(':')[0].strip('-- '))
+            if 'Airbnb:Arrival Form' in p:
+                sendAirbnb4Weeks += get_four_weeks_bookings(database, bookingId=bookingId)
+            elif 'WhatsApp:Arrival Form' in p:
+                sendWhatsApp4Weeks += get_four_weeks_bookings(database, bookingId=bookingId)
+            elif 'WhatsApp:Guest Registration Form' in p:
+                sendWhatsAppGuestReg += get_guest_registration_form_bookings(database, bookingId=bookingId)
 
-    if whatsAppArrivalForm:
-        send_whatsapp_prompts_for_guest_arrival_forms(bookings=whatsAppArrivalForm)
+    if sendAirbnb4Weeks:
+        send_airbnb_arrival_form_messages(bookings=sendAirbnb4Weeks)
+    
+    if sendWhatsAppGuestReg:
+        send_whatsapp_prompts_for_guest_registration_forms(bookings=sendWhatsAppGuestReg)
 
-    return f'Sent {len(airbnbBookings)} Airbnb arrival form messages, {len(whatsAppGuestReg)} ' \
-           f'WhatsApp guest registration form messages, and {len(whatsAppArrivalForm)} WhatsApp ' \
+    if sendWhatsApp4Weeks:
+        send_whatsapp_prompts_for_guest_arrival_forms(bookings=sendWhatsApp4Weeks)
+
+    if reviewAirbnbGuests:
+        review_airbnb_guests()
+
+    for message in messages:
+        message.delete()
+
+    return f'Sent {len(sendAirbnb4Weeks)} Airbnb arrival form messages, {len(sendWhatsAppGuestReg)} ' \
+           f'WhatsApp guest registration form messages, and {len(sendWhatsApp4Weeks)} WhatsApp ' \
            'arrival form messages.'

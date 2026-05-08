@@ -142,6 +142,9 @@ def get_four_weeks_bookings(
 
     select = search.departures.select()
     select.date()
+
+    select = search.emails.select()
+    select.arrivalQuestionnaire()
     
     # Set conditions for bookings
     where = search.details.where()

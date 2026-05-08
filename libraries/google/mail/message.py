@@ -191,6 +191,8 @@ class GoogleMailMessage(Object):
             Returns:
                 str: Complete formatted body content
             """
+            if not self._isHTML:
+                return '\n\n'.join([segment['content'] for segment in self._body])
             body = ''
             for segment in self._body:
                 body += getattr(self, segment['type'])(segment['content'], **segment['styles'])

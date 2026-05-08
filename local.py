@@ -11,6 +11,7 @@ from backup.programming.run import back_up_programming_files
 
 from commissions.run import update_commissions_breakdown_workbooks
 
+from correspondence.guest.local import send_guest_messages_from_local_update
 from correspondence.guest.arrival.balance_payment.reminder.run import send_balance_payment_emails
 from correspondence.guest.arrival.four_weeks.run import send_guest_four_weeks_emails
 from correspondence.guest.arrival.instructions.two_days.run import send_two_days_instructions_emails
@@ -121,10 +122,7 @@ def partial_update() -> None:
     """
     back_up_database()
     update_from_platforms()
-    from correspondence.guest.local import send_messages_from_updates_table
-    send_messages_from_updates_table()
-    review_airbnb_guests()
-
+    send_guest_messages_from_local_update()
     
 
 def update_backups() -> None:
