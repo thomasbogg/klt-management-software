@@ -195,10 +195,12 @@ def get_reservations(
         #input('Press Enter to continue...')
         reservations = browser.reservations(propIdsDates, guestNamesPropertyId, start, end).list
         browser.quit()
+        if not reservations:
+            if not total:
+                return []
         if reservations:
-            if total > 0 and len(reservations) < total:
-                continue
-            return reservations
+            if total <= len(reservations):
+                return reservations
        
         log('Trying again to get reservations from Vrbo website')
     

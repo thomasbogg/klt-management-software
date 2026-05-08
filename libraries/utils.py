@@ -272,20 +272,19 @@ def log(*messages: Any, newlines: int = 1, tabs: int = 2) -> None:
     return pretty_print(message_str, newlines=newlines, tabs=tabs)
 
 
-def loginput(*messages: Any, newlines: int = 1, tabs: int = 2) -> None:
+def loginput(*messages: Any, tabs: int = 2) -> None:
     """
     Logs multiple messages separated by a delimiter.
     
     Args:
         *messages: Messages to log
-        newlines: Number of newlines to prepend
         tabs: Number of tabs to prepend
         
     Returns:
         None
     """
     message_str = " // ".join(list(map(str, messages)))
-    input(f'{"\n" * newlines}{"\t" * tabs}{message_str}\n')
+    input(f'{"\t" * tabs}{message_str}\n')
 
 
 def sublog(message: Any, tabs: int = 2) -> None:

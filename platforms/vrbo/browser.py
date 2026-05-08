@@ -7,7 +7,7 @@ from datetime import date
 from platforms.functions import convert_date, convert_dates, threeX
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
-from libraries.utils import log, logerror, loginput
+from libraries.utils import log, loginput
 from libraries.web.html import HTML
 import regex as re
 
@@ -53,9 +53,9 @@ class BrowseVrbo(KLTBrowser):
         """        
         try:
 
-            if 'show your human side' in self.html.lower():
+            if 'show us your human side' in self.html.lower():
                 log('Anti-bot verification required. Please complete the verification steps in the browser.')
-                loginput('Press Enter to continue after completing the verification steps...')
+                loginput('Press Enter to continue after completing the verification...')
             
             self.element(By.XPATH, '//input[@name="email"]')
             self.clear()
@@ -504,7 +504,7 @@ class BrowseVrbo(KLTBrowser):
             True if we have enough reservations, False if we need more
         """
         if self._start or self._end:
-            return self._totalPreviousReservationsFound == 7
+            return self._totalPreviousReservationsFound > 7
         if len(reservations) < self._total:
             return False
         return True
@@ -519,7 +519,7 @@ class BrowseVrbo(KLTBrowser):
         Returns:
             True if the status is valid, False otherwise
         """
-        for valid in ('confirmed', 'cancel', 'booked', 'arriving'):
+        for valid in ('confirmed', 'cancel', 'booked', 'arriving', 'post-stay'):
             if valid in status.lower():
                 return True
         return status.lower() in ('confirmed', 'cancelled', 'booked')
