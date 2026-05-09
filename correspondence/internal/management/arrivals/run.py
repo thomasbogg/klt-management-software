@@ -108,6 +108,8 @@ def get_management_arrivals_email_bookings(
     select = search.propertyManagers.select()
     select.name()
     select.email()  # Changed from company_email
+    select.cleaning()  # Changed from company_email
+    select.cleaningEmail()  # Changed from company_email
     
     # Apply additional conditions
     set_valid_management_booking(search)
