@@ -50,7 +50,9 @@ def update(func):
             run = func(*args, **kwargs)
             sections.log(run)    
         except Exception as e:
-            _contact_self(subject=f'ERROR IN {func.__name__}', body=str(e))
+            _contact_self(
+                        subject=f'ERROR IN {func.__name__}', 
+                        body=str(traceback.format_exc(chain=False)))
             _log_exception(sections)
      
         end = dates.now()
