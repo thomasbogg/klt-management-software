@@ -90,7 +90,6 @@ def update_from_guest_arrival_forms(
 
     if whatsappPrompts:
         if not LOCAL:
-            from default.updates.functions import update_to_database
             for booking in whatsappPrompts:
                 update_to_database(
                     booking,
