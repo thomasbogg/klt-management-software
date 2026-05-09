@@ -4,7 +4,7 @@ from default.database.functions import get_database
 from default.google.mail.functions import get_user, get_inbox
 from default.settings import DEFAULT_ACCOUNT
 from default.update.wrapper import update
-from forms.arrival.guest.run import send_whatsapp_prompts_for_guest_arrival_forms, get_guest_arrival_form_bookings
+from forms.arrival.guest.run import send_whatsapp_prompts_for_guest_arrival_forms
 from forms.registration.run import send_whatsapp_prompts_for_guest_registration_forms, get_guest_registration_form_bookings
 from libraries.web.html import HTML
 from platforms.airbnb.review import review_airbnb_guests
@@ -62,10 +62,10 @@ def send_guest_messages_from_local_update() -> str:
             bookingId = int(p.split(':')[0].strip('-- '))
             if 'Airbnb:Arrival Form' in p:
                 sendAirbnb4Weeks += get_four_weeks_bookings(database, bookingId=bookingId)
-            elif 'WhatsApp:Arrival Form' in p:
-                sendWhatsApp4Weeks += get_four_weeks_bookings(database, bookingId=bookingId)
             elif 'WhatsApp:Guest Registration Form' in p:
                 sendWhatsAppGuestReg += get_guest_registration_form_bookings(database, bookingId=bookingId)
+            elif 'WhatsApp:Arrival Form' in p:
+                sendWhatsApp4Weeks += get_four_weeks_bookings(database, bookingId=bookingId)
 
     if sendAirbnb4Weeks:
         send_airbnb_arrival_form_messages(bookings=sendAirbnb4Weeks)
