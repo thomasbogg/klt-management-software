@@ -79,7 +79,7 @@ def close_departed_bookings_in_PIMS(visible: bool = False) -> str:
     Returns:
         Success message confirming closure
     """
-    browser = BrowsePIMS(True).goTo().login()
+    browser = BrowsePIMS(visible).goTo().login()
 
     todoList = browser.todoList.goTo()
     todoList.propertyName = 'All properties'
