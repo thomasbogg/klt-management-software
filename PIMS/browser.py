@@ -1254,7 +1254,7 @@ class BrowsePIMS(KLTBrowser):
             for key in self.currentTasks.keys():
                 if taskName.lower() in key:
                     self.currentTasks[key].find_element(By.TAG_NAME, 'input').click()
-            self.element(By.XPATH, '//input[@value="Update Status"]').click()
+                    self.element(By.XPATH, '//input[@value="Update Status"]').click()
             return self
             
         @property
