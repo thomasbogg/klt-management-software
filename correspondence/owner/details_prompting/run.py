@@ -113,7 +113,7 @@ def send_new_owner_prompting_email(booking: Booking) -> None:
     information_2(body)
     conclusion(body)
     
-    send_email(user, message)
+    send_email(user, message, checkSent=True)
 
 
 #######################################################
