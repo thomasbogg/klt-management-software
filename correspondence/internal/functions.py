@@ -56,7 +56,7 @@ def get_subject(
     if topic is None:
         topic = ""
     if daily:
-        dateValue = updatedates.tomorrow()
+        dateValue = updatedates.date()
         return f'DAILY {topic} EMAIL for {updatedates.prettyDate(dateValue)}'
     if start and end:
         return (f'GENERAL {topic} UPDATE EMAIL for {updatedates.prettyDate(start)} '
