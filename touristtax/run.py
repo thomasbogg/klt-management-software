@@ -66,6 +66,7 @@ def add_new_tourist_tax_properties(propertyId: Optional[int] = None, propertyNam
     return 'Successfully added properties to TMT'
 
 
+@update
 def pay_monthly_tourist_tax(start: datetime.date = None, end: datetime.date = None, propertyName: str | None = None) -> None:
     """
     Pay the monthly tourist tax for a specific property.
@@ -90,7 +91,7 @@ def pay_monthly_tourist_tax(start: datetime.date = None, end: datetime.date = No
     properties = get_tourist_tax_properties(propertyName=propertyName)
     database = get_database()
 
-    browser = TMTBrowser(visible=True)
+    browser = TMTBrowser(visible=False)
     browser.goTo()
     browser.login()
     
@@ -108,9 +109,9 @@ def pay_monthly_tourist_tax(start: datetime.date = None, end: datetime.date = No
         # Calculate the total tourist tax based on bookings and property specifications
         tax_amount = calculate_tourist_tax(bookings)
 
-        sublog(f'Calculated tourist tax for property {property.name}: {tax_amount:.2f}')
-        if updatedates.date() < updatedates.date(2026, 6, 1):
+        if updatedates.date() < updatedates.date(2026, 7, 1):
             tax_amount = 0
+        sublog(f'Calculated tourist tax for property {property.name}: {tax_amount:.2f}')
         browser.declareMonthlyTax(property=property, year=start.year, month=start.month, total=tax_amount)
         browser.home()  # Return to home after declaration
 
