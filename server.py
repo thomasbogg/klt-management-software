@@ -197,12 +197,12 @@ def final_PIMS_check() -> None:
     Update platform bookings from PIMS.
     Review Airbnb guests based on the latest data.
     """
-    if IS_EARLY_RUN:
+    if IS_EARLY_RUN or IS_MAIN_RUN:
         close_departed_bookings_in_PIMS()
     if IS_LATE_RUN:
         update_PIMS_platform_bookings()
     if IS_EVENING_RUN:
-        if updatedates.day() == 1:
+        if updatedates.day() in (1, 4):
             notify_platform_bookings_without_PIMS_ID(
                                                 start=updatedates.date(), 
                                                 end=updatedates.calculate(365))
