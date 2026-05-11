@@ -66,6 +66,7 @@ def get_accountancy_sheet_bookings(
     select.currency()
     select.basicRental()
     select.platformFee()
+    select.extraNights()
   
     # Select property owners data
     select = search.propertyOwners.select()
