@@ -220,6 +220,7 @@ def get_ABA_bookings(
     select.basicRental()
     select.platformFee()
     select.currency()
+    select.extraNights()
     
     select = search.propertyOwners.select()
     select.wantsAccounting()
