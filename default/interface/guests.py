@@ -252,6 +252,9 @@ def reset_guest(subsection: Interface, databaseBooking: Booking) -> None:
     phoneAnswer = get_text(subsection, 'Phone', None)
     databaseBooking.guest.phone = phoneAnswer
 
+    languageAnswer = get_text(subsection, 'Preferred Language', 'EN-GB')
+    databaseBooking.guest.preferredLanguage = 'EN-GB' if not languageAnswer else languageAnswer
+
     guestId = databaseBooking.guest.insert()
     databaseBooking.details.guestId = guestId
     databaseBooking.update()
