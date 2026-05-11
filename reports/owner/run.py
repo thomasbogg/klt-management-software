@@ -222,6 +222,7 @@ def _get_bookings(database: Database, start: date, end: date,
 
     select = search.charges.select()
     select.admin()
+    select.extraNights()
 
     select = search.propertySpecs.select()
     select.bedrooms()

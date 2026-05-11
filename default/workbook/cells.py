@@ -461,7 +461,8 @@ def set_basic_holiday_charge_cell(worksheet: Worksheet, booking: Booking | None,
     
     if booking:
         worksheet.cell.setToCurrencyFormat(booking.charges.currency)
-        return set_cell(worksheet, value=booking.charges.basicRental, **kwargs)
+        total = booking.charges.basicRental + booking.charges.extraNights
+        return set_cell(worksheet, value=total, **kwargs)
     
     return set_cell(worksheet, **kwargs)
 
