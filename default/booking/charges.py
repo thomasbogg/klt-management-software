@@ -357,7 +357,7 @@ class Charges(DatabaseRow):
         Returns:
             The total rental amount or 'Und.' if any component is undefined
         """
-        value = self.basicRental + self.admin
+        value = self.basicRental + self.admin + self.extraNights
         if isinstance(value, str) and 'und' in value.lower():
             return 'Und.'
         return value

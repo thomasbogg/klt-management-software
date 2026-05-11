@@ -491,7 +491,7 @@ def determine_commission(booking: Booking) -> float:
     Returns:
         Commission amount
     """
-    rental = booking.charges.basicRental
+    rental = booking.charges.basicRental + booking.charges.extraNights
     if not dates.isHighSeason(booking.arrival.date):
         return 0.10 * rental
     if booking.property.owner.wantsAccounting:
@@ -611,7 +611,8 @@ def determine_owner_payment(booking: Booking, minusPlatIVA: bool = True) -> floa
     """
     platFee = determine_platform_fee_IVA(booking) if minusPlatIVA else 0
     return (
-        booking.charges.basicRental - 
+        booking.charges.basicRental +
+        booking.charges.extraNights -
         determine_commission(booking) - 
         platFee
     )
