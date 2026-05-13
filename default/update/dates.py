@@ -1,4 +1,5 @@
 import datetime
+import os
 
 from default.dates import dates
 
@@ -388,6 +389,8 @@ class updatedates(dates):
         Returns:
             A tuple containing start and end dates for management cleaning emails.
         """
+        if cls.hour() < 12:
+            return cls.calculate(days=1), cls.calculate(days=5)
         return cls.calculate(days=1), cls.calculate(days=17)
 
     @classmethod

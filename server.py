@@ -159,9 +159,9 @@ def update_arrivals_system() -> None:
     update_arrivals_calendar()
     if IS_EARLY_RUN or IS_MAIN_RUN:
         send_management_updates_emails()
+        send_management_cleans_emails()
     if IS_MAIN_RUN:
         send_management_arrivals_emails()
-        send_management_cleans_emails()
     send_airport_transfers_request_emails()
     if updatedates.date() == 25:
         send_realco_email()
