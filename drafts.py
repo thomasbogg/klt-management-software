@@ -1,4 +1,4 @@
-from default.google.accounts import KevinAtABA, TeamAtABA, ThomasAtABA
+from default.settings import KevinAtABA, TeamAtABA, ThomasAtABA
 from libraries.google.mail.message import GoogleMailMessage
 from libraries.google.mail.messages import GoogleMailMessages
 from correspondence.drafts.functions import (
@@ -68,11 +68,11 @@ def get_user_account(sections: Interface) -> GoogleMailMessages:
     account = sections.option(('Kevin', 'Thomas', 'Team'))
     
     if account == 1: 
-        return get_user(KevinAtABA())
+        return get_user(KevinAtABA)
     elif account == 2: 
-        return get_user(ThomasAtABA())
+        return get_user(ThomasAtABA)
     else: 
-        return get_user(TeamAtABA())
+        return get_user(TeamAtABA)
 
 
 def get_draft_email_message(sections: Interface, user: GoogleMailMessages) -> GoogleMailMessage:

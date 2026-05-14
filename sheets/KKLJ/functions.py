@@ -1,7 +1,6 @@
 from datetime import date
 
 from libraries.workbook.workbook import Workbook
-from default.booking import booking
 from default.booking.booking import Booking
 from default.booking.functions import (
     determine_extras_in_list,

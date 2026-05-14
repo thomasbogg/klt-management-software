@@ -30,7 +30,6 @@ from libraries.utils import sublog
 
 from default.booking.functions import (
     determine_total_to_be_receipted,
-    determine_owner_payment,
     logbooking,
 )
 from default.booking.booking import Booking

@@ -1,4 +1,4 @@
-from default.google.accounts import TeamAtABA
+from default.settings import TeamAtABA
 from libraries.google.mail.message import GoogleMailMessage
 from correspondence.guest.arrival.functions import (
     get_arrival_table_data,
@@ -83,7 +83,7 @@ def send_two_days_instructions_emails(
                     booking, prevProperty, bookingId)
         else:
             send_new_arrival_instructions_email(
-                account=TeamAtABA(), 
+                account=TeamAtABA, 
                 topic='Check-in Instructions', 
                 booking=booking, 
                 bookingId=bookingId, 
@@ -140,7 +140,7 @@ def send_new_apartment_changeover_email(booking: Booking, previous: str,
         None
     """
     user, message = new_guest_arrival_email(
-        TeamAtABA(), 'Change of Apartment', booking)
+        TeamAtABA, 'Change of Apartment', booking)
     body = message.body
     
     changeover_opening(body, booking)

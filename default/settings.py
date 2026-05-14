@@ -135,9 +135,9 @@ else:
         os.getenv('GOOGLE_API_SERVICE_ACCOUNT_USERNAME'),
     )
 
-TeamAtABA = KLTGoogleAccount(details=os.getenv('TEAM_AT_ABA').split(';'), credentials=GOOGLE_API_CREDENTIALS, local=LOCAL)
-ThomasAtABA = KLTGoogleAccount(details=os.getenv('THOMAS_AT_ABA').split(';'), credentials=GOOGLE_API_CREDENTIALS, local=LOCAL)
-KevinAtABA = KLTGoogleAccount(details=os.getenv('KEVIN_AT_ABA').split(';'), credentials=GOOGLE_API_CREDENTIALS, local=LOCAL)
+TeamAtABA = KLTGoogleAccount(details=os.getenv('TEAM_@_ABA').split(';'), credentials=GOOGLE_API_CREDENTIALS, local=LOCAL)
+ThomasAtABA = KLTGoogleAccount(details=os.getenv('THOMAS_@_ABA').split(';'), credentials=GOOGLE_API_CREDENTIALS, local=LOCAL)
+KevinAtABA = KLTGoogleAccount(details=os.getenv('KEVIN_@_ABA').split(';'), credentials=GOOGLE_API_CREDENTIALS, local=LOCAL)
 
 # Default account for Google API operations
 DEFAULT_ACCOUNT = KLTGoogleAccount(details=os.getenv('DEFAULT_ACCOUNT').split(';'), credentials=GOOGLE_API_CREDENTIALS, local=LOCAL)
