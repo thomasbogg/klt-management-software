@@ -232,7 +232,7 @@ class updatedates(dates):
         Returns:
             The cut-off date for deleting old arrival forms.
         """
-        return cls.calculate(-15)
+        return cls.calculate(days=-15)
 
     @classmethod
     def edgered_update_dates(cls, month: int = 0) -> tuple[datetime.date, datetime.date]:
