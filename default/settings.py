@@ -5,7 +5,7 @@ This module contains configuration settings, API credentials, and constants
 used throughout the application.
 """
 import os
-from default.google.accounts import ThomasAtABA
+from default.google.accounts import KLTGoogleAccount
 
 try:
     # Check if running in deployed environment (e.g., on a server) 
@@ -26,9 +26,6 @@ TEST: bool = os.getenv('TEST', 'False').lower() == 'true'
 
 # Website information
 WEBSITE_LINK: str = 'https://www.algarvebeachapartments.com/'
-
-# Default account for API operations
-DEFAULT_ACCOUNT = ThomasAtABA()
 
 # Default language
 DEFAULT_LANGUAGE = 'EN-GB'
@@ -112,3 +109,35 @@ DEEPL_KEY: str = os.getenv('DEEPL_KEY', '')
 # TMT credentials
 TMT_USERNAME: str = os.getenv('TMT_USERNAME', '')
 TMT_PASSWORD: str = os.getenv('TMT_PASSWORD', '')
+
+
+#######################################################
+# GOOGLE CREDENTIALS & ACCOUNTS
+#######################################################
+
+if LOCAL:  
+    GOOGLE_API_CREDENTIALS = os.path.abspath(os.getenv('GOOGLE_CREDS_DIR', None))
+else:
+    GOOGLE_API_CREDENTIALS = (
+        {
+            "type": os.getenv("type"),
+            "project_id": os.getenv("project_id"),
+            "private_key_id": os.getenv("private_key_id"),
+            "private_key": '\n'.join(os.getenv("private_key").split('\\n')),
+            "client_email": os.getenv("client_email"),
+            "client_id": os.getenv("client_id"),
+            "auth_uri": os.getenv("auth_uri"),
+            "token_uri": os.getenv("token_uri"),
+            "auth_provider_x509_cert_url": os.getenv("auth_provider_x509_cert_url"),
+            "client_x509_cert_url": os.getenv("client_x509_cert_url"),
+            "universe_domain": os.getenv("universe_domain"),
+        },
+        os.getenv('GOOGLE_API_SERVICE_ACCOUNT_USERNAME'),
+    )
+
+TeamAtABA = KLTGoogleAccount(details=os.getenv('TEAM_AT_ABA').split(';'), credentials=GOOGLE_API_CREDENTIALS, local=LOCAL)
+ThomasAtABA = KLTGoogleAccount(details=os.getenv('THOMAS_AT_ABA').split(';'), credentials=GOOGLE_API_CREDENTIALS, local=LOCAL)
+KevinAtABA = KLTGoogleAccount(details=os.getenv('KEVIN_AT_ABA').split(';'), credentials=GOOGLE_API_CREDENTIALS, local=LOCAL)
+
+# Default account for Google API operations
+DEFAULT_ACCOUNT = KLTGoogleAccount(details=os.getenv('DEFAULT_ACCOUNT').split(';'), credentials=GOOGLE_API_CREDENTIALS, local=LOCAL)
