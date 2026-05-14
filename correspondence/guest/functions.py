@@ -9,7 +9,7 @@ from default.database.functions import set_valid_management_booking
 from default.google.contacts.functions import create_contact, get_contacts
 from default.google.mail.functions import new_email, send_email
 from default.settings import (
-    DEEPL_AUTH_KEY, 
+    DEEPL_KEY, 
     DEFAULT_ACCOUNT, 
     DEFAULT_LANGUAGE, 
 )
@@ -41,7 +41,7 @@ def new_guest_email(
     user, message = new_email(account=account, user=user, subject=subject, to=to, name=name)
     language = booking.guest.preferredLanguage
     if booking.guest.preferredLanguage != DEFAULT_LANGUAGE:
-        message.translator = Deepl(authKey=DEEPL_AUTH_KEY, targetLang=language)
+        message.translator = Deepl(authKey=DEEPL_KEY, targetLang=language)
     return user, message
 
 
