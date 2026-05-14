@@ -107,7 +107,7 @@ VRBO_USERNAME: str = os.getenv('VRBO_USERNAME', '')
 VRBO_PASSWORD: str = os.getenv('VRBO_PASSWORD', '')
 
 # API Keys
-DEEPL_AUTH_KEY: str = os.getenv('DEEPL_AUTH_KEY', '')
+DEEPL_KEY: str = os.getenv('DEEPL_KEY', '')
 
 # TMT credentials
 TMT_USERNAME: str = os.getenv('TMT_USERNAME', '')

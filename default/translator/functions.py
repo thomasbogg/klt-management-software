@@ -1,5 +1,5 @@
 from libraries.translator.deepl import Deepl
-from default.settings import DEEPL_AUTH_KEY
+from default.settings import DEEPL_KEY
 
 DEEPL = None
 
@@ -9,7 +9,7 @@ def _is_set() -> bool:
 def _set() -> None:
     if not _is_set():
         global DEEPL
-        DEEPL = Deepl(DEEPL_AUTH_KEY)
+        DEEPL = Deepl(DEEPL_KEY)
 
 def translate_text(text, targetLang='PT-PT') -> str:
     _set()
