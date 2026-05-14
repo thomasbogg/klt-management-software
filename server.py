@@ -59,14 +59,10 @@ from sheets.KKLJ.run import update_KKLJ_properties_sheets
 
 from touristtax.run import pay_monthly_tourist_tax
 
-IS_EARLY_RUN: bool =True
-#IS_EARLY_RUN: bool = updatedates.hour() == 5
-IS_MAIN_RUN: bool =True
-#IS_MAIN_RUN: bool = updatedates.hour() == 14
-IS_EVENING_RUN: bool =True
-#IS_EVENING_RUN: bool = updatedates.hour() == 18
-IS_LATE_RUN: bool =True
-#IS_LATE_RUN: bool = updatedates.hour() == 23
+IS_EARLY_RUN: bool = updatedates.hour() == 5
+IS_MAIN_RUN: bool = updatedates.hour() == 14
+IS_EVENING_RUN: bool = updatedates.hour() == 18
+IS_LATE_RUN: bool = updatedates.hour() == 23
 
 @pull_database
 def run() -> None:
