@@ -1,6 +1,6 @@
 import requests
-from utils import Object, logerror, generate_request_headers
-
+from libraries.utils import Object, logerror, generate_request_headers
+from typing import List
 
 API_VERSION = '2026-04-20'
 BASE_URL = "https://sandbox-merchant.revolut.com/api"
@@ -87,7 +87,7 @@ class Revolut(Object):
             self._set('url', value)
 
         @property
-        def events(self) -> list:
+        def events(self) -> List[str]:
             """
             Get the list of events that trigger the webhook.
             
@@ -97,7 +97,7 @@ class Revolut(Object):
             return self._get('events') or []
         
         @events.setter
-        def events(self, value: list | str) -> None:
+        def events(self, value: List[str] | str) -> None:
             """
             Set the list of events that trigger the webhook.
             
