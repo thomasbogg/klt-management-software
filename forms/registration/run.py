@@ -2,6 +2,7 @@ from datetime import date
 
 from libraries.google.mail.message import GoogleMailMessage
 from correspondence.guest.arrival.registration.run import (
+    create_tourist_tax_payment,
     get_guest_registration_attachment,
     new_guest_arrival_email,
     registration_link,
@@ -10,7 +11,6 @@ from correspondence.guest.arrival.registration.run import (
     sef_residents,
     send_guest_email,
     tax_explanation,
-    tax_exemption,
     tax_request,
     tourist_tax_link
 )
@@ -21,7 +21,7 @@ from correspondence.guest.functions import (
 from correspondence.owner.guest_registration.run import send_new_guest_registration_to_owner_email
 from default.booking.booking import Booking
 from default.booking.functions import (
-    determine_tourist_tax,
+    determine_tourist_tax_nights,
     guest_has_stayed_before,
     logbooking
 )
@@ -268,13 +268,14 @@ def send_new_registration_reminder_email(booking: Booking) -> None:
     sef_residents(body)
     
     # TOURIST TAX PAYMENT
-    body.section('Tourist Tax Payment')
-    tax_explanation(body)
-    if determine_tourist_tax(booking): 
-        tax_request(body)
+    touristTaxNights = determine_tourist_tax_nights(booking)
+    if touristTaxNights and not booking.charges.touristtax.paid:
+        body.section('Tourist Tax Payment')
+        tax_explanation(body)
+        if not booking.charges.touristtax.orderToken:
+            create_tourist_tax_payment(booking, touristTaxNights)
+        tax_request(body, booking)
         tourist_tax_link(body, booking)
-    else:
-        tax_exemption(body)
     
     thank_you(body)
     send_guest_email(user, message)
