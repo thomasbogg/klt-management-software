@@ -12,6 +12,7 @@ from typing import Optional
 from default.database.functions import get_database
 from default.update.dates import updatedates
 from default.update.wrapper import update
+from default.settings import TOURIST_TAX_PER_NIGHT
 from touristtax.browser import TMTBrowser
 from touristtax.functions import get_tourist_tax_properties, get_tourist_tax_bookings, calculate_tourist_tax
 from libraries.utils import log, sublog
@@ -107,12 +108,10 @@ def pay_monthly_tourist_tax(start: datetime.date = None, end: datetime.date = No
         bookings = get_tourist_tax_bookings(database, start, end, property.name)
         
         # Calculate the total tourist tax based on bookings and property specifications
-        tax_amount = calculate_tourist_tax(bookings)
+        taxed_nights = sum([b.charges.touristtax.total for b in bookings]) / TOURIST_TAX_PER_NIGHT
 
-        if updatedates.date() < updatedates.date(2026, 7, 1):
-            tax_amount = 0
-        sublog(f'Calculated tourist tax for property {property.name}: {tax_amount:.2f}')
-        browser.declareMonthlyTax(property=property, year=start.year, month=start.month, total=tax_amount)
+        sublog(f'Calculated tourist tax for property {property.name}: {taxed_nights:.2f}')
+        browser.declareMonthlyTax(property=property, year=start.year, month=start.month, total=taxed_nights)
         browser.home()  # Return to home after declaration
 
     browser.quit()  # Close browser after processing all properties
