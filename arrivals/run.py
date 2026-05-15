@@ -13,7 +13,7 @@ from default.booking.functions import (
     determine_price_of_extra,
     determine_security_deposit_request,
     determine_self_check_in,
-    determine_tourist_tax,
+    determine_tourist_tax_nights,
     logbooking
 )
 from default.database.database import Database
@@ -475,8 +475,8 @@ def get_elements_for_arrival_description(booking: Booking, string: str) -> str:
     if guest_has_stayed_before(booking):
         string += f'\n- This is a Returning Guest'
     
-    if determine_tourist_tax(booking):
-        string += f'\n- Mention Tourist Tax to Guest'
+    if determine_tourist_tax_nights(booking) and not booking.charges.touristtax.paid:
+        string += f'\n- Mention Tourist Tax to Guest (Link to pay in email)'
 
     if determine_guest_registration_form_notification(booking):
         string += '\n- Mention Guests Registration Form to Guest'
@@ -721,10 +721,14 @@ def set_selection(search: Database) -> Database:
     select.email()
    
     select = search.charges.select()
+    select.id()
     select.security()
     select.securityMethod()
     select.extraNights()
     select.currency()
+
+    select = search.touristtax.select()
+    select.paid()
 
     select = search.forms.select()
     select.guestRegistrationDone()

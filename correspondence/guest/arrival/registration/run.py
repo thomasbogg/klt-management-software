@@ -1,6 +1,7 @@
 from datetime import date
 from os import getcwd, path
 
+from default.settings import REVOLUT_API_VERSION
 from libraries.google.mail.message import GoogleMailMessage
 from libraries.google.mail.messages import GoogleMailMessages
 from correspondence.guest.arrival.functions import (
@@ -15,7 +16,7 @@ from correspondence.guest.arrival.functions import (
     get_code_of_conduct_attachment
 )
 from default.booking.booking import Booking
-from default.booking.functions import determine_tourist_tax
+from default.booking.functions import determine_tourist_tax_nights
 from default.database.database import Database
 from default.database.functions import get_database
 from default.update.dates import updatedates
@@ -193,8 +194,10 @@ def send_new_guest_registration_email(
     # Tourist tax payment section
     body.section('Tourist Tax Payment')
     tax_explanation(body)
-    if determine_tourist_tax(booking): 
-        tax_request(body)
+    touristTaxNights = determine_tourist_tax_nights(booking)
+    if touristTaxNights:
+        create_tourist_tax_payment(booking, touristTaxNights)
+        tax_request(body, booking)
         tourist_tax_link(body, booking)
     else:
         tax_exemption(body)
@@ -383,7 +386,7 @@ def tax_explanation(body: GoogleMailMessage.Body) -> None:
     )
 
 
-def tax_request(body: GoogleMailMessage.Body) -> None:
+def tax_request(body: GoogleMailMessage.Body, booking: Booking) -> None:
     """
     Add instructions for paying tourist tax.
     
@@ -394,11 +397,9 @@ def tax_request(body: GoogleMailMessage.Body) -> None:
         None
     """
     body.paragraph(
-        'Please follow the link provided below to make this payment. It will ask',
-        'you to enter your check-in and check-out dates as well as the number of',
-        'people in your group. If you arrive before April, please only enter the',
-        'nights stayed from the 1st April onwards; likewise, if departing after',
-        'October only register the nights stayed up to the 31st October.'
+        'Please follow the link provided below to make this payment. We have calculated',
+        f'the amount of €{booking.charges.touristtax.total} based on the information we',
+        'have on record regarding the number of adults in your group. ',
     )
 
 
@@ -413,8 +414,9 @@ def tourist_tax_link(body: GoogleMailMessage.Body, booking: Booking) -> None:
     Returns:
         None
     """
+    from default.settings import REVOLUT_BASE_PAYMENT_LINK
     body.link(
-        f'https://tt.360city.pt/?id=AL-{booking.property.alNumber}',
+        f'{REVOLUT_BASE_PAYMENT_LINK}{booking.charges.touristtax.orderToken}',
         f'Tourist Tax Payment for {booking.guest.fullName}'
     )
 
@@ -569,3 +571,32 @@ def _house_rules_4(body: GoogleMailMessage.Body) -> None:
         'are left unattended for more than 10 minutes, other guests have the right',
         'to remove the items and use the beds.'
     )
+
+
+def create_tourist_tax_payment(booking: Booking, nights: int) -> str:
+    """
+    Create a tourist tax payment link for the guest.
+    
+    Args:
+        booking: The booking for which to create the payment link
+        nights: The number of nights for which to calculate the tourist tax
+    Returns:
+        str: The URL for the tourist tax payment
+    """
+    from libraries.banking.revolut import Revolut
+    from default.settings import REVOLUT_SECRET_KEY, REVOLUT_API_VERSION
+  
+    revolut = Revolut(secretKey=REVOLUT_SECRET_KEY, apiVersion=REVOLUT_API_VERSION)
+    payment = revolut.payment
+    payment.amount = nights * 2 * 100 # €2 per night
+    payment.currency = 'EUR'
+    payment.description = f'Tourist Tax for {booking.guest.fullName} - {booking.property.name}'
+    payment.customerPhone = booking.guest.phone
+    payment.customerEmail = booking.guest.email
+    payment.customerName = booking.guest.fullName
+    payment.create()
+
+    booking.charges.touristtax.total = nights * 2  # €2 per night
+    booking.charges.touristtax.orderId = payment.id
+    booking.charges.touristtax.orderToken = payment.token
+    booking.update()

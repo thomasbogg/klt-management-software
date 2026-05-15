@@ -334,7 +334,7 @@ def determine_key_box_for_self_check_in(booking: Booking) -> None:
     return True
 
 
-def determine_tourist_tax(booking: Booking) -> bool:
+def determine_tourist_tax_nights(booking: Booking) -> int:
     """
     Determine if tourist tax applies to this booking.
     
@@ -342,32 +342,51 @@ def determine_tourist_tax(booking: Booking) -> bool:
         booking: The booking to check
         
     Returns:
-        True if tourist tax applies
+        EUR value if tourist tax applies, 0 otherwise
     """
-    return False
+    def calculate_tourist_tax_nights(bookings: list[Booking]) -> float:
+        """
+        Calculate the tourist tax for a given property based on its specifications.
+        This is a placeholder function and should be implemented with the actual tax calculation logic.
+        """
+        # Example calculation (this should be replaced with the actual logic):
+        total = 0
+        for booking in bookings:
+            # Assuming a flat rate of 1.5 per guest per night for demonstration
+            nights = booking.totalNights
+            adults = booking.details.adults
+            if nights > 7:
+                nights = 7  # Cap at 7 nights for tax calculation
+            total += adults * nights
+        return total
+
+    if booking.arrival.date < dates.date(2026, 5, 23):
+        return 0
     if booking.details.isOwner:
-        return False
+        return 0
     if not booking.property.alNumber:
-        return False
+        return 0
     if not isinstance(booking.property.alNumber, int):
-        return False
+        return 0
     if booking.details.enquirySource == 'Booking.com':
-        return False
+        return 0
+    if booking.details.enquirySource == 'Direct':
+        return 0
     if booking.property.alNumber < 999:
-        return False
+        return 0
     if booking.departure.date.month < 4:
-        return False
+        return 0
     if booking.departure.date.month == 4:
         if booking.totalNights > 14:
-            return False
+            return 0
         if booking.departure.date.day < 6:
-            return False
+            return 0
     if booking.arrival.date.month > 10:
-        return False
+        return 0
     if booking.arrival.date.month == 10:
         if booking.arrival.date.day > 23:
-            return False
-    return True
+            return 0
+    return calculate_tourist_tax_nights([booking])
 
 
 def determine_extra_bed(booking: Booking) -> bool:

@@ -38,7 +38,7 @@ class Touristtax(DatabaseRow):
         self._set('chargesId', value)
 
     @property
-    def total(self) -> str | None:
+    def total(self) -> float | None:
         """
         Get the total used for this charge.
         
@@ -48,7 +48,7 @@ class Touristtax(DatabaseRow):
         return self._get('total')
     
     @total.setter
-    def total(self, value: str) -> None:
+    def total(self, value: float) -> None:
         """
         Set the total for this charge.
         
@@ -58,7 +58,7 @@ class Touristtax(DatabaseRow):
         self._set('total', value)
 
     @property
-    def orderId(self) -> bool | str | None:
+    def orderId(self) -> str | None:
         """
         Get order ID information.
         
@@ -68,7 +68,7 @@ class Touristtax(DatabaseRow):
         return self._get('orderId')
 
     @orderId.setter
-    def orderId(self, value: bool | str) -> None:
+    def orderId(self, value: str) -> None:
         """
         Set order ID information.
         
@@ -78,7 +78,7 @@ class Touristtax(DatabaseRow):
         self._set('orderId', value)
 
     @property
-    def orderToken(self) -> bool | str | None:
+    def orderToken(self) -> str | None:
         """
         Get order token information.
         
@@ -88,7 +88,7 @@ class Touristtax(DatabaseRow):
         return self._get('orderToken')
     
     @orderToken.setter
-    def orderToken(self, value: bool | str) -> None:
+    def orderToken(self, value: str) -> None:
         """
         Set order token information.
         
@@ -98,7 +98,7 @@ class Touristtax(DatabaseRow):
         self._set('orderToken', value)
 
     @property
-    def paid(self) -> bool | str | None:
+    def paid(self) -> bool | None:
         """
         Get the payment status.
         

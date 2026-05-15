@@ -853,3 +853,25 @@ class ObjectWithDefaults(Object):
 
         if key in self._values:
             del self._values[key]
+
+
+# =============================================================================
+# Requests and API Utilities
+# =============================================================================
+
+def generate_request_headers(secretKey: str = None, **kwargs) -> dict:
+  """
+    Generate headers for Revolut API requests.
+  
+    Args:
+        secretKey: The API secret key for authentication. If None, the default from settings will be used.
+        apiVersion: The version of the Revolut API to use.
+    Returns:
+        A dictionary of headers to include in the API request.
+  """
+  return {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': f'Bearer {secretKey}',
+    **kwargs
+  }

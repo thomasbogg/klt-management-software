@@ -62,23 +62,6 @@ def get_tourist_tax_properties(propertyId: Optional[int] = None, propertyName: O
     return result
 
 
-def calculate_tourist_tax(bookings: list[Booking]) -> float:
-    """
-    Calculate the tourist tax for a given property based on its specifications.
-    This is a placeholder function and should be implemented with the actual tax calculation logic.
-    """
-    # Example calculation (this should be replaced with the actual logic):
-    total = 0
-    for booking in bookings:
-        # Assuming a flat rate of 1.5 per guest per night for demonstration
-        nights = booking.totalNights
-        adults = booking.details.adults
-        if nights > 7:
-            nights = 7  # Cap at 7 nights for tax calculation
-        total += adults * nights
-    return total
-
-
 def get_tourist_tax_bookings(database: Database, start: datetime.date, end: datetime.date, propertyName: str) -> list[Booking]:
     """
     Retrieve bookings from the database that are relevant for tourist tax calculation.
