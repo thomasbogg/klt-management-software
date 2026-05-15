@@ -52,7 +52,7 @@ def update(func):
         except Exception as e:
             _contact_self(
                         subject=f'ERROR IN {func.__name__}', 
-                        body=str(traceback.format_exc(chain=False)))
+                        body=str(traceback.format_exc()))
             _log_exception(sections)
      
         end = dates.now()
