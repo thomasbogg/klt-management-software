@@ -203,6 +203,12 @@ def get_guest_registration_form_bookings(
     select.guestRegistration()
     select.PIMSuin()
     select.PIMSoid()
+
+    # Selections for charges and TT
+    select = search.charges.select()
+    select.id()
+    select = search.touristtax.select()
+    select.all()
     
     # Selections for addresses
     select = search.propertyAddresses.select()
