@@ -1,4 +1,3 @@
-import json
 import requests
 from utils import Object, logerror, generate_request_headers
 
