@@ -392,6 +392,7 @@ def tax_request(body: GoogleMailMessage.Body, booking: Booking) -> None:
     
     Args:
         body: The email body object to modify
+        booking: The booking with guest information
         
     Returns:
         None
