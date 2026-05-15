@@ -512,8 +512,9 @@ def create_touristtax_table(database: Database) -> Database:
     bookingId = Column(name='bookingId', tablename=table.name, dataType='integer').notNull().foreignKey().references('bookings', 'id')
     table.columns = bookingId
     table.foreignKeys = bookingId
-    table.columns = Column(name='total', tablename=table.name, dataType='real').notNull()
+    table.columns = Column(name='total', tablename=table.name, dataType='real')
     table.columns = Column(name='orderId', tablename=table.name, dataType='text')
-    table.columns = Column(name='token', tablename=table.name, dataType='text')
+    table.columns = Column(name='orderToken', tablename=table.name, dataType='text')
+    table.columns = Column(name='paid', tablename=table.name, dataType='boolean')
     table.create()
     return database
