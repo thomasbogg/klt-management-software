@@ -30,9 +30,9 @@ WEBSITE_LINK: str = 'https://www.algarvebeachapartments.com/'
 # Default language
 DEFAULT_LANGUAGE = 'EN-GB'
 
-# Cloud update warning
-CLOUD_UPDATE_EMAIL_FOLDER = 'Updates from Cloud'
-CLOUD_UPDATE_EMAIL_SUBJECT = 'RUNNING UPDATE FROM CLOUD'
+# Database in use warning
+DATABASE_IN_USE_EMAIL_FOLDER = 'Updates with Database'
+DATABASE_IN_USE_EMAIL_SUBJECT = 'RUNNING UPDATE WITH DATABASE'
 
 #######################################################
 # FILESYSTEM SETTINGS

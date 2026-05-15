@@ -1,3 +1,4 @@
+from time import sleep
 import traceback
 
 from libraries.google.drives.file import GoogleDriveFile
@@ -13,15 +14,14 @@ from default.google.drive.functions import (
     upload_local_file_to_drive
 )
 from default.settings import (
-    CLOUD_UPDATE_EMAIL_FOLDER, 
-    CLOUD_UPDATE_EMAIL_SUBJECT, 
+    DATABASE_IN_USE_EMAIL_FOLDER, 
+    DATABASE_IN_USE_EMAIL_SUBJECT, 
     DATABASE_NAME, 
     DATABASE_PATH, 
     DEFAULT_ACCOUNT,
-    LOCAL,
 )
 from libraries.interface.interface import Interface
-from libraries.utils import logerror
+from libraries.utils import logwarning
 
 LOAD_START = dates.now()
 
@@ -80,17 +80,19 @@ def pull_database(func):
         if not pullDatabase:
             return func(*args, **kwargs)
         
-        if not LOCAL:
-            _contact_self(subject=CLOUD_UPDATE_EMAIL_SUBJECT, body=f'Started cloud update at {dates.now()}')
-        else:
-            if _current_update_message_exists():
-                logerror('Cannot pull database as Cloud Update Ongoing')
-                return
+        while True:
+            if not _current_update_message_exists():
+                _contact_self(
+                    subject=DATABASE_IN_USE_EMAIL_SUBJECT, 
+                    body='Running update with database. This message will be automatically deleted when complete.')
+                break
+            logwarning('Cannot pull database as is it currently in use. Retrying in 1 minute...')
+            sleep(60)
         
         interface = Interface(divider=90)
         interface.divide()
         sections = interface.subsections()
-        sections.log('Clearing cache and pulling database from CLOUD...')
+        sections.log('Clearing cache and pulling database from GOOGLE DRIVE...')
         
         clear_cache_and_conflicts()
         driveFile = _get_database_file_on_drive()
@@ -101,15 +103,13 @@ def pull_database(func):
             _log_exception(sections)
         
         sections.smallDivide()  
-        sections.log('Clearing cache and storing database on CLOUD...')
+        sections.log('Clearing cache and storing database on GOOGLE DRIVE...')
         driveFile.connection =  reconnect()
         upload_local_file_to_drive(driveFile)
         clear_cache_and_conflicts()
         interface.divide()
 
-        if not LOCAL:
-            _delete_current_update_messages()
-
+        _delete_current_update_messages()
     return wrapper
 
 
@@ -169,15 +169,15 @@ def _contact_self(subject: str, body: str) -> None:
 def _current_update_message_exists():
     from default.google.mail.functions import get_user
     messages = get_user(DEFAULT_ACCOUNT)
-    messages.folder(CLOUD_UPDATE_EMAIL_FOLDER)
-    messages.subject(CLOUD_UPDATE_EMAIL_SUBJECT)
+    messages.folder(DATABASE_IN_USE_EMAIL_FOLDER)
+    messages.subject(DATABASE_IN_USE_EMAIL_SUBJECT)
     return len(messages.list) > 0
 
 
 def _delete_current_update_messages():
     from default.google.mail.functions import get_user
     messages = get_user(DEFAULT_ACCOUNT)
-    messages.folder(CLOUD_UPDATE_EMAIL_FOLDER)
-    messages.subject(CLOUD_UPDATE_EMAIL_SUBJECT)
+    messages.folder(DATABASE_IN_USE_EMAIL_FOLDER)
+    messages.subject(DATABASE_IN_USE_EMAIL_SUBJECT)
     for message in messages.list:
         message.delete()
