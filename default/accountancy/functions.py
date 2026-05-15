@@ -63,6 +63,7 @@ def get_accountancy_sheet_bookings(
     
     # Select charges data
     select = search.charges.select()
+    select.id()
     select.currency()
     select.basicRental()
     select.platformFee()

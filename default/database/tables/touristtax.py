@@ -25,14 +25,14 @@ class Touristtax(Table):
         """
         return self._column(name='id', dataType='integer')
     
-    def bookingId(self) -> Column | Self:
+    def chargesId(self) -> Column | Self:
         """
-        Define the bookingId column of the table.
+        Define the chargesId column of the table.
         
         Returns:
             Touristtax: The current instance for method chaining.
         """
-        return self._column(name='bookingId', dataType='integer')
+        return self._column(name='chargesId', dataType='integer')
     
     def total(self) -> Column | Self:
         """
@@ -69,20 +69,6 @@ class Touristtax(Table):
             Touristtax: The current instance for method chaining.
         """
         return self._column(name='paid', dataType='boolean')
-    
-    def joinStatement(self, tableNames: list[str]) -> list[str]:
-        """
-        Generate SQL JOIN statement for the touristtax table.
-        
-        Parameters:
-            tableNames: A list of table names to potentially join with.
-            
-        Returns:
-            A list of JOIN SQL statements or an empty list if no join is needed.
-        """
-        if 'bookings' in tableNames:
-            return ['JOIN touristtax ON touristtax.bookingId = bookings.id']
-        return []
 
     def all(self) -> Column | Self:
         """
@@ -92,7 +78,7 @@ class Touristtax(Table):
             Touristtax: The current instance for method chaining.
         """
         self.id()
-        self.bookingId()
+        self.chargesId()
         self.total()
         self.orderId()
         self.orderToken()

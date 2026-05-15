@@ -134,9 +134,12 @@ class Charges(Table):
         Returns:
             A list of JOIN SQL statements or an empty list if no join is needed.
         """
+        joins = []
         if 'bookings' in tableNames:
-            return ['JOIN charges ON charges.bookingId = bookings.id']
-        return []
+            joins.append('JOIN charges ON charges.bookingId = bookings.id')
+        if 'touristtax' in tableNames:
+            joins.append('JOIN touristtax ON touristtax.chargesId = charges.id')
+        return joins
 
     def all(self) -> Column | Self:
         """

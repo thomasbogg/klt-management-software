@@ -2,6 +2,7 @@ from datetime import date
 
 from default.booking.arrival import Arrival
 from default.booking.charges import Charges
+from default.booking.touristtax import Touristtax
 from default.booking.departure import Departure
 from default.booking.details import Details
 from default.booking.emails import Emails
@@ -36,6 +37,7 @@ class Booking:
         self._charges = Charges(database)
         self._extras = Extras(database)
         self._emails = Emails(database)
+        self._touristtax = Touristtax(database)
         self._forms = Forms(database)
         self._property = Property(database)
         self._guest = Guest(database)
@@ -262,7 +264,7 @@ class Booking:
         if 'departures' in load:
             self._departure.set(load['departures'])
         if 'charges' in load:
-            self._charges.set(load['charges'])
+            self._charges.set(load)
         if 'extras' in load:
             self._extras.set(load['extras'])
         if 'emails' in load:
@@ -322,6 +324,7 @@ class Booking:
         self._extras.insert()
         self._emails.insert()
         self._forms.insert()
+        self._touristtax.insert()
         return self
     
     def save(self) -> 'Booking':

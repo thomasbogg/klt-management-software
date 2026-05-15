@@ -14,28 +14,28 @@ class Touristtax(DatabaseRow):
         Args:
             database: The database connection to use for database operations
         """
-        super().__init__(database, 'touristtax', foreignKeys=['bookingId'])
+        super().__init__(database, 'touristtax', foreignKeys=['chargesId'])
 
     # Basic properties
     @property
-    def bookingId(self) -> int | None:
+    def chargesId(self) -> int | None:
         """
-        Get the booking ID.
+        Get the charges ID.
         
         Returns:
-            The ID of the associated booking
+            The ID of the associated charges
         """
-        return self._get('bookingId')
+        return self._get('chargesId')
 
-    @bookingId.setter
-    def bookingId(self, value: int) -> None:
+    @chargesId.setter
+    def chargesId(self, value: int) -> None:
         """
-        Set the booking ID.
+        Set the charges ID.
         
         Args:
-            value: The booking ID to set
+            value: The charges ID to set
         """
-        self._set('bookingId', value)
+        self._set('chargesId', value)
 
     @property
     def total(self) -> str | None:

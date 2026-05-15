@@ -1,5 +1,6 @@
-from libraries.database.row import Row as DatabaseRow
 from default.settings import GBP_EUR_EXCHANGE_RATE
+from libraries.database.row import Row as DatabaseRow
+from default.booking.touristtax import Touristtax
 
 
 class Charges(DatabaseRow):
@@ -19,6 +20,7 @@ class Charges(DatabaseRow):
         self._applyExchangeRate = True
         self._actualCurrency = None
         self._hide = False
+        self._touristtax = Touristtax(database)
 
     def _get(self, column: str) -> object:
         """
@@ -444,3 +446,62 @@ class Charges(DatabaseRow):
         """
         self._hide = value
         return self
+    
+    @property
+    def touristtax(self) -> Touristtax:
+        """
+        Get the associated Touristtax instance.
+        
+        Returns:
+            The Touristtax instance related to this charge
+        """
+        return self._touristtax
+    
+    def insert(self) -> None:
+        """
+        Insert the charge and its related tourist tax into the database.
+        """
+        self.id = super().insert()
+        self._touristtax.chargesId = self.id
+        self._touristtax.insert()
+    
+    def update(self) -> None:
+        """
+        Update the charge and its related tourist tax in the database.
+        """
+        super().update()
+        self._touristtax.chargesId = self.id
+        self._touristtax.update()
+
+    def delete(self) -> None:
+        """
+        Delete the charge and its related tourist tax from the database.
+        """
+        self._touristtax.delete()
+        super().delete()
+    
+    # Data handling
+    def set(self, load: dict) -> 'Charges':
+        """
+        Set properties from a dictionary including related entities.
+        
+        Args:
+            load: Dictionary containing property data and related entity data.
+            
+        Returns:
+            Self for method chaining.
+        """
+        if 'touristtax' in load:
+            self._touristtax.set(load['touristtax'])
+        return super().set(load)
+    
+    def __str__(self) -> str:
+        """
+        String representation of the Charges instance including tourist tax details.
+        
+        Returns:
+            A string representation of the Charges instance
+        """
+        string = super().__str__()
+        string += self._touristtax.__str__()
+        return string
