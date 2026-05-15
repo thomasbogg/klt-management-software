@@ -84,3 +84,12 @@ class Touristtax(Table):
         self.orderToken()
         self.paid()
         return self
+
+    def _get_condition(self) -> str:
+        """
+        Get the database condition to identify this price record.
+        
+        Returns:
+            A SQL condition string based on the property identifier.
+        """
+        return f'chargesId="{self._get("chargesId")}"'

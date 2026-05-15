@@ -17,7 +17,7 @@ ACC_STORAGE_DIR = os.path.join(LOCAL_STORAGE_DIR, 'accountancy-sheets')
 # DATABASE QUERY FUNCTIONS
 #######################################################
 
-def get_accountancy_sheet_bookings(
+def get_accountancy_bookings(
         database: Database, 
         start: date = None, 
         end: date = None, 

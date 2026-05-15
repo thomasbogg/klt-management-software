@@ -1,6 +1,6 @@
 from datetime import date
 
-from default.accountancy.functions import ACC_STORAGE_DIR, get_accountancy_sheet_bookings
+from default.accountancy.functions import ACC_STORAGE_DIR, get_accountancy_bookings
 from default.booking.booking import Booking
 from default.database.database import Database
 from default.database.functions import get_database, set_property_location
@@ -125,7 +125,7 @@ def _get_bookings(database: Database, start: date = None, end: date = None, **lo
     Returns:
         A list of Booking objects matching the criteria.
     """
-    search = get_accountancy_sheet_bookings(database, start, end)
+    search = get_accountancy_bookings(database, start, end)
     select = search.propertyOwners.select()
     select.rentalCommissionsAreInvoiced()
     set_property_location(search, **locations)    

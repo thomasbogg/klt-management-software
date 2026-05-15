@@ -5,7 +5,7 @@ from accountants.functions import (
     get_workbook
 )
 import datetime
-from default.accountancy.functions import get_accountancy_sheet_bookings
+from default.accountancy.functions import get_accountancy_bookings
 from default.booking.booking import Booking
 from default.database.database import Database
 from default.database.functions import get_database
@@ -93,7 +93,7 @@ def get_bookings(database: Database, start: datetime.date, end: datetime.date) -
     Returns:
         List of bookings matching the criteria
     """
-    search: Database = get_accountancy_sheet_bookings(database, start, end)
+    search: Database = get_accountancy_bookings(database, start, end)
 
     select = search.propertyAccountants.select()
     select.name()

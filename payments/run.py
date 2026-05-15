@@ -1,5 +1,5 @@
 from datetime import date
-from default.accountancy.functions import get_accountancy_sheet_bookings
+from default.accountancy.functions import get_accountancy_bookings
 from default.database.database import Database
 from default.database.functions import (
     get_database,
@@ -174,7 +174,7 @@ def get_bookings(database: Database, start: date = None, end: date = None, **pro
     Returns:
         List of booking objects
     """
-    search = get_accountancy_sheet_bookings(database, start, end)
+    search = get_accountancy_bookings(database, start, end)
     select = search.charges.select()
     select.admin()
     set_property_location(search, **properties)    

@@ -4,7 +4,7 @@ from libraries.google.drives.file import GoogleDriveFile
 from libraries.google.mail.message import GoogleMailMessage
 from default.accountancy.functions import (
     ACC_STORAGE_DIR,
-    get_accountancy_sheet_bookings
+    get_accountancy_bookings
 )
 from default.booking.booking import Booking
 from default.database.database import Database
@@ -89,7 +89,7 @@ def get_accountants_sheet_bookings(
     Returns:
         Database search object with selections and conditions set
     """
-    search = get_accountancy_sheet_bookings(database, start, end, noOwner)
+    search = get_accountancy_bookings(database, start, end, noOwner)
     
     # Select details data
     select = search.details.select()

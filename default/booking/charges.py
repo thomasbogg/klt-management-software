@@ -457,29 +457,6 @@ class Charges(DatabaseRow):
         """
         return self._touristtax
     
-    def insert(self) -> None:
-        """
-        Insert the charge and its related tourist tax into the database.
-        """
-        self.id = super().insert()
-        self._touristtax.chargesId = self.id
-        self._touristtax.insert()
-    
-    def update(self) -> None:
-        """
-        Update the charge and its related tourist tax in the database.
-        """
-        super().update()
-        self._touristtax.chargesId = self.id
-        self._touristtax.update()
-
-    def delete(self) -> None:
-        """
-        Delete the charge and its related tourist tax from the database.
-        """
-        self._touristtax.delete()
-        super().delete()
-    
     # Data handling
     def set(self, load: dict) -> 'Charges':
         """
@@ -494,6 +471,32 @@ class Charges(DatabaseRow):
         if 'touristtax' in load:
             self._touristtax.set(load['touristtax'])
         return super().set(load)
+    
+    def insert(self) -> None:
+        """
+        Insert the charge and its related tourist tax into the database.
+        """
+        self.id = super().insert()
+        self._touristtax.chargesId = self.id
+        self._touristtax.insert()
+    
+    def update(self) -> None:
+        """
+        Update the charge and its related tourist tax in the database.
+        """
+        super().update()
+        self._touristtax.chargesId = self.id
+        if self._touristtax.exists():
+            self._touristtax.update()
+        else:
+            self._touristtax.insert()
+
+    def delete(self) -> None:
+        """
+        Delete the charge and its related tourist tax from the database.
+        """
+        self._touristtax.delete()
+        super().delete()
     
     def __str__(self) -> str:
         """
