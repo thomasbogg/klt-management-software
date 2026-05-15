@@ -60,7 +60,7 @@ class BrowseAirbnb(KLTBrowser):
             (
                 self
                 .wait(1)
-                .element(By.XPATH, '//input[@name="phoneInputphone-login"]')
+                .element(By.XPATH, '//input[@id="phone-or-email"]')
                 .clear()
                 .input(DEFAULT_ACCOUNT.noPrefix().phoneNumber)
                 .element(By.XPATH, '//button[@type="submit"]')
