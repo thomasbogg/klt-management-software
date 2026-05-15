@@ -39,6 +39,7 @@ def get_balance_payment_bookings(
     select.basicRental()
     select.admin()
     select.currency()
+    select.extraNights()
   
     select = search.forms.select()
     select.balancePayment()
