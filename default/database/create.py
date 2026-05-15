@@ -30,6 +30,7 @@ def create_database() -> Database:
     create_forms_table(database)
     create_emails_table(database)
     create_updates_table(database)
+    create_touristtax_table(database)
     return database
 
 
@@ -492,5 +493,27 @@ def create_updates_table(database: Database) -> Database:
     table.columns = Column(name='details', tablename=table.name, dataType='integer')
     table.columns = Column(name='extras', tablename=table.name, dataType='integer')
     table.columns = Column(name='emailSent', tablename=table.name, dataType='boolean').notNull()
+    table.create()
+    return database
+
+
+def create_touristtax_table(database: Database) -> Database:
+    """
+    Create the touristtax table in the database.
+    
+    Parameters:
+        database: The database connection.
+        
+    Returns:
+        Database: The database instance for chaining.
+    """
+    table = Table(database, name='touristtax')
+    table.columns = Column(name='id', tablename=table.name, dataType='integer').primaryKey()
+    bookingId = Column(name='bookingId', tablename=table.name, dataType='integer').notNull().foreignKey().references('bookings', 'id')
+    table.columns = bookingId
+    table.foreignKeys = bookingId
+    table.columns = Column(name='total', tablename=table.name, dataType='real').notNull()
+    table.columns = Column(name='orderId', tablename=table.name, dataType='text')
+    table.columns = Column(name='token', tablename=table.name, dataType='text')
     table.create()
     return database

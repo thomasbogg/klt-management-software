@@ -17,6 +17,7 @@ from default.database.tables.prices import Prices
 from default.database.tables.properties import Properties
 from default.database.tables.sef import SEFDetails
 from default.database.tables.specs import Specs
+from default.database.tables.touristtax import Touristtax
 from default.database.tables.updates import Updates
 from default.guest.guest import Guest as LoadedGuest
 from default.property.property import Property as LoadedProperty
@@ -156,6 +157,16 @@ class Database(DefaultDatabase):
             Forms: The forms table object.
         """
         return self._table(name='forms', object=Forms)
+    
+    @property
+    def touristtax(self) -> Touristtax:
+        """
+        Get the tourist tax table object.
+        
+        Returns:
+            Touristtax: The tourist tax table object.
+        """
+        return self._table(name='touristtax', object=Touristtax)
     
     @property
     def propertyOwners(self) -> Owners:
