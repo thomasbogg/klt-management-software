@@ -428,6 +428,10 @@ class Revolut(Object):
 def _get_headers(secretKey: str, apiVersion: str) -> dict:
     """
     Generate the headers for API requests to Revolut, including authentication and API version.
+
+    Args:
+        secretKey: The API secret key for authentication
+        apiVersion: The version of the Revolut API to use
     
     Returns:
         A dictionary containing the headers for API requests.
