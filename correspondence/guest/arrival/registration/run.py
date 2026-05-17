@@ -585,9 +585,9 @@ def create_tourist_tax_payment(booking: Booking, nights: int) -> str:
         str: The URL for the tourist tax payment
     """
     from libraries.banking.revolut import Revolut
-    from default.settings import REVOLUT_SECRET_KEY, REVOLUT_API_VERSION, TOURIST_TAX_PER_NIGHT
+    from default.settings import REVOLUT_API_SECRET_KEY, REVOLUT_API_VERSION, TOURIST_TAX_PER_NIGHT
   
-    revolut = Revolut(secretKey=REVOLUT_SECRET_KEY, apiVersion=REVOLUT_API_VERSION)
+    revolut = Revolut(secretKey=REVOLUT_API_SECRET_KEY, apiVersion=REVOLUT_API_VERSION)
     payment = revolut.payment
     payment.amount = nights * TOURIST_TAX_PER_NIGHT * 100 # REVOLUT API expects amount in cents
     payment.currency = 'EUR'

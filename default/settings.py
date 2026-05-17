@@ -26,6 +26,7 @@ TEST: bool = os.getenv('TEST', 'False').lower() == 'true'
 
 # Website information
 WEBSITE_LINK: str = 'https://www.algarvebeachapartments.com/'
+KLT_WEBHOOK_URL: str = 'https://klt-hooks.up.railway.app/'
 
 # Default language
 DEFAULT_LANGUAGE = 'EN-GB'
@@ -147,7 +148,7 @@ DEFAULT_ACCOUNT = KLTGoogleAccount(details=os.getenv('DEFAULT_ACCOUNT').split(';
 # BANKING CREDENTIALS
 ##################################################
 
-REVOLUT_SECRET_KEY = os.getenv('REVOLUT_API_SECRET_KEY')
+REVOLUT_API_SECRET_KEY = os.getenv('REVOLUT_API_SECRET_KEY')
 REVOLUT_API_VERSION = os.getenv('REVOLUT_API_VERSION')
 REVOLUT_BASE_PAYMENT_LINK = 'https://checkout.revolut.com/payment-link/'
 

@@ -3,7 +3,7 @@ from libraries.utils import Object, logerror, generate_request_headers
 from typing import List
 
 API_VERSION = '2026-04-20'
-BASE_URL = "https://sandbox-merchant.revolut.com/api"
+BASE_URL = "https://merchant.revolut.com/api"
 
 
 class Revolut(Object):
@@ -65,6 +65,25 @@ class Revolut(Object):
                 self._values = response.json()
             else:
                 logerror(f"Failed to create webhook: {response.status_code} - {response.text}")
+
+        def delete(self):
+            """
+            Delete the webhook from Revolut.
+            
+            Returns:
+                True if the webhook was successfully deleted, False otherwise.
+            """
+            if not self._get('id'):
+                logerror("Webhook ID is not set. Cannot delete webhook.")
+                return False
+            
+            headers = _get_headers(self._get('secretKey'), self._get('apiVersion'))
+            response = requests.delete(f"{self._url}/{self._get('id')}", headers=headers)
+            if response.status_code == 204:
+                return True
+            else:
+                logerror(f"Failed to delete webhook: {response.status_code} - {response.text}")
+                return False
 
         @property
         def url(self) -> str | None:
@@ -160,6 +179,24 @@ class Revolut(Object):
                 self._values = response.json()
             else:
                 logerror(f"Failed to create payment order: {response.status_code} - {response.text}")
+
+        def cancel(self):
+            """
+            Cancel the payment order in Revolut.
+            
+            Returns:
+                A dictionary containing the updated payment order details after cancellation, or None if the request fails.
+            """
+            if not self._get('id'):
+                logerror("Payment order ID is not set. Cannot cancel payment order.")
+                return None
+            
+            headers = _get_headers(self._get('secretKey'), self._get('apiVersion'))
+            response = requests.post(f"{self._url}/{self._get('id')}/cancel", headers=headers)
+            if response.status_code == 200:
+                self._values = response.json()
+            else:
+                logerror(f"Failed to cancel payment order: {response.status_code} - {response.text}")
 
         @property
         def amount(self) -> int:
