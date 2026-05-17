@@ -1,6 +1,7 @@
 from default.settings import GBP_EUR_EXCHANGE_RATE
 from libraries.database.row import Row as DatabaseRow
 from default.booking.touristtax import Touristtax
+from utils import logerror
 
 
 class Charges(DatabaseRow):
@@ -485,7 +486,7 @@ class Charges(DatabaseRow):
         Update the charge and its related tourist tax in the database.
         """
         super().update()
-        self._touristtax.chargesId = self.id
+        self._touristtax.chargesId = self._get_id()
         if self._touristtax.exists():
             self._touristtax.update()
         else:
@@ -497,6 +498,28 @@ class Charges(DatabaseRow):
         """
         self._touristtax.delete()
         super().delete()
+
+    def _get_id(self) -> int | None:
+        """
+        Get the ID of this charge.
+        
+        Returns:
+            The ID of this charge if it exists, None otherwise
+        """
+        try: 
+            return super()._get('id')
+        except KeyError:
+            pass
+
+        conditionsString = 'SELECT charges.id FROM charges WHERE '
+        conditionsString += f'charges.bookingId = "{self.bookingId}"'
+        result = self._database.runSQL(conditionsString)._cursor.fetchone()
+      
+        if result:
+            self._set('id', result[0])
+            return result[0]
+
+        logerror('Couldn\'t find charges ID in database with {self.bookingId} Booking ID')
     
     def __str__(self) -> str:
         """

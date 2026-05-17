@@ -199,9 +199,6 @@ def search_booking_by_basic_characteristics(database: Database, booking: Booking
         Matching booking if found, None otherwise
     """
     search = search_valid_bookings(database)
-
-    select = search.charges.select()
-    select.id()
     
     where = search.details.where()
     where.propertyId().isEqualTo(booking.details.propertyId)
