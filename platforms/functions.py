@@ -182,6 +182,8 @@ def search_booking_by_platform_id(database: Database, platformId: str) -> Bookin
         Matching booking if found, None otherwise
     """
     search = get_booking(database, platformId=platformId)
+    select = search.charges.select()
+    select.id()
     return search.fetchone()
 
 
@@ -274,7 +276,6 @@ def get_booking_from_database(database: Database, id: int) -> Booking:
     select.manualDate()
     
     select = search.charges.select()
-    select.id()
     select.manualCharges()
     
     select = search.extras.select()
@@ -287,7 +288,6 @@ def get_booking_from_database(database: Database, id: int) -> Booking:
     select.name()
     
     select = search.guests.select()
-    select.id()
     select.firstName()
     select.lastName()
     select.email()
