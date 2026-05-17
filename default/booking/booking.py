@@ -324,7 +324,6 @@ class Booking:
         self._extras.insert()
         self._emails.insert()
         self._forms.insert()
-        self._touristtax.insert()
         return self
     
     def save(self) -> 'Booking':
