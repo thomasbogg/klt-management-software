@@ -61,7 +61,6 @@ def search_bookings(database: Database = None, start: date = None,
     search.details.isPrimaryTable = True
     
     select = search.details.select()
-    select.id()
     select.guestId()
     select.propertyId()
     
@@ -146,7 +145,6 @@ def search_properties() -> Database:
     properties.isPrimaryTable = True
     
     select = properties.select()
-    select.id()
     select.name()
     select.shortName()
     
@@ -297,7 +295,6 @@ def search_guests() -> Database:
     guests.isPrimaryTable = True
     
     select = guests.select()
-    select.id()
     select.firstName()
     select.lastName()
     
@@ -487,7 +484,6 @@ def set_minimum_logging_criteria(search: Database) -> Database:
         Database: The updated search database object.
     """
     select = search.details.select()
-    select.id()
     select.enquirySource()
     select.enquiryStatus()
 

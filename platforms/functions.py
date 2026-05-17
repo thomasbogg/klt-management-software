@@ -7,7 +7,6 @@ from default.database.database import Database
 from default.database.functions import (
     get_booking, 
     search_valid_bookings,
-    set_minimum_logging_criteria
 )
 from default.dates import dates
 from default.updates.functions import (
@@ -182,8 +181,6 @@ def search_booking_by_platform_id(database: Database, platformId: str) -> Bookin
         Matching booking if found, None otherwise
     """
     search = get_booking(database, platformId=platformId)
-    select = search.charges.select()
-    select.id()
     return search.fetchone()
 
 
@@ -327,7 +324,6 @@ def get_bookings_for_PIMS_updates(database: Database, platformIds: list[str]) ->
     select.date()
     
     select = search.charges.select()
-    select.id()
     select.basicRental()
     select.currency()
     
