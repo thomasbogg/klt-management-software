@@ -84,13 +84,15 @@ def run() -> None:
         return
 
     sections.log(
-        'Will do partial update. Press ENTER to continue or 1 for full update')
+        'Will do partial update. Press ENTER to continue or 1 for last-minute update or 2 for full update')
     
     option = sections.integer()
-    if option:
-            full_update()
+    if option == 2:
+        full_update()
+    elif option == 1:
+        last_minute_update(sections)
     else:
-            partial_update()
+        partial_update()
 
 
 @pull_database

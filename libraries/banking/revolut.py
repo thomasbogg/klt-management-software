@@ -29,7 +29,7 @@ class Revolut(Object):
             headers = _get_headers(self._get('secretKey'), self._get('apiVersion'))
             response = requests.get(f"{self._url}/{self._get('id')}", headers=headers)
             if response.status_code == 200:
-                self._values = response.json()
+                self._values.update(response.json())
             else:
                 logerror(f"Failed to retrieve webhook: {response.status_code} - {response.text}")
 
@@ -38,12 +38,14 @@ class Revolut(Object):
             List all webhooks from Revolut.
             
             Returns:
-                A list of dictionaries containing the details of each webhook, or None if the request fails.
+                A generator of Revolut.Webhook objects, or None if the request fails.
             """
             headers = _get_headers(self._get('secretKey'), self._get('apiVersion'))
             response = requests.get(self._url, headers=headers)
             if response.status_code == 200:
-                return response.json().get('webhooks', [])
+                for webhook_data in response.json().get('webhooks', []):
+                    webhook = Revolut.Webhook(secretKey=self._get('secretKey'), apiVersion=self._get('apiVersion'), **webhook_data)
+                    yield webhook
             else:
                 logerror(f"Failed to list webhooks: {response.status_code} - {response.text}")
                 return None
@@ -61,8 +63,8 @@ class Revolut(Object):
                 'events': self._get('events'),
             }
             response = requests.post(self._url, headers=headers, json=payload)
-            if response.status_code == 201:
-                self._values = response.json()
+            if response.status_code == 200:
+                self._values.update(response.json())
             else:
                 logerror(f"Failed to create webhook: {response.status_code} - {response.text}")
 
@@ -78,12 +80,36 @@ class Revolut(Object):
                 return False
             
             headers = _get_headers(self._get('secretKey'), self._get('apiVersion'))
-            response = requests.delete(f"{self._url}/{self._get('id')}", headers=headers)
+            headers.pop('Content-Type', None)  # Remove Content-Type header for DELETE request
+            headers.pop('Accept', None)  # Remove Accept header for DELETE request
+            response = requests.request('DELETE', f"{self._url}/{self._get('id')}", headers=headers, data={})
             if response.status_code == 204:
                 return True
             else:
                 logerror(f"Failed to delete webhook: {response.status_code} - {response.text}")
                 return False
+            
+        def update(self):
+            """
+            Update the webhook in Revolut with the current properties.
+            
+            Returns:
+                A dictionary containing the updated webhook details, or None if the request fails.
+            """
+            if not self._get('id'):
+                logerror("Webhook ID is not set. Cannot update webhook.")
+                return None
+            
+            headers = _get_headers(self._get('secretKey'), self._get('apiVersion'))
+            payload = {
+                'url': self._get('url'),
+                'events': self._get('events'),
+            }
+            response = requests.patch(f"{self._url}/{self._get('id')}", headers=headers, json=payload)
+            if response.status_code == 200:
+                self._values.update(response.json())
+            else:
+                logerror(f"Failed to update webhook: {response.status_code} - {response.text}")
 
         @property
         def url(self) -> str | None:
@@ -176,9 +202,10 @@ class Revolut(Object):
             }
             response = requests.post(self._url, headers=headers, json=payload)
             if response.status_code == 201:
-                self._values = response.json()
+                self._values.update(response.json())
             else:
                 logerror(f"Failed to create payment order: {response.status_code} - {response.text}")
+            return self
 
         def cancel(self):
             """
@@ -194,9 +221,10 @@ class Revolut(Object):
             headers = _get_headers(self._get('secretKey'), self._get('apiVersion'))
             response = requests.post(f"{self._url}/{self._get('id')}/cancel", headers=headers)
             if response.status_code == 200:
-                self._values = response.json()
+                self._values.update(response.json())
             else:
                 logerror(f"Failed to cancel payment order: {response.status_code} - {response.text}")
+            return self
 
         @property
         def amount(self) -> int:
@@ -362,14 +390,24 @@ class Revolut(Object):
             return self._get('outstanding_amount')
         
         @property
-        def isPaid(self) -> bool | None:
+        def state(self) -> str | None:
             """
-            Get the status of the payment order.
+            Get the state of the payment order.
             
             Returns:
-                The status of the payment order (e.g., 'pending', 'paid', 'cancelled'), or None if not available.
+                The state of the payment order (e.g., 'pending', 'paid', 'cancelled'), or None if not available.
             """
-            return self._get('outstanding_amount') <= 0
+            return self._get('state')
+        
+        @property
+        def checkoutUrl(self) -> str | None:
+            """
+            Get the checkout URL for the payment order.
+            
+            Returns:
+                The URL that the customer can use to complete the payment, or None if not available.
+            """
+            return self._get('checkout_url')
         
         def _get_customer(self, field: str) -> str | None:
             """
@@ -392,7 +430,9 @@ class Revolut(Object):
                 field: The specific customer field to set (e.g., 'email', 'phone').
                 value: The value to set for the specified customer field.
             """
-            customer = self._get('customer') or {}
+            if 'customer' not in self._values:
+                self._values['customer'] = {}
+            customer = self._values['customer']
             customer[field] = value
             self._set('customer', customer)
 

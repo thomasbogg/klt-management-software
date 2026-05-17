@@ -102,6 +102,11 @@ def update_existing_events(
     
     bookingId: int = int(parsed.group(1))
     booking: Booking = get_calendar_booking(database, bookingId)
+    
+    if not booking:
+        logbooking(f'No booking found for id {bookingId}. Probably old (no TT entry).')
+        return update_existing_events(database, calendar, events, existingBookingIds)
+    
     if not booking.managementStatusIsOkay:
         logbooking(booking, f'BOOKING no longer valid. DELETING it.')
         event.delete()
