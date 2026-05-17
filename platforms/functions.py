@@ -200,6 +200,9 @@ def search_booking_by_basic_characteristics(database: Database, booking: Booking
         Matching booking if found, None otherwise
     """
     search = search_valid_bookings(database)
+
+    select = search.charges.select()
+    select.id()
     
     where = search.details.where()
     where.propertyId().isEqualTo(booking.details.propertyId)
@@ -271,6 +274,7 @@ def get_booking_from_database(database: Database, id: int) -> Booking:
     select.manualDate()
     
     select = search.charges.select()
+    select.id()
     select.manualCharges()
     
     select = search.extras.select()
@@ -323,6 +327,7 @@ def get_bookings_for_PIMS_updates(database: Database, platformIds: list[str]) ->
     select.date()
     
     select = search.charges.select()
+    select.id()
     select.basicRental()
     select.currency()
     
