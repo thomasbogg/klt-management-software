@@ -3,7 +3,7 @@ from libraries.banking.revolut import Revolut
 from libraries.utils import log
 
 
-def create_new_webhook(name: str = 'revolutcallback', events: list = None) -> Revolut.Webhook:
+def create_new_webhook(name: str = 'revolut/callback', events: list = None) -> Revolut.Webhook:
     """
     Create a new webhook in Revolut for payment notifications.
     
@@ -13,7 +13,7 @@ def create_new_webhook(name: str = 'revolutcallback', events: list = None) -> Re
     revolut = Revolut(secretKey=REVOLUT_API_SECRET_KEY, apiVersion=REVOLUT_API_VERSION)
     webhook = revolut.webhook
     webhook.url = KLT_WEBHOOK_URL + name
-    webhook.events = events or ['ORDER_COMPLETED']
+    webhook.events = events or ['ORDER_COMPLETED', 'ORDER_CANCELLED']
     webhook.create()
     return webhook
 
