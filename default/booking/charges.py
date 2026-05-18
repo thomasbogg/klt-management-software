@@ -1,7 +1,7 @@
 from default.settings import GBP_EUR_EXCHANGE_RATE
 from libraries.database.row import Row as DatabaseRow
 from default.booking.touristtax import Touristtax
-from utils import logerror
+from libraries.utils import logerror
 
 
 class Charges(DatabaseRow):
