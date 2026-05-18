@@ -234,7 +234,6 @@ class BrowseBookingComExtranet(KLTBrowser):
                 
             if 'x' in reservation['rooms']:
                 link = data.find('a')['href']
-                print(link)
                 self.parse_guests(link, reservation)
             
             parser.parsed = reservation
