@@ -109,10 +109,18 @@ def get_guest_registration_bookings(
     # Select guest details 
     select = search.guests.select()
     select.nifNumber()
+    select.phone()
     
     # Select arrival and departure dates
     select = search.departures.select()
     select.date()
+
+    select = search.charges.select()
+    select.id()
+
+    select = search.touristtax.select()
+    select.orderToken()
+    select.paid()
     
     # Select forms details
     select = search.forms.select()
@@ -195,11 +203,11 @@ def send_new_guest_registration_email(
     body.section('Tourist Tax Payment')
     tax_explanation(body)
     touristTaxNights = determine_tourist_tax_nights(booking)
-    if touristTaxNights:
+    if not booking.charges.touristtax.paid and touristTaxNights:
         create_tourist_tax_payment(booking, touristTaxNights)
         tax_request(body, booking)
         tourist_tax_link(body, booking)
-    else:
+    elif not touristTaxNights:
         tax_exemption(body)
 
     if booking.details.isPlatform:
@@ -574,16 +582,20 @@ def _house_rules_4(body: GoogleMailMessage.Body) -> None:
     )
 
 
-def create_tourist_tax_payment(booking: Booking, nights: int) -> str:
+def create_tourist_tax_payment(booking: Booking, nights: int) -> None:
     """
     Create a tourist tax payment link for the guest.
     
     Args:
         booking: The booking for which to create the payment link
         nights: The number of nights for which to calculate the tourist tax
+    
     Returns:
-        str: The URL for the tourist tax payment
+        None
     """
+    #if booking.charges.touristtax.orderId or nights == 0:
+    #    return None
+    
     from libraries.banking.revolut import Revolut
     from default.settings import REVOLUT_API_SECRET_KEY, REVOLUT_API_VERSION, TOURIST_TAX_PER_NIGHT
   

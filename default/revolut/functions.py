@@ -3,7 +3,7 @@ from libraries.banking.revolut import Revolut
 from libraries.utils import log
 
 
-def create_new_webhook(name: str = 'revolutcallback', events: list = None) -> Revolut.webhook:
+def create_new_webhook(name: str = 'revolutcallback', events: list = None) -> Revolut.Webhook:
     """
     Create a new webhook in Revolut for payment notifications.
     
@@ -18,7 +18,7 @@ def create_new_webhook(name: str = 'revolutcallback', events: list = None) -> Re
     return webhook
 
 
-def delete_webhook(webhookId: str) -> Revolut.webhook:
+def delete_webhook(webhookId: str) -> Revolut.Webhook:
     """
     Delete an existing webhook in Revolut by its ID.
     
@@ -36,7 +36,7 @@ def delete_webhook(webhookId: str) -> Revolut.webhook:
     return webhook
 
 
-def get_webhooks() -> list[Revolut.webhook]:
+def get_webhooks() -> list[Revolut.Webhook]:
     """
     Retrieve all webhooks from Revolut.
     
@@ -48,7 +48,7 @@ def get_webhooks() -> list[Revolut.webhook]:
     return webhooks
 
 
-def cancel_payment(orderId: str) -> Revolut.payment:
+def cancel_payment(orderId: str) -> Revolut.Payment:
     """
     Cancel a payment in Revolut by its order ID.
     
@@ -66,7 +66,7 @@ def cancel_payment(orderId: str) -> Revolut.payment:
     return payment
 
 
-def create_dummy_payment(amount: int = 1000, currency: str = 'EUR') -> Revolut.payment:
+def create_dummy_payment(amount: int = 1000, currency: str = 'EUR') -> Revolut.Payment:
     """
     Create a dummy payment in Revolut for testing purposes.
     

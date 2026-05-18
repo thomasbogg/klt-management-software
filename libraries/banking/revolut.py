@@ -157,6 +157,17 @@ class Revolut(Object):
                     val.append(value)
             self._set('events', val)
 
+        @property
+        def signingSecret(self) -> str | None:
+            """
+            Get the signing secret for the webhook.
+            
+            Returns:
+                The signing secret used to verify webhook events, or None if not set.
+            """
+            return self._get('signing_secret')
+
+
     class Payment(Object):
 
         _url = f"{BASE_URL}/orders"
