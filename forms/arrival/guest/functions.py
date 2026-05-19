@@ -156,7 +156,7 @@ def update_from_guest_details_section(
         adultsChildren = booking.details.adults + booking.details.children
         booking.details.adults = responses.adults
         booking.details.children = adultsChildren - responses.adults
-    except KeyError as e:
+    except TypeError as e:
         logwarning(f'Error updating total adults from form responses: {e}')
 
     return booking
