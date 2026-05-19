@@ -1,4 +1,5 @@
 from libraries.google.drives.directory import GoogleDriveDirectory
+from libraries.google.forms.form import GoogleForm
 from default.booking.booking import Booking
 from default.google.drive.functions import (
     get_klt_management_directory_on_drive,
@@ -12,7 +13,7 @@ from forms.arrival.functions import (
     set_non_flight_details_section_of_form,
     set_extras_section_of_form,
 )
-from forms.arrival.vars import GUEST_PHONE_NUMBER
+from forms.arrival.vars import GUEST_PHONE_NUMBER, TOTAL_ADULTS
 from forms.arrival.guest.responses import GuestArrivalFormResponses
 from default.translator.functions import translator as _translator
 from libraries.utils import (
@@ -76,6 +77,14 @@ def set_guest_arrival_form(booking: Booking, form = None) -> str:
         )
     )
 
+    form.newChoiceQuestionItem(
+        id=TOTAL_ADULTS,
+        title=translator('Total Guests Over 12 Years Old'),
+        description=translator('Please indicate the number of guests in your group over 12 years old.'),
+        options=[GoogleForm.Option(value=str(i)) for i in range(1, booking.details.totalGuests + 1)],
+        required=True
+    )
+
     set_arrival_section_of_form(form, translator=translator)
     set_flight_details_section_of_form(form, booking, translator=translator)
     set_airport_transfers_option_section_of_form(form, booking, translator=translator)
@@ -101,9 +110,10 @@ def get_form_responses(formId: str) -> GuestArrivalFormResponses:
     Returns:
         Parsed guest arrival form responses.
     """
-    responses: None | GuestArrivalFormResponses = _get_form_responses(
-                                                                formId, 
-                                                                objectType=GuestArrivalFormResponses)
+    responses = _get_form_responses(
+        formId, 
+        objectType=GuestArrivalFormResponses
+    )
     if not responses:
         return None
     if responses.hasMany:
@@ -139,6 +149,15 @@ def update_from_guest_details_section(
     if responses.phone.startswith('+') or responses.phone.startswith('00') or not databasePhone:
         if len(responses.phone) > 5:
             booking.guest.phone = responses.phone
+
+    ## new question for total adults may not have been in the form 
+    # when it was first created, so catch KeyError if question not found
+    try: 
+        adultsChildren = booking.details.adults + booking.details.children
+        booking.details.adults = responses.adults
+        booking.details.children = adultsChildren - responses.adults
+    except KeyError as e:
+        logwarning(f'Error updating total adults from form responses: {e}')
 
     return booking
 

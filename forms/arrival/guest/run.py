@@ -127,6 +127,9 @@ def get_guest_arrival_form_bookings(
     select = search.details.select()
     select.enquirySource()
     select.platformId()
+    select.adults()
+    select.children()
+    select.babies()
     
     select = search.forms.select()
     select.arrivalQuestionnaire()

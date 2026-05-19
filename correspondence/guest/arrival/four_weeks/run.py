@@ -124,6 +124,12 @@ def get_four_weeks_bookings(
                                             end=end, 
                                             bookingId=bookingId)
 
+    # Select adults, children, and babies
+    select = search.details.select()
+    select.adults()
+    select.children()
+    select.babies()
+    
     # Select columns from the owners table
     select = search.propertyOwners.select()
     select.name()

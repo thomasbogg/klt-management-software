@@ -1,5 +1,5 @@
 from forms.arrival.responses import ArrivalFormResponses
-from forms.arrival.vars import GUEST_PHONE_NUMBER
+from forms.arrival.vars import GUEST_PHONE_NUMBER, TOTAL_ADULTS
 
 class GuestArrivalFormResponses(ArrivalFormResponses):
     """
@@ -39,6 +39,16 @@ class GuestArrivalFormResponses(ArrivalFormResponses):
             The respondent's phone number or None if not available.
         """
         return self._get(GUEST_PHONE_NUMBER)
+    
+    @property
+    def adults(self) -> int | None:
+        """
+        Get the total number of adults from the form responses.
+        
+        Returns:
+            The total number of adults or None if not available.
+        """
+        return int(self._get(TOTAL_ADULTS))
 
     def __str__(self) -> str:
         """
