@@ -156,6 +156,9 @@ def get_upcoming_booking_com_bookings(database: Database, start: str, end: str) 
     where.isOwner().isFalse()
     where.platformId().isNotNullEmptyOrFalse()
 
+    where = search.guests.where()
+    where.phone().isNullEmptyOrFalse()
+
     set_valid_management_booking(search)
     return search.fetchall()
 
@@ -187,9 +190,9 @@ def update_worksheet(worksheet: Worksheet, bookings: list[Booking]) -> bool:
     column.number = 7
     guestPhone = worksheet.cell.value
    
-    if guestEmail and len(guestEmail) > 10:
+    if guestPhone and len(guestEmail) > 10:
         booking: Booking = list(filter(lambda b: b.guest.id == guestId, bookings))[0]
-        booking.guest.email = guestEmail
+        #booking.guest.email = guestEmail
         booking.guest.phone = guestPhone.split(':')[-1]
         booking.update()
         bookings.remove(booking)
@@ -254,6 +257,11 @@ def set_guest_email_cell(worksheet: Worksheet, booking: Booking | None = None) -
     """
     if is_header(worksheet):
         return set_header_cell(worksheet, width=30, value='Guest Email')
+    
+    if booking:
+        worksheet.cell.setToTextFormat()
+        return set_cell(worksheet, value=booking.guest.email)
+    
     return set_cell(worksheet)
 
 
