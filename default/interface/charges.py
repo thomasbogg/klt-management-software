@@ -1,5 +1,5 @@
 from default.booking.booking import Booking
-from default.interface.functions import get_float
+from default.interface.functions import get_float, get_bool
 from libraries.interface.interface import Interface
 
 
@@ -26,6 +26,8 @@ def update_charges(subsection: Interface, databaseBooking: Booking) -> None:
         'Basic Rental Charge',
         'Platform Fee',
         'Admin Fee',
+        'Tourist Tax Total',
+        'Tourist Tax Paid',
     ]
     
     charge = subsection.option(charges)
@@ -66,6 +68,20 @@ def update_charges(subsection: Interface, databaseBooking: Booking) -> None:
         
         databaseBooking.charges.adminFee = value
         databaseBooking.charges.manualCharges = manual
+
+    elif charge == 5:
+        currentTouristTaxTotal = databaseBooking.charges.touristtax.total
+        
+        value, manual = get_float(subsection, charges[charge - 1], currentTouristTaxTotal, manual)
+        
+        databaseBooking.charges.touristtax.total = value
+
+    elif charge == 6:
+        currentTouristTaxPaid = databaseBooking.charges.touristtax.paid
+        
+        value = get_bool(subsection, 'Tourist Tax Paid', currentTouristTaxPaid)
+        
+        databaseBooking.charges.touristtax.paid = value
 
     databaseBooking.update()
     
