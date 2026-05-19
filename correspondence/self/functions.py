@@ -49,7 +49,8 @@ def new_email_to_self(
 
 def send_email_to_self(
         user: GoogleMailMessages = None, 
-        message: GoogleMailMessage = None) -> None:
+        message: GoogleMailMessage = None,
+        verbose: bool = True) -> None:
     """
     Send an email to self.
     
@@ -68,7 +69,7 @@ def send_email_to_self(
     if not user:
         user = get_default_user()
     if not get_inbox(user=user, sender=user.account.emailAddress, subject=message.subject):
-        message.send()
+        message.send(verbose=verbose)
     return None
 
 

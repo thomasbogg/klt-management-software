@@ -163,7 +163,7 @@ def _contact_self(subject: str, body: str) -> None:
     """
     user, message = new_email_to_self(subject=subject)
     message.body.paragraph(body)
-    send_email_to_self(user, message)
+    send_email_to_self(user, message, verbose=False)
 
 
 def _current_update_message_exists():

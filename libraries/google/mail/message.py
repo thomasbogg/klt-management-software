@@ -813,7 +813,7 @@ class GoogleMailMessage(Object):
         self._service.users().messages().trash(userId='me', id=self.id).execute()
         return self
 
-    def send(self) -> 'GoogleMailMessage':
+    def send(self, verbose: bool = True) -> 'GoogleMailMessage':
         """
         Send this message.
         
@@ -861,7 +861,8 @@ class GoogleMailMessage(Object):
         
         self._service.users().messages().send(userId='me', body=encoded_body).execute()
         #print(f'sending to {message["From"]}')
-        self._log_send()
+        if verbose:
+            self._log_send()
         self._reset_recipients()
         return self
 
