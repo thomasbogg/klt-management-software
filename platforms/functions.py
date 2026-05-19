@@ -82,7 +82,8 @@ def update_booking_in_database(database: Database, booking: Booking) -> None:
         del booking.details.babies
 
     if databaseBooking.details.manualProperty:
-        del booking.details.propertyId
+        booking.details.propertyId = databaseBooking.details.propertyId
+        booking.details.manualProperty = True
     
     booking.details.update()
     
