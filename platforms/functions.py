@@ -81,6 +81,10 @@ def update_booking_in_database(database: Database, booking: Booking) -> None:
         del booking.details.children
         del booking.details.babies
 
+    if booking.details.enquirySource == 'Booking.com':
+        if databaseBooking.guest.email:
+            booking.guest.email = databaseBooking.guest.email
+
     if databaseBooking.details.manualProperty:
         booking.details.propertyId = databaseBooking.details.propertyId
         booking.details.manualProperty = True

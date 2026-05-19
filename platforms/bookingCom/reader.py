@@ -66,7 +66,7 @@ class ReadBookingComEmails(ReadPlatformEmails):
         name: str, 
         dates: list[date], 
         i: int
-    ) -> tuple[date | None, date | None]:
+    ) -> list[date]:
         """
         Recursively collect booking dates for a specific property.
         
@@ -76,10 +76,10 @@ class ReadBookingComEmails(ReadPlatformEmails):
             i: Current index in the email list
             
         Returns:
-            Tuple of (earliest_date, latest_date) or (None, None) if no dates found
+            List of dates found for the property
         """
         if len(self._all) < i + 1: 
-            return self._first_last_dates_only(dates)
+            return (set(dates))
 
         message = self._all[i]
         if not self._is_property(name, message): 

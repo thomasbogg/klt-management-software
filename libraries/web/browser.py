@@ -102,18 +102,45 @@ class Browser:
             self._switch(self._tabs()[order])
             return self
 
-        def close(self, order: int | None = None) -> 'Browser.Tabs':
+        def switchToNext(self) -> 'Browser.Tabs':
             """
-            Close the specified tab.
-            Switches to the last tab after closing.
+            Switch to the next tab.
             
             Args:
-                order: The order of the tab to close. If None, close the current tab.
+                order: The number of tabs to move forward.
+
                 
             Returns:
                 The current instance of the Tabs class.
             """
+            self._switch(self._tabs()[self._tabs().index(self._current()) + 1])
+            return self
+
+        def switchToPrevious(self) -> 'Browser.Tabs':
+            """
+            Switch to the next tab.
+            
+            Args:
+                order: The number of tabs to move forward.
+
+                
+            Returns:
+                The current instance of the Tabs class.
+            """
+            self._switch(self._tabs()[self._tabs().index(self._current()) - 1])
+            return self
+
+        def close(self) -> 'Browser.Tabs':
+            """
+            Close the specified tab.
+            Switches to the last tab after closing.
+
+            Returns:
+                The current instance of the Tabs class.
+            """
+            indexCurrent = self._tabs().index(self._current())
             self._driver.close()
+            #self._tabs().pop(indexCurrent)
             self._switch(self._tabs()[-1])
             return self
         
@@ -230,17 +257,24 @@ class Browser:
         self._driver.refresh()
         return self.wait(3)
 
-    def scroll(self, toEnd: bool = True) -> Self:
+    def scroll(self, toEnd: bool = True, toStart: bool = False) -> Self:
         """
         Scroll the page to the end or to a specific height.
         
         Args:
             toEnd: If True, scroll to the end of the page.
+            toStart: If True, scroll to the start of the page.
             
         Returns:
             The current instance of the Browser class.
         """
         totalHeight: int = int(self._driver.execute_script("return document.body.scrollHeight"))
+
+        if toStart:
+            for i in range(self._currentHeight + 1, 0, -2):
+                self._driver.execute_script(f"window.scrollTo(0, {i});")
+                self._currentHeight = 0
+                return self
         
         if toEnd and totalHeight == self._currentHeight: 
             return self

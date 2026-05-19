@@ -1,3 +1,4 @@
+import datetime
 import re
 from typing import List
 
@@ -9,7 +10,7 @@ from default.settings import (
 )
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
-from libraries.utils import logerror, loginput
+from libraries.utils import logerror, loginput, superlog
 from libraries.web.html import HTML
 
 
@@ -64,7 +65,7 @@ class BrowseBookingComExtranet(KLTBrowser):
 
             if 'homepage' in text.lower():
                 return self
-            if self.addAttempts().reachedLimitOfAttempts():
+            if self.addAttempt().reachedLimitOfAttempts():
                 return self
             return self.goTo().login()
             
@@ -101,6 +102,7 @@ class BrowseBookingComExtranet(KLTBrowser):
             'parque da corcovada': '9330221',
             'clube do monaco': '8252517',
         }
+        superlog('\n'.join(self.tabs.all))
         if len(self.tabs.all) > 1:
             self.tabs.close()
 
@@ -113,10 +115,10 @@ class BrowseBookingComExtranet(KLTBrowser):
             except:
                 self.reload().login()
        
-        self.tabs.switchTo(-1)
+        self.tabs.switchToPrevious()
         return self
 
-    def reservations(self, start: str | None = None, end: str | None = None) -> 'BrowseBookingComExtranet':
+    def reservations(self, dates: List[str] | None = None) -> 'BrowseBookingComExtranet':
         """
         Search for reservations between the given dates.
         
@@ -127,22 +129,25 @@ class BrowseBookingComExtranet(KLTBrowser):
         Returns:
             Self reference for method chaining
         """
-        if not start:
-            return self
-            
         self.wait(3).element(By.LINK_TEXT, 'Reservations').click()
-        self.element(By.XPATH, '//*[@id="date_from"]').clear().input(start)
-        self.element(By.XPATH, '//*[@id="date_to"]').clear().input(end)
+        return self
+
+    def set_date(self, date: datetime.date) -> 'BrowseBookingComExtranet':
+        if not date:
+            return self
+        
+        self.element(By.XPATH, '//*[@id="date_from"]').clear().input(date)
+        self.element(By.XPATH, '//*[@id="date_to"]').clear().input(date)
         self.wait(2).element(By.XPATH, self._xpath_for_search_button()).click()
         self.wait(3).scroll()
         
-        try:
-            self.element(By.XPATH, '//select[@id="reservations_table_pagination"]')
-            self.selectByValue('100')
-        except:
-            pass
+        #try:
+        #    self.element(By.XPATH, '//select[@id="reservations_table_pagination"]')
+        #    self.selectByValue('100')
+        #except:
+        #    pass
             
-        return self.wait(3).scroll()
+        return self#.wait(3).scroll()
     
     def acceptOneTrustPolicy(self) -> 'BrowseBookingComExtranet':
         """
@@ -182,24 +187,28 @@ class BrowseBookingComExtranet(KLTBrowser):
         Returns:
             Self reference for method chaining
         """
-        self.element(By.XPATH, f'//a[@href="{link}"]').click().wait(3)
-        self.tabs.switchTo(-1)
+        self.element(By.XPATH, f'//a[@href="{link}"]').click().wait(7)
+        self.tabs.switchToNext()
+        superlog('\n'.join(self.tabs.all))
+     
+        reservation['email'] = self.element(By.XPATH, '//a[contains(@href, "mailto:")]').text
+        if 'x' in reservation['rooms']:
+            reservation['Properties'] = {}
 
-        reservation['Properties'] = {}
-
-        parser = HTML(self.html)
-        for property in parser.findAll('ul', {'aria-label': 'Check all details'}):
-            titleEl = property.find('button')
-            title = re.search(r'\(([A-Z \-0-9]+)\)', titleEl.text).group(1)
-            occupancy = re.search(r'Booked occupancy ([\d\s,()\w"]+) Max occupancy', property.text).group(1)
-            reservation['Properties'][title] = occupancy.strip()
+            parser = HTML(self.html)
+            for property in parser.findAll('ul', {'aria-label': 'Check all details'}):
+                titleEl = property.find('button')
+                title = re.search(r'\(([A-Z \-0-9]+)\)', titleEl.text).group(1)
+                occupancy = re.search(r'Booked occupancy ([\d\s,()\w"]+) Max occupancy', property.text).group(1)
+                reservation['Properties'][title] = occupancy.strip()
 
         """
         self.findElement('button', 'Show phone number').click().wait(2)
-        reservation['email'] = self.element(By.XPATH, '//a[contains(@href, "mailto:")]').text
         #reservation['phone'] = self.element(By.XPATH, '//a[contains(@href, "tel:")]').text
         """
         self.tabs.close()
+        superlog('\n'.join(self.tabs.all))
+
         return self
 
     #######################################################
@@ -232,11 +241,14 @@ class BrowseBookingComExtranet(KLTBrowser):
                     print('--------------------------------------')
                 reservation[key] = value
                 
-            if 'x' in reservation['rooms']:
-                link = data.find('a')['href']
-                self.parse_guests(link, reservation)
-            
-            parser.parsed = reservation
+            if 'ok' in reservation['status'].lower():
+                aElement = data.find('a')
+                if aElement and 'href' in aElement.attrs:
+                    link = aElement['href']
+                    self.parse_guests(link, reservation)
+
+            if reservation:
+                parser.parsed = reservation
             
         return parser.parsed
 

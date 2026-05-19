@@ -47,7 +47,8 @@ def update_from_bookingCom(
     database = get_database()
     
     if start and end: 
-        done = update_from_dates(database, browser, start, end, properties)
+        pass
+        #done = update_from_dates(database, browser, start, end, properties)
     else: 
         reader = ReadBookingComEmails(messages)
         done = update_from_emails(database, browser, reader, properties)
@@ -58,30 +59,30 @@ def update_from_bookingCom(
     return done
 
 
-def update_from_dates(
-    database: Database, 
-    browser: BrowseBookingComExtranet, 
-    start: str, 
-    end: str, 
-    properties: list[str]
-) -> str:
-    """
-    Update bookings from Booking.com for the specified date range.
-    
-    Parameters:
-        database: Database connection.
-        browser: Browser instance for web scraping.
-        start: Start date for booking retrieval.
-        end: End date for booking retrieval.
-        properties: List of property names to update.
-        
-    Returns:
-        Success message.
-    """
-    for property in properties: 
-        parse_property_reservations_page_bookings(database, browser, start, end, property)
-    return 'Successfully scraped and parsed Booking.com bookings from given dates!'
-
+#def update_from_dates(
+#    database: Database, 
+#    browser: BrowseBookingComExtranet, 
+#    start: str, 
+#    end: str, 
+#    properties: list[str]
+#) -> str:
+#    """
+#    Update bookings from Booking.com for the specified date range.
+#    
+#    Parameters:
+#        database: Database connection.
+#        browser: Browser instance for web scraping.
+#        start: Start date for booking retrieval.
+#        end: End date for booking retrieval.
+#        properties: List of property names to update.
+#        
+#    Returns:
+#        Success message.
+#    """
+#    for property in properties: 
+#        parse_property_reservations_page_bookings(database, browser, start, end, property)
+#    return 'Successfully scraped and parsed Booking.com bookings from given dates!'
+#
 
 def update_from_emails(
     database: Database, 
@@ -102,11 +103,11 @@ def update_from_emails(
         Success message.
     """
     dates = (reader.quintaDaBarracudaDates, reader.clubeDoMonacoDates, reader.parqueDaCorcovadaDates)
-    
-    for i, (start, end) in enumerate(dates):
-        if start is None or end is None:
+
+    for i, dates in enumerate(dates):
+        if not dates:
             continue
-        parse_property_reservations_page_bookings(database, browser, start, end, properties[i])
+        parse_property_reservations_page_bookings(database, browser, dates, properties[i])
         
     return 'Successfully scraped and parsed Booking.com bookings from read emails!'
 
@@ -133,8 +134,7 @@ def delete_sign_in_email() -> str:
 def parse_property_reservations_page_bookings(
     database: Database, 
     browser: BrowseBookingComExtranet,
-    start: str, 
-    end: str, 
+    dates: list[str], 
     property: str
 ) -> None:
     """
@@ -143,32 +143,33 @@ def parse_property_reservations_page_bookings(
     Parameters:
         database: Database connection.
         browser: Browser instance for web scraping.
-        start: Start date for booking retrieval.
-        end: End date for booking retrieval.
+        dates: List of dates for booking retrieval.
         property: Name of the property to retrieve bookings for.
         
     Returns:
         None
     """
-    reservations = browser.propertyPage(property).reservations(start, end)
+    reservations = browser.propertyPage(property).reservations()
     
-    if TEST: 
-        print(f"Reservations for {property} between {start} and {end}:")
-        reservationsList = reservations.list_reservations(reservations.html, test=True)
-        for reservation in reservationsList:
-            print(reservation)
-            print('-----------')
-        print('=======================================')
-    
-    for reservation in reservations.list:
-        bookings = set_booking(database, reservation)
-        for booking in bookings:
-            if TEST:
-                print(f"Bookings for {property} between {start} and {end}:")
-                print(booking)
+    for date in dates:
+        reservations.set_date(date)
+        
+        for reservation in reservations.list:
+
+            if TEST: 
+                print(reservation)
                 print('-----------')
-                continue
-            update_booking_in_database(database, booking)
+        
+            bookings = set_booking(database, reservation)
+            for booking in bookings:
+                if TEST:
+                    print(f"Bookings for {property} for {date}:")
+                    print(booking)
+                    print('-----------')
+                    continue
+                update_booking_in_database(database, booking)
+
+        reservations.wait(3).scroll(toStart=True)
 
 
 def set_booking(database: Database, reservation: dict[str, str]) -> list[Booking]:
@@ -232,6 +233,9 @@ def set_booking(database: Database, reservation: dict[str, str]) -> list[Booking
         booking.charges.platformFee = platformFee
         booking.charges.admin = 0
         booking.details.enquiryStatus = sort_enquiry_status(reservation['status'], platformRentalCharge)
+        
+        if reservation.get('email', None):
+            booking.guest.email = reservation['email']
         
         if totalProperties > 1: 
             num = decide_booking_num_order(database, reservation, totalProperties, name, num)
@@ -354,7 +358,7 @@ def sort_enquiry_status(statusString: str, priceOfReservation: float) -> str:
     Returns:
         Enquiry status string.
     """
-    if 'OK' in statusString: 
+    if 'ok' in statusString.lower(): 
         return 'Booking confirmed'
     elif priceOfReservation > 0: 
         return 'Booking cancelled with fees'

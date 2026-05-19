@@ -159,7 +159,7 @@ class updatedates(dates):
         Returns:
             A tuple containing start and end dates for guest contact processing.
         """
-        return cls.calculate(days=2), cls.calculate(days=35)
+        return cls.calculate(days=1), cls.calculate(days=35)
 
     @classmethod
     def bookingCom_update_dates(cls) -> tuple[datetime.date, datetime.date]:
