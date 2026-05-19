@@ -38,6 +38,7 @@ class BrowsePIMS(KLTBrowser):
         self._reservationsList = self.ReservationsList(self.url, self._driver)
         self._orderForms = self.OrderForms(self.url, self._driver)
         self._todoList = self.TodoList(self.url, self._driver)
+        self._emailer = self.Emailer(self.url, self._driver)
 
     def goTo(self, url: str | None = None) -> 'BrowsePIMS':
         """
@@ -82,6 +83,11 @@ class BrowsePIMS(KLTBrowser):
     def orderForms(self) -> 'BrowsePIMS.OrderForms':
         """Get the order forms interface."""
         return self._orderForms
+    
+    @property
+    def emailer(self) -> 'BrowsePIMS.Emailer':
+        """Get the emailer interface."""
+        return self._emailer
 
     class ReservationsList(KLTBrowser):
         """
@@ -450,7 +456,7 @@ class BrowsePIMS(KLTBrowser):
             Returns:
                 Self for method chaining
             """
-            self.element(By.XPATH, '//input[@value="Refresh"]').click(wait=3)
+            self.element(By.XPATH, '//input[@value="Refresh"]').click(wait=6)
             return self
         
         @property
@@ -484,7 +490,8 @@ class BrowsePIMS(KLTBrowser):
                 task = data[3]
                 taskName = task.text.strip()
                 orderId = task.find('a')['href'].split('order_id=')[1]
-                parser.parsed = {'orderId': int(orderId), 'taskName': taskName} 
+                days = data[5].text.strip()
+                parser.parsed = {'orderId': int(orderId), 'taskName': taskName, 'days': int(days)} 
             except IndexError:
                 pass
             return self._parse_task_rows(parser, rows)
@@ -543,6 +550,49 @@ class BrowsePIMS(KLTBrowser):
                 Self for method chaining
             """
             self.element(By.NAME, 'todo_list_overdays').clear().input(str(days))
+
+            
+    class Emailer(KLTBrowser):
+        """
+        Interface for PIMS emailer.
+        
+        Provides methods for composing and sending emails to guests and owners
+        directly from the PIMS system.
+        """
+        def __init__(self, url: str, driver):
+            """
+            Initialize emailer interface.
+            
+            Parameters:
+                url: Base URL for PIMS system
+                driver: Browser driver instance
+            """
+            self._url = url
+            self._driver = driver
+            self._wait = WebDriverWait(self._driver, 10)
+
+        def goTo(self, orderId: str | int, formType: str = 'new', emailId: str | int = None) -> 'BrowsePIMS.Emailer':
+            """
+            Navigate to the emailer form for a specific order.
+
+            Parameters:
+                orderId: ID of the order to email about
+                formType: Type of email form ('new' or 'followup')
+                emailId: ID of the email to edit (optional)
+            Returns:
+                Self for method chaining
+            """
+            url = f'{self._url}/emailer.php?formtype={formType}&order_id={orderId}'
+            if emailId is not None:
+                url += f'&emailid={emailId}'
+            return super().goTo(url)
+        
+        def followUpAfterNoContact(self, orderId: str | int):
+            return self.goTo(orderId, formType='mailedit', emailId=28)
+        
+        def send(self):
+            self.element(By.XPATH, '//input[@value="Send it"]').click()
+            return self
 
 
     class OrderForms(KLTBrowser):
@@ -1261,7 +1311,6 @@ class BrowsePIMS(KLTBrowser):
         def currentTasks(self):
             self.elements(By.XPATH, '//fieldset[@class="todo"]//table[@class="paymentlisting"]//tr')
             return {task.text.lower(): task for task in self._elements}  
-
         
         def unlockGuestRegistrationForm(self, PIMSId) -> 'BrowsePIMS.OrderForms':
             """
@@ -1344,6 +1393,43 @@ class BrowsePIMS(KLTBrowser):
                 return self.option
             self.selectByVisibleText(str(value))
             return self
+        
+        @property
+        def outcomeOfEnquiry(self) -> 'BrowsePIMS.OrderForms':
+            """
+            Set the outcome of the enquiry.
+            
+            Parameters:
+                outcome: 
+                - Declined by owner
+                - Dates unavailable
+                - No reply received
+                - Some correspondence, but no booking
+                - Booking agreed
+
+            Returns:
+                Self for method chaining
+            """
+            return self._by_selection('enquiry_outcome')
+        
+        @outcomeOfEnquiry.setter
+        def outcomeOfEnquiry(self, outcome: str | None = None) -> 'BrowsePIMS.OrderForms':
+            """
+            Set the outcome of the enquiry.
+            
+            Parameters:
+                outcome: 
+                - Declined by owner
+                - Dates unavailable
+                - No reply received
+                - Some correspondence, but no booking
+                - Booking agreed
+                Or None to keep current
+          
+              Returns:
+                Self for method chaining
+            """
+            return self._by_selection('enquiry_outcome_id', value=outcome)
 
         def _set_charge(self, name: str, value: float | None = None) -> 'BrowsePIMS.OrderForms':
             """

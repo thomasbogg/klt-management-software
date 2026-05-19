@@ -97,3 +97,47 @@ def close_departed_bookings_in_PIMS(visible: bool = False) -> str:
    
     browser.quit()
     return 'All departed bookings closed successfully'
+
+
+@update
+def follow_up_on_open_enquiries_in_PIMS(visible: bool = False) -> str:
+    """
+    Follow up on open enquiries in PIMS.
+    
+    Finds and follows up on open enquiries that have been pending for a certain
+    period of time. This helps keep the PIMS system clean by ensuring that
+    enquiries are addressed in a timely manner and do not remain open indefinitely.
+    
+    Parameters:
+        visible: Whether to show the browser window during execution
+    Returns:
+        Success message confirming follow-up
+    """
+    browser = BrowsePIMS(visible).goTo().login()
+
+    todoList = browser.todoList.goTo()
+    todoList.propertyName = 'All properties'
+    todoList.dueInNextXDays = 5
+    todoList.excludeOlderThan = 30
+    todoList.refresh()
+    allTasks = todoList.list
+   
+    orderForms = browser.orderForms
+    emailer = browser.emailer
+  
+    for task in allTasks:
+        taskName = task['taskName']
+        orderId = task['orderId']
+        days = task['days']
+        if 'enquiry outcome updated' in taskName.lower():
+            if days == 1:
+                pass
+                #emailer.followUpAfterNoContact(orderId).send()
+            elif days < 0:
+                orderForms.goTo(orderId)
+                orderForms.outcomeOfEnquiry = 'Some correspondence, but no booking'
+                browser.wait(1)
+                orderForms.update()
+   
+    browser.quit()
+    return 'All open enquiries followed up successfully'
