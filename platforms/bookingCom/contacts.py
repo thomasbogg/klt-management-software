@@ -154,6 +154,7 @@ def get_upcoming_booking_com_bookings(database: Database, start: str, end: str) 
     where = search.details.where()
     where.enquirySource().isEqualTo('Booking.com')
     where.isOwner().isFalse()
+    where.platformId().isNotNullEmptyOrFalse()
 
     set_valid_management_booking(search)
     return search.fetchall()
