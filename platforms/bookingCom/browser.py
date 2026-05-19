@@ -209,7 +209,7 @@ class BrowseBookingComExtranet(KLTBrowser):
         self.tabs.close()
         superlog('\n'.join(self.tabs.all))
 
-        return self
+        return self.wait(4)
 
     #######################################################
     # HELPER METHODS
