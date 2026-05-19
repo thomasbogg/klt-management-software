@@ -100,6 +100,7 @@ def set_search_selection(search: Database) -> None:
     search.charges.select().all()
     search.emails.select().all()
     search.forms.select().all()
+    search.touristtax.select().all()
     
     select = search.properties.select()
     select.name()
