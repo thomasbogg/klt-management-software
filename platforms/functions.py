@@ -80,6 +80,9 @@ def update_booking_in_database(database: Database, booking: Booking) -> None:
         del booking.details.adults
         del booking.details.children
         del booking.details.babies
+
+    if databaseBooking.details.manualProperty:
+        del booking.details.propertyId
     
     booking.details.update()
     
@@ -260,6 +263,7 @@ def get_booking_from_database(database: Database, id: int) -> Booking:
     select.adults()
     select.children()
     select.babies()
+    select.manualProperty()
     
     select = search.arrivals.select()
     select.date()

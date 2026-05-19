@@ -383,6 +383,26 @@ class Details(DatabaseRow):
             value: The update date to set
         """
         self._set('lastUpdated', value)
+
+    @property
+    def manualProperty(self) -> bool | None:
+        """
+        Check if the property was manually entered for this booking.
+        
+        Returns:
+            True if the property was manually entered, False otherwise
+        """
+        return self._get('manualProperty')
+    
+    @manualProperty.setter
+    def manualProperty(self, value: bool) -> None:
+        """
+        Set whether the property was manually entered for this booking.
+        
+        Args:
+            value: True if the property was manually entered
+        """
+        self._set('manualProperty', value)
     
     # Calculated properties
     @property

@@ -286,7 +286,6 @@ def create_bookings_table(database: Database) -> Database:
     table.foreignKeys = [propertyId, guestId]
     table.columns = Column(name='PIMSId', tablename=table.name, dataType='integer')
     table.columns = Column(name='platformId', tablename=table.name, dataType='text')
-    table.columns = Column(name='platformAddress', tablename=table.name, dataType='text')
     table.columns = Column(name='isOwner', tablename=table.name, dataType='boolean').notNull()
     table.columns = Column(name='enquiryStatus', tablename=table.name, dataType='text').notNull()
     table.columns = Column(name='enquiryDate', tablename=table.name, dataType='text')
@@ -296,6 +295,7 @@ def create_bookings_table(database: Database) -> Database:
     table.columns = Column(name='babies', tablename=table.name, dataType='integer').notNull()
     table.columns = Column(name='manualGuests', tablename=table.name, dataType='boolean').notNull()
     table.columns = Column(name='lastUpdated', tablename=table.name, dataType='text').notNull()
+    table.columns = Column(name='manualProperty', tablename=table.name, dataType='boolean')
     table.create()
     return database
 

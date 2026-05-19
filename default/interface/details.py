@@ -38,21 +38,26 @@ def update_details(
         if pims_id is None:
             return None
         databaseBooking.details.PIMSId = pims_id
+   
     elif option == 2:
         enquiry_source = get_text(subsection, 'Enquiry Source', databaseBooking.details.enquirySource)
         if enquiry_source is None:
             return None
         databaseBooking.details.enquirySource = enquiry_source
+   
     elif option == 3:
         platform_id = get_text(subsection, 'Platform Id', databaseBooking.details.platformId)
         if platform_id is None:
             return None
         databaseBooking.details.platformId = platform_id
+   
     elif option == 4:
         property_name = get_text(subsection, 'Property', databaseBooking.property.name)
         if property_name is None:
             return None
         databaseBooking.details.propertyId = property_name.upper()
+        databaseBooking.details.manualProperty = True
+   
     elif option < 9:
         newStatus = options[option - 1].split('Set "')[1][:-1]
         if databaseBooking.details.enquiryStatus == newStatus:

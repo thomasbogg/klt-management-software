@@ -142,6 +142,15 @@ class Details(Table):
         """
         return self._column(name='manualGuests', dataType='boolean')
     
+    def manualProperty(self) -> Column | Self:
+        """
+        Define the manualProperty column of the table.
+        
+        Returns:
+            Details: The current instance for method chaining.
+        """
+        return self._column(name='manualProperty', dataType='boolean')
+    
     def joinStatement(self, tableNames: list[str]) -> list[str]:
         """
         Generate SQL JOIN statements for the bookings table.
@@ -179,4 +188,5 @@ class Details(Table):
         self.children()
         self.babies()
         self.manualGuests()
+        self.manualProperty()
         return self
