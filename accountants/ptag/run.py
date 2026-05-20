@@ -67,7 +67,7 @@ def update_ptag_workbooks(start: datetime.date | None = None, end: datetime.date
     
         for booking in bookings:
             date: datetime.date = booking.arrival.date
-            if updatedates.calculate(days=-4) <= date <= updatedates.calculate(days=-1):
+            if updatedates.calculate(days=-4) <= date <= updatedates.calculate(days=-2):
                 send_email_to_accountant(booking)
         
         if workbook.hasSheet(sheet): 
