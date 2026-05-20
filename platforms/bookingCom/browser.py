@@ -189,7 +189,6 @@ class BrowseBookingComExtranet(KLTBrowser):
         """
         self.element(By.XPATH, f'//a[@href="{link}"]').click().wait(7)
         self.tabs.switchToNext()
-        superlog('\n'.join(self.tabs.all))
      
         reservation['email'] = self.element(By.XPATH, '//a[contains(@href, "mailto:")]').text
         if 'x' in reservation['rooms']:
@@ -207,8 +206,6 @@ class BrowseBookingComExtranet(KLTBrowser):
         #reservation['phone'] = self.element(By.XPATH, '//a[contains(@href, "tel:")]').text
         """
         self.tabs.close()
-        superlog('\n'.join(self.tabs.all))
-
         return self.wait(4)
 
     #######################################################
