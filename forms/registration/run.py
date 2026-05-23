@@ -180,6 +180,7 @@ def get_guest_registration_form_bookings(
     # Selections for booking details
     select = search.details.select()
     select.PIMSId()
+    select.enquirySource()
     
     # Selections for guests
     select = search.guests.select()
