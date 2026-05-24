@@ -68,7 +68,7 @@ def add_new_tourist_tax_properties(propertyId: Optional[int] = None, propertyNam
 
 
 @update
-def pay_monthly_tourist_tax(start: datetime.date = None, end: datetime.date = None, propertyName: str | None = None) -> None:
+def pay_monthly_tourist_tax(start: datetime.date = None, end: datetime.date = None, propertyName: str | None = None, visible: bool = False) -> None:
     """
     Pay the monthly tourist tax for a specific property.
     
@@ -92,7 +92,7 @@ def pay_monthly_tourist_tax(start: datetime.date = None, end: datetime.date = No
     properties = get_tourist_tax_properties(propertyName=propertyName)
     database = get_database()
 
-    browser = TMTBrowser(visible=False)
+    browser = TMTBrowser(visible=visible)
     browser.goTo()
     browser.login()
     
