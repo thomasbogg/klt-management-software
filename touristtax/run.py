@@ -100,6 +100,7 @@ def pay_monthly_tourist_tax(start: datetime.date = None, end: datetime.date = No
         log(f'Processing tourist tax payment for property {property.name}')
        
         browser.goToMonthlyDeclarations()
+        browser.filerByName(property.name)
         if not browser.propertyExists(property):
             sublog(f'Property {property.name} does not exist in TMT, skipping tax payment')
             continue
@@ -108,7 +109,7 @@ def pay_monthly_tourist_tax(start: datetime.date = None, end: datetime.date = No
         bookings = get_tourist_tax_bookings(database, start, end, property.name)
         
         # Calculate the total tourist tax based on bookings and property specifications
-        taxed_nights = sum([b.charges.touristtax.total for b in bookings]) / TOURIST_TAX_PER_NIGHT
+        taxed_nights = sum([b.charges.touristtax.total for b in bookings if b.charges.touristtax.paid]) / TOURIST_TAX_PER_NIGHT
 
         sublog(f'Calculated tourist tax for property {property.name}: {taxed_nights:.2f}')
         browser.declareMonthlyTax(property=property, year=start.year, month=start.month, total=taxed_nights)

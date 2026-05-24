@@ -147,10 +147,6 @@ class TMTBrowser(KLTBrowser):
         Returns:
             Self: Returns self for method chaining
         """
-        # Search for the property in the establishments list to select it for declaration
-        self.element(By.ID, 'listEstablishmentForm:listEstablishmentTable:globalFilter').input(property.name).wait(2)
-        self.element(By.ID, 'listEstablishmentForm:listEstablishmentTable:globalFilterBTN').click()
-
         # Check if tax has already been paid for the specified period, and if so, skip declaration
         if self.checkPaid(property):
             sublog(f'Tourist tax for property {property.name} has already been paid for {month}/{year}, skipping declaration.')
@@ -234,3 +230,19 @@ class TMTBrowser(KLTBrowser):
             count += 1
         self.elements(By.TAG_NAME, 'td')
         return self._elements[count].text.lower() == 'sim'
+    
+    def filerByName(self, name: str) -> Self:
+        """Filter the establishments list by property name.
+        
+        Inputs the property name into the filter field to narrow down the list
+        of establishments for easier selection.
+        
+        Args:
+            name (str): The name of the property to filter
+
+        Returns:
+            Self: Returns self for method chaining
+        """
+        self.element(By.ID, 'listEstablishmentForm:listEstablishmentTable:globalFilter').clear().input(name).wait(2)
+        self.element(By.ID, 'listEstablishmentForm:listEstablishmentTable:globalFilterBTN').click()
+        return self

@@ -474,7 +474,7 @@ class updatedates(dates):
         Get date range for tourist tax payments.
         
         Returns:
-            A tuple containing start (7 days ago) and end (yesterday) dates.
+            A tuple containing start (first day of previous month) and end (last day of previous month) dates.
         """
         return cls.firstOfMonth(-1), cls.lastOfMonth(-1)
 
