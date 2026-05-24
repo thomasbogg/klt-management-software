@@ -91,6 +91,10 @@ def get_tourist_tax_bookings(database: Database, start: datetime.date, end: date
     select = search.departures.select()
     select.date()
 
+    select = search.touristtax.select()
+    select.total()
+    select.paid()
+
     where = search.details.where()
     where.isOwner().isFalse()
     where.enquirySource().isNotIn(('Direct', 'Booking.com'))
