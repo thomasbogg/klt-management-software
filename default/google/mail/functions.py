@@ -248,9 +248,10 @@ def send_email(
             dates.calculate(days=-1), 
             dates.calculate(days=1)
         )
-        if sent:
-            message.clear_recipients()
-            return None
+        for sent_message in sent:
+            if sent_message.subject == message.subject and sent_message.to == message.to:
+                message.clear_recipients()
+                return None
     
     return message.send()
 
