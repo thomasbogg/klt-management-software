@@ -72,6 +72,7 @@ def send_two_weeks_instructions_emails(
                     continue
                 if not booking.forms.arrivalQuestionnaire:
                     send_new_missing_arrival_information_email(booking)
+                    continue
                 continue
 
             # Check for changeover
