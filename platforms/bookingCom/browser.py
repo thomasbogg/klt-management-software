@@ -102,7 +102,6 @@ class BrowseBookingComExtranet(KLTBrowser):
             'parque da corcovada': '9330221',
             'clube do monaco': '8252517',
         }
-        superlog('\n'.join(self.tabs.all))
         if len(self.tabs.all) > 1:
             self.tabs.close()
 
