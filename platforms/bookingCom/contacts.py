@@ -132,6 +132,7 @@ def get_upcoming_booking_com_bookings(database: Database, start: str, end: str) 
     search = search_bookings(database, start, end)
     select = search.guests.select()
     select.id()
+    select.email()
     select.firstName()
     select.lastName()
 
@@ -148,9 +149,6 @@ def get_upcoming_booking_com_bookings(database: Database, start: str, end: str) 
     select.name()
     select.shortName()
 
-    where = search.guests.where()
-    where.email().isNullEmptyOrFalse()
-
     where = search.details.where()
     where.enquirySource().isEqualTo('Booking.com')
     where.isOwner().isFalse()
@@ -158,6 +156,9 @@ def get_upcoming_booking_com_bookings(database: Database, start: str, end: str) 
 
     where = search.guests.where()
     where.phone().isNullEmptyOrFalse()
+
+    where = search.arrivals.where()
+    where.time().isNullEmptyOrFalse()
 
     set_valid_management_booking(search)
     return search.fetchall()
