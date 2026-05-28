@@ -738,8 +738,7 @@ def _during_stay(body: GoogleMailMessage.Body, booking: Booking) -> None:
     body.paragraph(
         f'During your stay, {booking.property.manager.maintenance}',
         f'({booking.property.manager.maintenancePhone}) is your first point of',
-        'contact should you experience any problems or have unresolved questions',
-        'about the accommodation.',   
+        'contact should you experience any emergencies or problems with the apartment.',
         bold=True
     )
 
