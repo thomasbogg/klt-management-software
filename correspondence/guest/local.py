@@ -60,14 +60,19 @@ def send_guest_messages_from_local_update() -> str:
                 updateVrboArrivals = True
                 continue
             bookingId = int(p.split(':')[0].strip('-- '))
+         
             if 'Airbnb:Arrival Form' in p:
                 booking = get_four_weeks_bookings(database, bookingId=bookingId)[0]
-                if booking and not booking.emails.arrivalQuestionnaire:
+                if not booking.emails.arrivalQuestionnaire:
                     sendAirbnb4Weeks.append(booking)
+         
             elif 'WhatsApp:Guest Registration Form' in p:
                 sendWhatsAppGuestReg += get_guest_registration_form_bookings(database, bookingId=bookingId)
+         
             elif 'WhatsApp:Arrival Form' in p:
-                sendWhatsApp4Weeks += get_guest_arrival_form_bookings(database, bookingId=bookingId)
+                booking = get_guest_arrival_form_bookings(database, bookingId=bookingId)[0]
+                if not booking.arrival.hasDetails:
+                    sendWhatsApp4Weeks.append(booking)
 
     if sendAirbnb4Weeks:
         send_airbnb_arrival_form_messages(bookings=sendAirbnb4Weeks)
