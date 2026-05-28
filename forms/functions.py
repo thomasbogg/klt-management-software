@@ -31,6 +31,9 @@ def get_forms_bookings(database: Database, start: date, end: date, bookingId: in
     select = search.arrivals.select()
     select.id()
     select.date()
+    select.details()
+    select.time()
+    select.flightNumber()
     
     select = search.departures.select()
     select.id()
