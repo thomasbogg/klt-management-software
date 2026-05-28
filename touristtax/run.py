@@ -51,6 +51,7 @@ def add_new_tourist_tax_properties(propertyId: Optional[int] = None, propertyNam
         
         # Navigate to properties list to check existence
         browser.goToPropertiesList()
+        browser.filerByName(property.name)
         
         # Skip if property already exists in TMT
         if browser.propertyExists(property):
