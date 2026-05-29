@@ -1,5 +1,5 @@
 from default.booking.booking import Booking
-from default.database.functions import search_valid_bookings, search_properties
+from default.database.functions import search_valid_bookings, search_properties, set_property_name
 from default.database.database import Database
 import datetime
 from typing import List, Optional
@@ -49,8 +49,7 @@ def get_tourist_tax_properties(propertyId: Optional[int] = None, propertyName: O
 
     # Apply property name filter if specified (case-insensitive partial match)
     if propertyName:
-        where = search.properties.where()
-        where.name().isLike(f'%{propertyName}%')
+        set_property_name(search, propertyName)
 
     # Filter to only bookable properties (required for TMT)
     where = search.properties.where()
