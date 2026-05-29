@@ -52,11 +52,6 @@ def set_cell(worksheet: Worksheet, stylesheet=Stylesheet, **kwargs) -> Worksheet
 
     worksheet.cell.styles = styles
 
-    #try:
-    #    if kwargs.get('isDeparture', False) and kwargs.get('color', '000000') == '00FF0000':
-    #        print('\n\n', worksheet.cell.value, worksheet.name, worksheet.row.number)  # Debug print statement
-    #except Exception as e:
-    #    print(f"Error printing debug info: {e}")
     return worksheet
 
 
@@ -164,6 +159,9 @@ def set_lead_guest_cell(worksheet: Worksheet, booking: Booking | None, **kwargs)
     """
     if is_header(worksheet):
         return set_header_cell(worksheet, value='Lead Guest', width=11, **kwargs)
+
+    if kwargs.get('total', False):
+        return set_cell(worksheet, value='TOTAL', bold=True, **kwargs)
     
     if booking:
         return set_cell(worksheet, value=booking.guest.prettyName, **kwargs)
@@ -419,6 +417,7 @@ def set_total_rental_received_by_klt_cell(worksheet: Worksheet, booking: Booking
     """
     if is_header(worksheet):
         return set_header_cell(worksheet, value='Total Rental Received by KLT Prop. Serv.', width=14, **kwargs)
+       
     return set_basic_holiday_charge_cell(worksheet, booking, **kwargs)
 
 
@@ -436,6 +435,11 @@ def set_total_received_by_klt_cell(worksheet: Worksheet, booking: Booking | None
     """
     if is_header(worksheet):
         return set_header_cell(worksheet, value='Total Received by KLT Prop. Serv.', width=14, **kwargs)
+
+    if kwargs.get('total', False):
+        worksheet.cell.setToEurosFormat()
+        worksheet.cell.setColumnTotal()
+        return set_cell(worksheet, bold=True, **kwargs)
     
     if booking:
         worksheet.cell.setToCurrencyFormat(booking.charges.currency)
@@ -458,7 +462,12 @@ def set_basic_holiday_charge_cell(worksheet: Worksheet, booking: Booking | None,
     """
     if is_header(worksheet):
         return set_header_cell(worksheet, value='Basic Holiday Charge', width=10, **kwargs)
-    
+
+    if kwargs.get('total', False):
+        worksheet.cell.setToEurosFormat()
+        worksheet.cell.setColumnTotal()
+        return set_cell(worksheet, bold=True, **kwargs)
+        
     if booking:
         worksheet.cell.setToCurrencyFormat(booking.charges.currency)
         total = booking.charges.basicRental + booking.charges.extraNights
@@ -482,6 +491,11 @@ def set_admin_charge_cell(worksheet: Worksheet, booking: Booking | None, **kwarg
     if is_header(worksheet):
         return set_header_cell(worksheet, value='Admin. Charge', width=10, **kwargs)
     
+    if kwargs.get('total', False):
+        worksheet.cell.setToEurosFormat()
+        worksheet.cell.setColumnTotal()
+        return set_cell(worksheet, bold=True, **kwargs)
+    
     if booking:
         worksheet.cell.setToCurrencyFormat(booking.charges.currency)
         return set_cell(worksheet, value=booking.charges.admin, **kwargs)
@@ -503,6 +517,11 @@ def set_platform_fee_cell(worksheet: Worksheet, booking: Booking | None, **kwarg
     """
     if is_header(worksheet):
         return set_header_cell(worksheet, value='Platform Fee', width=10, **kwargs)
+    
+    if kwargs.get('total', False):
+        worksheet.cell.setToEurosFormat()
+        worksheet.cell.setColumnTotal()
+        return set_cell(worksheet, bold=True, **kwargs)
     
     if booking:
         worksheet.cell.setToCurrencyFormat(booking.charges.currency)
@@ -526,6 +545,11 @@ def set_platform_fee_iva_cell(worksheet: Worksheet, booking: Booking | None, **k
     if is_header(worksheet):
         return set_header_cell(worksheet, value='Platform Fee IVA', width=10, **kwargs)
     
+    if kwargs.get('total', False):
+        worksheet.cell.setToEurosFormat()
+        worksheet.cell.setColumnTotal()
+        return set_cell(worksheet, bold=True, **kwargs)
+    
     if booking:
         worksheet.cell.setToCurrencyFormat(booking.charges.currency)
         return set_cell(worksheet, value=determine_platform_fee_IVA(booking), **kwargs)
@@ -548,6 +572,11 @@ def set_platform_fee_plus_iva_cell(worksheet: Worksheet, booking: Booking | None
     if is_header(worksheet):
         return set_header_cell(worksheet, value='Platform Fee + IVA', width=10, **kwargs)
     
+    if kwargs.get('total', False):
+        worksheet.cell.setToEurosFormat()
+        worksheet.cell.setColumnTotal()
+        return set_cell(worksheet, bold=True, **kwargs)
+    
     if booking:
         worksheet.cell.setToCurrencyFormat(booking.charges.currency)
         return set_cell(worksheet, value=determine_platform_fee_with_IVA(booking), **kwargs)
@@ -569,6 +598,11 @@ def set_total_to_be_receipted_cell(worksheet: Worksheet, booking: Booking | None
     """
     if is_header(worksheet):
         return set_header_cell(worksheet, value='Total to be Receipted', width=10, **kwargs)
+    
+    if kwargs.get('total', False):
+        worksheet.cell.setToEurosFormat()
+        worksheet.cell.setColumnTotal()
+        return set_cell(worksheet, bold=True, **kwargs)
     
     worksheet.cell.setToEurosFormat()
     if booking:
@@ -596,6 +630,11 @@ def set_rental_to_owner_cell(worksheet: Worksheet, booking: Booking | None, **kw
     """
     if is_header(worksheet):
         return set_header_cell(worksheet, value='Rental to Owner', width=10, **kwargs)
+
+    if kwargs.get('total', False):
+        worksheet.cell.setToEurosFormat()
+        worksheet.cell.setColumnTotal()
+        return set_cell(worksheet, bold=True, **kwargs)
     
     if booking:
         worksheet.cell.setToCurrencyFormat(booking.charges.currency)
@@ -620,6 +659,11 @@ def set_management_fees_cell(worksheet: Worksheet, booking: Booking | None, **kw
     """
     if is_header(worksheet):
         return set_header_cell(worksheet, value='Cleaning Fees, etc.', width=10, **kwargs)
+    
+    if kwargs.get('total', False):
+        worksheet.cell.setToEurosFormat()
+        worksheet.cell.setColumnTotal()
+        return set_cell(worksheet, bold=True, **kwargs)
     
     if booking:
         worksheet.cell.setToEurosFormat()
@@ -659,6 +703,11 @@ def set_invoice_total_cell(worksheet: Worksheet, booking: Booking | None, **kwar
     if is_header(worksheet):
         return set_header_cell(worksheet, value='Invoice Total', width=10, **kwargs)
     
+    if kwargs.get('total', False):
+        worksheet.cell.setToEurosFormat()
+        worksheet.cell.setColumnTotal()
+        return set_cell(worksheet, bold=True, **kwargs)
+    
     if booking:
         worksheet.cell.setToEurosFormat()
         return set_cell(worksheet, value=determine_owner_invoice(booking), **kwargs)
@@ -685,6 +734,11 @@ def set_internal_commission_cell(worksheet: Worksheet, booking: Booking | None, 
     if is_header(worksheet):
         return set_header_cell(worksheet, value='Internal Commission', width=12, **kwargs)
     
+    if kwargs.get('total', False):
+        worksheet.cell.setToEurosFormat()
+        worksheet.cell.setColumnTotal()
+        return set_cell(worksheet, bold=True, **kwargs)
+    
     if booking:
         worksheet.cell.setToCurrencyFormat(booking.charges.currency)
         return set_cell(worksheet, value=determine_commission(booking), **kwargs)
@@ -706,6 +760,11 @@ def set_commission_after_iva_cell(worksheet: Worksheet, booking: Booking | None,
     """
     if is_header(worksheet):
         return set_header_cell(worksheet, value='Comm. after IVA', width=10, **kwargs)
+
+    if kwargs.get('total', False):
+        worksheet.cell.setToEurosFormat()
+        worksheet.cell.setColumnTotal()
+        return set_cell(worksheet, bold=True, **kwargs)
     
     if booking:
         worksheet.cell.setToCurrencyFormat(booking.charges.currency)
@@ -729,6 +788,11 @@ def set_klt_commission_cell(worksheet: Worksheet, booking: Booking | None, **kwa
     if is_header(worksheet):
         return set_header_cell(worksheet, value='KLT Commission', width=13, **kwargs)
     
+    if kwargs.get('total', False):
+        worksheet.cell.setToEurosFormat()
+        worksheet.cell.setColumnTotal()
+        return set_cell(worksheet, bold=True, **kwargs)
+    
     if booking:
         worksheet.cell.setToCurrencyFormat(booking.charges.currency)
         return set_cell(worksheet, value=determine_klt_commission(booking), **kwargs)
@@ -750,6 +814,11 @@ def set_marias_commission_cell(worksheet: Worksheet, booking: Booking | None, **
     """
     if is_header(worksheet):
         return set_header_cell(worksheet, value='Maria\'s Commission', width=13, **kwargs)
+    
+    if kwargs.get('total', False):
+        worksheet.cell.setToEurosFormat()
+        worksheet.cell.setColumnTotal()
+        return set_cell(worksheet, bold=True, **kwargs)
     
     if booking:
         worksheet.cell.setToCurrencyFormat(booking.charges.currency)

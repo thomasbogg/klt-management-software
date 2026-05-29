@@ -69,7 +69,7 @@ def set_worksheet(name: str, start: date | int = None, end: date | int = None,
 
 
 def create_worksheet(worksheet: Worksheet, bookings: list[Booking] | None, 
-                    cells: tuple) -> Worksheet:
+                    cells: tuple, totals: bool = False) -> Worksheet:
     """
     Create a new worksheet with headers and booking data.
     
@@ -77,6 +77,7 @@ def create_worksheet(worksheet: Worksheet, bookings: list[Booking] | None,
         worksheet: The worksheet to populate.
         bookings: List of booking objects to add to the worksheet.
         cells: Tuple of cell setter functions to apply to each booking.
+        totals: Whether to include totals in the worksheet.
         
     Returns:
         The populated Worksheet object.
@@ -102,6 +103,11 @@ def create_worksheet(worksheet: Worksheet, bookings: list[Booking] | None,
         worksheet.row.increase()
         worksheet.row.height = 30
         worksheet.column.number = column.firstDataColumn
+
+    if totals:
+        for col in cells:
+            worksheet = col(worksheet, None, total=True)
+            worksheet.column.increase()
 
     return worksheet
 

@@ -140,6 +140,36 @@ class Cell:
 
         self.value = f'= {start} + {end}'
         return self
+    
+    def setColumnTotal(self, start: str | None = None, end: str | None = None) -> 'Cell':
+        """
+        Create a SUM formula for a column range.
+        
+        If start and end cell references are not provided, they will be automatically 
+        calculated based on the current cell position:
+        - start: Two rows above the current position
+        - end: One row above the current position
+        
+        The method temporarily modifies the row position during calculation
+        and restores it before returning.
+        
+        Args:
+            start: Starting cell reference (e.g., 'A1')
+            end: Ending cell reference (e.g., 'A2')
+            
+        Returns:
+            Self for method chaining
+        """
+        if start is None or end is None:
+            if start is None:
+                start = f'{self.column.letter}{self.row.firstDataRow}'
+          
+            if end is None:
+                end = f'{self.column.letter}{self.row.decrease().number}'
+                self.row.increase()
+
+        self.value = f'=SUM({start}:{end})'
+        return self
 
     def setRunningTotal(self) -> 'Cell':
         """
@@ -162,10 +192,6 @@ class Cell:
 
         if self.row.isFirstDataRow:
             self.value = f'= {prevColumn}'
-            #if isinstance(prevColumnVal, (int, float)):
-            #    self.value = f'= {prevColumn}'
-            #else:
-            #    self.value = f'= 0'
             return self
 
         prevRow = f'{self.column.letter}{self.row.decrease().number}'

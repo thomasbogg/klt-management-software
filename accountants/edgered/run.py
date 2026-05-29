@@ -86,10 +86,10 @@ def update_edgered_workbooks(
                 cellsToSet = cells(id=False)
                 
             bookings = get_bookings(database, start, end, sheetname)
-            create_worksheet(workbook.insertSheet(sheet), bookings, cellsToSet)
+            create_worksheet(workbook.insertSheet(sheet), bookings, cellsToSet, totals=True)
             
         workbook.save()
-        upload_local_file_to_drive(driveFile, **args_for_drive(filename, DRIVE_FOLDER))
+        #upload_local_file_to_drive(driveFile, **args_for_drive(filename, DRIVE_FOLDER))
     
     if updatedates.month() < 3: 
         archive_files_from_previous_years(**args_for_drive(filename, DRIVE_FOLDER))
